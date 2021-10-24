@@ -28,24 +28,11 @@ namespace Scrummy.UI
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            
-            var config = new Configuration
-            {
-                BasePath = "https://gitlab.com/api",
-                AccessToken = "67QbbetYYda4fSujaLfF"
-            };
-            
-            services.AddSingleton<IProjectApi>(new ProjectApi(config));
-
-            var mapperConfig = new MapperConfiguration(cfg => cfg.CreateMap<Issue, Issue>());
-            var mapper = new Mapper(mapperConfig);
-            services.AddSingleton<IMapper>(mapper);
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            builder.RegisterModule<ScrumModule>();
-            builder.RegisterModule<GitLabModule>();
+            builder.RegisterModule<ScrummyUiModule>();
         }
         
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
