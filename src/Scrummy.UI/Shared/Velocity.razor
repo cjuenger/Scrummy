@@ -1,0 +1,35 @@
+﻿@using Radzen.Blazor
+
+<RadzenCard Style="width:500px;">
+    
+    <h5 class="card-title">Velocity</h5>
+    
+    <br>
+    
+    <RadzenRadialGauge Style="width: 100%; height: 300px;">
+        <RadzenRadialGaugeScale StartAngle="-150" 
+                                EndAngle="150" 
+                                Step="20" Min="0" 
+                                Max="260" 
+                                TickPosition="@GaugeTickPosition.Outside">
+            <RadzenRadialGaugeScalePointer Value="@_velocity" Length="0.6" ShowValue="@true">
+                <Template Context="pointer">
+                    <h4>
+                        @pointer.Value SP
+                    </h4>
+                </Template>
+            </RadzenRadialGaugeScalePointer>
+            @* <RadzenRadialGaugeScaleRange From="0" To="90" Fill="green" /> *@
+            @* <RadzenRadialGaugeScaleRange From="90" To="140" Fill="orange" /> *@
+            @* <RadzenRadialGaugeScaleRange From="140" To="260" Fill="red" /> *@
+        </RadzenRadialGaugeScale>
+    </RadzenRadialGauge>
+    
+    <br/>
+    
+    <b>Story Points: @_velocity SP</b>
+    <b>Sprint Length: @SprintLength @(SprintLength == 1 ? "week" : "weeks")</b>
+    
+</RadzenCard>
+
+

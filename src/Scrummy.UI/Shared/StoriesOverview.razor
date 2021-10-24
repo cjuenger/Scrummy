@@ -1,0 +1,39 @@
+﻿@using Radzen.Blazor
+@using Radzen
+@using Scrummy.Scrum.Contracts.Models
+@using Scrummy.Scrum.Contracts.Enums
+
+<RadzenCard Style="width:500px; height:550px;">
+    
+    <h3>Stories Overview</h3>
+    
+    <br>
+    
+    <RadzenDataGrid @ref="_storiesGrid"
+                    AllowFiltering="true"
+                    AllowPaging="true"
+                    PageSize="10"
+                    AllowSorting="true"
+                    Data="@_groupedStories"
+                    TItem="IGrouping<WorkflowState, Story>">
+        <Columns>
+
+            <RadzenDataGridColumn TItem="IGrouping<WorkflowState, Story>"
+                                  Property="State"
+                                  TextAlign="TextAlign.Center">
+                <Template Context="data">
+                    @data.Key
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="IGrouping<WorkflowState, Story>"
+                                  Property="State"
+                                  TextAlign="TextAlign.Center">
+                <Template Context="data">
+                    @($"{data.Count()}")
+                </Template>
+            </RadzenDataGridColumn>
+
+        </Columns>
+    </RadzenDataGrid>
+</RadzenCard>

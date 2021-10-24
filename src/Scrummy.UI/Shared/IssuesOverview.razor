@@ -1,0 +1,58 @@
+﻿@using IO.Juenger.GitLab.Model
+@using Radzen.Blazor
+@using Radzen
+
+<RadzenCard Style="width:500px; height:550px;">
+    
+    <h5 class="card-title">Issues Overview</h5>
+    
+    <br>
+    
+    <RadzenDataGrid @ref="_issuesGrid"
+                    AllowFiltering="true"
+                    AllowPaging="true"
+                    PageSize="10"
+                    AllowSorting="true"
+                    Data="@_issuesGroups"
+                    TItem="IGrouping<string, Issue>">
+        <Columns>
+
+            <RadzenDataGridColumn TItem="IGrouping<string, Issue>"
+                                  Property="Labels"
+                                  Title="Issue"
+                                  TextAlign="TextAlign.Center">
+                <Template Context="data">
+                    @data.Key
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="IGrouping<string, Issue>"
+                                  Property="Labels"
+                                  Title="Opened"
+                                  TextAlign="TextAlign.Center">
+                <Template Context="data">
+                    @($"{data.Count(i => i.State == State.Opened)}")
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="IGrouping<string, Issue>"
+                                  Property="Labels"
+                                  Title="Closed"
+                                  TextAlign="TextAlign.Center">
+                <Template Context="data">
+                    @($"{data.Count(i => i.State == State.Closed)}")
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="IGrouping<string, Issue>"
+                                  Property="Labels"
+                                  Title="Total"
+                                  TextAlign="TextAlign.Center">
+                <Template Context="data">
+                    @($"{data.Count()}")
+                </Template>
+            </RadzenDataGridColumn>
+
+        </Columns>
+    </RadzenDataGrid>
+</RadzenCard>

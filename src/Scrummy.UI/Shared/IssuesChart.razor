@@ -1,0 +1,46 @@
+﻿@using Radzen.Blazor
+@using Radzen
+@using Humanizer
+
+<RadzenCard Style="width:500px;">
+
+    @if (string.IsNullOrWhiteSpace(Label))
+    {
+        <h3> Issues</h3>
+    }
+    else
+    {
+        <h3> @Label.Pluralize()</h3>   
+    }
+    
+    <div class="row">
+        <b class="col">Opened: @(_opened?.Count() ?? 0)</b>
+        <b class="col">Closed: @(_closed?.Count() ?? 0)</b>
+    </div>
+    
+    <RadzenChart>
+        <RadzenLineSeries Smooth="@_smooth"
+                          Data="@_opened"
+                          CategoryProperty="X"
+                          Title="Opened"
+                          ValueProperty="Y">
+            <RadzenMarkers MarkerType="MarkerType.None" />
+        </RadzenLineSeries>
+        <RadzenLineSeries Smooth="@_smooth"
+                          Data="@_closed"
+                          CategoryProperty="X"
+                          Title="Closed"
+                          ValueProperty="Y">
+            <RadzenMarkers MarkerType="MarkerType.None" />
+        </RadzenLineSeries>
+    
+        <RadzenCategoryAxis Padding="20" FormatString="{0:MMM}" />
+    
+        <RadzenValueAxis>
+            <RadzenGridLines Visible="true" />
+            <RadzenAxisTitle Text="Issues" />
+        </RadzenValueAxis>
+    </RadzenChart>
+    
+</RadzenCard>
+

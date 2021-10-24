@@ -1,0 +1,43 @@
+﻿@using Radzen.Blazor
+@using Radzen
+
+<RadzenCard Style="width:500px;">
+
+    <h3>Burn-Down-Chart</h3>
+    
+    <RadzenChart>
+        
+        <RadzenLineSeries Smooth="@_smooth"
+                          Data="@_opened"
+                          Title="Opened"
+                          CategoryProperty="X"
+                          ValueProperty="Y">
+            <RadzenMarkers MarkerType="MarkerType.None"/>
+        </RadzenLineSeries>
+
+        <RadzenLineSeries Smooth="@_smooth"
+                          Data="@_burnDown"
+                          Title="Closed"
+                          CategoryProperty="X"
+                          ValueProperty="Y">
+            <RadzenMarkers MarkerType="MarkerType.None"/>
+        </RadzenLineSeries>
+        
+        <RadzenLineSeries Smooth="@_smooth"
+                          Data="@_estimate"
+                          CategoryProperty="X"
+                          Title="Estimate"
+                          LineType="LineType.Dashed"
+                          ValueProperty="Y">
+            <RadzenMarkers MarkerType="MarkerType.None"/>
+        </RadzenLineSeries>
+
+        <RadzenCategoryAxis Padding="20" FormatString="{0:MMM}"/>
+
+        <RadzenValueAxis>
+            <RadzenGridLines Visible="true"/>
+            <RadzenAxisTitle Text="Story Points"/>
+        </RadzenValueAxis>
+    </RadzenChart>
+    
+</RadzenCard>
