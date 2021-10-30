@@ -5,12 +5,15 @@ using System.Threading.Tasks;
 using IO.Juenger.GitLab.Api;
 using IO.Juenger.GitLab.Model;
 using Microsoft.AspNetCore.Components;
-using Scrummy.UI.Models;
+using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.UI.Shared
 {
     public partial class IssuesChart
     {
+        private int _countOfOpened = 0;
+        private int _countOfClosed = 0;
+        
         private IEnumerable<Xy<DateTime, int>> _opened;
         
         private IEnumerable<Xy<DateTime, int>> _closed;
@@ -43,13 +46,12 @@ namespace Scrummy.UI.Shared
                     X = i.CreatedAt,
                     Y = idx + 1
                 }).ToList();
-            
-             if(opened == null) return Enumerable.Empty<Xy<DateTime, int>>();
              
-            if (opened.Any() /*&& _closed?.Count() < _opened?.Count()*/)
-            {
-                opened.Add(new Xy<DateTime, int> {X = DateTime.Now, Y = opened.Last().Y});
-            }
+            if(opened == null) return Enumerable.Empty<Xy<DateTime, int>>();
+            if (!opened.Any()) return opened;
+            
+            _countOfOpened = opened.Count;
+            opened.Add(new Xy<DateTime, int> {X = DateTime.Now, Y = opened.Last().Y});
 
             return opened;
         }
@@ -68,11 +70,10 @@ namespace Scrummy.UI.Shared
                 }).ToList();
             
             if(closed == null) return Enumerable.Empty<Xy<DateTime, int>>();
-
-            if (closed.Any() /*&& _closed?.Count() < _opened?.Count()*/)
-            {
-                closed.Add(new Xy<DateTime, int> {X = DateTime.Now, Y = closed.Last().Y});
-            }
+            if (!closed.Any()) return closed;
+            
+            _countOfClosed = closed.Count;
+            closed.Add(new Xy<DateTime, int> {X = DateTime.Now, Y = closed.Last().Y});
 
             return closed;
         }

@@ -6,18 +6,10 @@
     <h3>Burn-Down-Chart</h3>
     
     <RadzenChart>
-        
-        <RadzenLineSeries Smooth="@_smooth"
-                          Data="@_opened"
-                          Title="Opened"
-                          CategoryProperty="X"
-                          ValueProperty="Y">
-            <RadzenMarkers MarkerType="MarkerType.None"/>
-        </RadzenLineSeries>
 
         <RadzenLineSeries Smooth="@_smooth"
                           Data="@_burnDown"
-                          Title="Closed"
+                          Title="Burn Down"
                           CategoryProperty="X"
                           ValueProperty="Y">
             <RadzenMarkers MarkerType="MarkerType.None"/>

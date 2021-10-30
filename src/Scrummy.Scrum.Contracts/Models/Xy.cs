@@ -1,4 +1,4 @@
-﻿namespace Scrummy.UI.Models
+﻿namespace Scrummy.Scrum.Contracts.Models
 {
     public class Xy<TX, TY>
     {
