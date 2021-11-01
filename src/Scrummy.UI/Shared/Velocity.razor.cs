@@ -6,15 +6,28 @@ using IO.Juenger.GitLab.Api;
 using Microsoft.AspNetCore.Components;
 using Scrummy.DataAccess.Contracts.Models;
 using Scrummy.DataAccess.Contracts.Parsers;
+using Scrummy.DataAccess.Contracts.Providers;
 using Scrummy.DataAccess.GitLab.Parsers;
 using Scrummy.Scrum.Metrics;
+using Scrummy.Scrum.Models;
+using Scrummy.Scrum.Providers;
 
 namespace Scrummy.UI.Shared
 {
     public partial class Velocity
     {
         private int _velocity;
-
+        
+        private IEnumerable<Xy<DateTime, int>> _velocitySeries;
+        
+        private readonly bool _smooth = false;
+        
+        [Inject]
+        private IChartGenerator ChartGenerator { get; set; }
+        
+        [Inject]
+        private ISprintProvider SprintProvider { get; set; }
+        
         [Inject]
         private IVelocityCalculator VelocityCalculator { get; set; }
         
@@ -27,13 +40,17 @@ namespace Scrummy.UI.Shared
         [Parameter]
         public DateTime StartDate { get; set; }
         
-        protected override void OnParametersSet()
+        protected override async Task OnParametersSetAsync()
         {
-            base.OnParametersSet();
+            await base.OnParametersSetAsync();
             
             if(Stories == null) return;
             
-            _velocity = VelocityCalculator.GetVelocityPerSprint(Stories, StartDate, DateTime.Now, SprintLength);
+            _velocity = (int) (VelocityCalculator.GetAverageVelocityPerDaySinceStart(Stories, StartDate) *
+                               SprintLength * 5);
+
+            var sprints = await SprintProvider.GetAllSprintsAsync("28355012");
+            _velocitySeries = ChartGenerator.GetVelocityChart(sprints);
         }
     }
 }

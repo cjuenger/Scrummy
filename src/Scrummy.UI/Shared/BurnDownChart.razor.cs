@@ -37,7 +37,7 @@ namespace Scrummy.UI.Shared
             
             _burnDown = ChartGenerator.GetBurnDownChart(Stories);
             
-            var velocity = VelocityCalculator.GetVelocityPerDay(Stories, StartDate, DateTime.Now);
+            var velocity = VelocityCalculator.GetAverageVelocityPerSingleDay(Stories, StartDate, DateTime.Now);
             _estimate = ChartGenerator.GetBurnDownEstimationChart(Stories, velocity);
         }
     }
