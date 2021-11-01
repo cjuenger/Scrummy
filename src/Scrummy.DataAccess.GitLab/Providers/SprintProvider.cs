@@ -6,39 +6,28 @@ using System.Threading;
 using System.Threading.Tasks;
 using IO.Juenger.GitLab.Api;
 using IO.Juenger.GitLab.Model;
-using Microsoft.Extensions.Configuration;
 using Scrummy.DataAccess.Contracts.Exceptions;
 using Scrummy.DataAccess.Contracts.Models;
 using Scrummy.DataAccess.Contracts.Providers;
+using Scrummy.DataAccess.GitLab.Configs;
 using Scrummy.DataAccess.GitLab.Parsers;
 
 namespace Scrummy.DataAccess.GitLab.Providers
 {
     internal class SprintProvider : ISprintProvider
     {
-        private const string DefaultTimePattern = @"(From:|To:)\s*(\d{4})-(\d{2})-(\d{2})(T(\d{2}):(\d{2})(:(\d{2}))?)?";
-        private const string DefaultSprintLabelPattern = "(Sprint|sprint)";
-        
         private readonly IProjectApi _projectApi;
         private readonly IItemParser _itemParser;
-
-        private readonly string _sprintTimePattern;
-        private readonly string _sprintLabelPattern;
+        private readonly ISprintProviderConfig _config;
         
         public SprintProvider(
             IProjectApi projectApi, 
             IItemParser itemParser,
-            IConfiguration configuration)
+            ISprintProviderConfig config)
         {
             _projectApi = projectApi ?? throw new ArgumentNullException(nameof(projectApi));
             _itemParser = itemParser ?? throw new ArgumentNullException(nameof(itemParser));
-
-            if (configuration == null) throw new ArgumentNullException(nameof(configuration));
-
-            var section = configuration.GetSection("GitLab");
-
-            _sprintTimePattern = section.GetValue("SprintTimePattern",DefaultTimePattern);
-            _sprintLabelPattern = section.GetValue("SprintLabelPattern", DefaultSprintLabelPattern);
+            _config = config ?? throw new ArgumentNullException(nameof(config));
         }
         
         public async Task<Sprint> GetCurrentSprintAsync(string projectId, CancellationToken ct = default)
@@ -139,14 +128,14 @@ namespace Scrummy.DataAccess.GitLab.Providers
         
         private bool FilterSprintLabel(Label label)
         {
-            var rgx = new Regex(_sprintLabelPattern);
+            var rgx = new Regex(_config.SprintLabelPattern);
             var match = rgx.Match(label.Name);
             return match.Success;
         }
 
         private (DateTime From, DateTime To) GetSprintTimeFromLabelDescription(Label label)
         {
-            var rgx = new Regex(_sprintTimePattern);
+            var rgx = new Regex(_config.SprintTimePattern);
             var matches = rgx.Matches(label.Description);
 
             var from = DateTime.MinValue;

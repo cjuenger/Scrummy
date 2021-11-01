@@ -4,7 +4,6 @@ using IO.Juenger.GitLab.Api;
 using IO.Juenger.GitLab.Client;
 using IO.Juenger.GitLab.Model;
 using Microsoft.Extensions.Configuration;
-using Scrummy.DataAccess.Contracts.Configs;
 using Scrummy.DataAccess.Contracts.Providers;
 using Scrummy.DataAccess.GitLab.Configs;
 using Scrummy.DataAccess.GitLab.GraphQl.Queries;
@@ -32,6 +31,14 @@ namespace Scrummy.DataAccess.GitLab
             builder.RegisterType<SprintProvider>()
                 .As<ISprintProvider>()
                 .SingleInstance();
+
+            builder.RegisterType<SprintProviderConfig>()
+                .As<ISprintProviderConfig>()
+                .SingleInstance();
+            
+            builder.RegisterType<BacklogProvider>()
+                .As<IBacklogProvider>()
+                .SingleInstance();
             
             builder.RegisterType<BoardQueries>()
                 .As<IBoardQueries>()
@@ -44,6 +51,8 @@ namespace Scrummy.DataAccess.GitLab
             builder.Register(ctx => new ProjectApi(GetGitLabApiConfiguration(ctx)))
                 .As<IProjectApi>()
                 .SingleInstance();
+
+            
             
             RegisterMappers(builder);
         }

@@ -1,0 +1,13 @@
+﻿@using Radzen.Blazor
+
+<RadzenCard Style="width:500px;">
+    
+    <h3 class="card-title">Scrum</h3>
+    
+    <b>Project Start</b><br>
+    <RadzenDatePicker @bind-Value="@ProjectStart" DateFormat="d" Placeholder="2021/11/01"/>
+
+    <b class="mt-2">Sprint Length</b><br>
+    <RadzenTextBox @bind-Value="@SprintLength" Placeholder="4"/>
+
+</RadzenCard>

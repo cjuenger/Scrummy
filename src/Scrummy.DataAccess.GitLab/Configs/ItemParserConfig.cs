@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Scrummy.DataAccess.Contracts.Configs;
 using Scrummy.DataAccess.Contracts.Enums;
 
 namespace Scrummy.DataAccess.GitLab.Configs
@@ -10,7 +9,6 @@ namespace Scrummy.DataAccess.GitLab.Configs
         public string BugLabel { get; set; } = "Bug";
         public string StoryPointPattern { get; set; } = @"\d+ SP";
         public string StoryPointSplitter { get; set; } = " ";
-
 
         public Dictionary<string, WorkflowState> LabelToWorkflowMapping { get; set; } = new()
         {

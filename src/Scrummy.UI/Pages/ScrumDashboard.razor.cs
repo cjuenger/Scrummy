@@ -8,6 +8,7 @@ using IO.Juenger.GitLab.Model;
 using Microsoft.AspNetCore.Components;
 using Scrummy.DataAccess.Contracts.Models;
 using Scrummy.DataAccess.Contracts.Providers;
+using Scrummy.UI.Configs;
 
 namespace Scrummy.UI.Pages
 {
@@ -23,23 +24,18 @@ namespace Scrummy.UI.Pages
         [Inject]
         private IItemsProvider ItemsProvider { get; set; }
 
-        private string _projectId = "28355012";
-
-        private int _sprintLength = 2;
-
-        private DateTime _startDate;
-
+        [Inject]
+        private IGitLabConfig GitLabConfig { get; set; }
+        
+        [Inject]
+        private IScrumConfig ScrumConfig { get; set; }
+        
         private List<Issue> _issues;
 
         private IEnumerable<Item> _items;
 
         private List<Story> _stories;
-
-        public ScrumDashboard()
-        {
-            _startDate = new DateTime(2021, 08, 01);
-        }
-
+        
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
@@ -50,7 +46,7 @@ namespace Scrummy.UI.Pages
 
         private async Task<List<Issue>> LoadIssuesAsync()
         {
-            var sprints = await SprintProvider.GetAllSprintsAsync("28355012");
+            var sprints = await SprintProvider.GetAllSprintsAsync(GitLabConfig.ProjectId);
 
             foreach (var sprint in sprints)
             {
@@ -58,11 +54,11 @@ namespace Scrummy.UI.Pages
                     $"{sprint.Name} Start:{sprint.StartTime} End:{sprint.EndTime} Items: {sprint.Items.Count}");
             }
 
-            var currentSprint = await SprintProvider.GetCurrentSprintAsync("28355012");
+            var currentSprint = await SprintProvider.GetCurrentSprintAsync(GitLabConfig.ProjectId);
             Debug.WriteLine($"The current sprint is {currentSprint.Name}");
             
             var issues = await ProjectApi
-                .GetProjectIssuesAsync(_projectId)
+                .GetProjectIssuesAsync(GitLabConfig.ProjectId)
                 .ConfigureAwait(false);
 
             return issues;
@@ -70,7 +66,7 @@ namespace Scrummy.UI.Pages
 
         private async Task<IEnumerable<Item>> GetItemsAsync()
         {
-            var items = await ItemsProvider.GetAllItemsAsync(_projectId);
+            var items = await ItemsProvider.GetAllItemsAsync(GitLabConfig.ProjectId);
             return items.ToList();
         }
 

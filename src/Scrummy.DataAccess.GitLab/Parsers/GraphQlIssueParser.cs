@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using Scrummy.DataAccess.Contracts.Configs;
 using Scrummy.DataAccess.Contracts.Enums;
+using Scrummy.DataAccess.GitLab.Configs;
 using Scrummy.DataAccess.GitLab.GraphQl.Responses;
 
 namespace Scrummy.DataAccess.GitLab.Parsers

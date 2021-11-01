@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using IO.Juenger.GitLab.Api;
 using Microsoft.AspNetCore.Components;
 using Scrummy.DataAccess.Contracts.Models;
-using Scrummy.DataAccess.Contracts.Parsers;
 using Scrummy.DataAccess.Contracts.Providers;
 using Scrummy.DataAccess.GitLab.Parsers;
 using Scrummy.Scrum.Metrics;

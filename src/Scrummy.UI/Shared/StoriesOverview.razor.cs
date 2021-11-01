@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
 using Scrummy.DataAccess.Contracts.Enums;
 using Scrummy.DataAccess.Contracts.Models;
-using Scrummy.DataAccess.Contracts.Parsers;
 using Scrummy.DataAccess.GitLab.Parsers;
 
 namespace Scrummy.UI.Shared
