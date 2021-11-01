@@ -4,10 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using IO.Juenger.GitLab.Api;
 using Microsoft.AspNetCore.Components;
-using Scrummy.GitLab.Contracts.Parsers;
-using Scrummy.GitLab.Parsers;
-using Scrummy.Scrum.Contracts.Metrics;
-using Scrummy.Scrum.Contracts.Models;
+using Scrummy.DataAccess.Contracts.Models;
+using Scrummy.DataAccess.Contracts.Parsers;
+using Scrummy.DataAccess.GitLab.Parsers;
+using Scrummy.Scrum.Metrics;
 
 namespace Scrummy.UI.Shared
 {
@@ -17,9 +17,6 @@ namespace Scrummy.UI.Shared
 
         [Inject]
         private IVelocityCalculator VelocityCalculator { get; set; }
-     
-        [Inject]
-        private IItemParser ItemParser { get; set; }
         
         [Parameter]
         public IEnumerable<Story> Stories { get; set; }

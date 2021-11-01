@@ -1,15 +1,9 @@
 using Autofac;
-using AutoMapper;
-using IO.Juenger.GitLab.Api;
-using IO.Juenger.GitLab.Client;
-using IO.Juenger.GitLab.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Scrummy.GitLab;
-using Scrummy.Scrum;
 
 namespace Scrummy.UI
 {

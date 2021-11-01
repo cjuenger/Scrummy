@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
-using Humanizer;
-using IO.Juenger.GitLab.Api;
-using IO.Juenger.GitLab.Client;
 using IO.Juenger.GitLab.Model;
 using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;

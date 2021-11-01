@@ -1,21 +1,20 @@
 ﻿@using Radzen.Blazor
-@using Scrummy.Scrum.Contracts.Enums
-@using Scrummy.Scrum.Contracts.Models
 
 <RadzenCard Style="width:500px; overflow: scroll;">
 
-    <h3>Backlog</h3>
-    
-    <div class="row">
-        <b class="col">Total: @(_backlogItems?.Count() ?? 0)</b>
-        <b class="col">Ready: @(_backlogItems?.Where(bi => bi.State == WorkflowState.Ready).Count() ?? 0)</b>
-    </div>
-    
-    <br/>
-    
-    @foreach (var backlogItem in _backlogItems ?? Enumerable.Empty<Item>())
-    {
-        <BacklogItem Item="backlogItem"/>
-    }
+    @* TODO: 20211101 CJ: Must refactor this!*@
+    @* <h3>Backlog</h3> *@
+    @* *@
+    @* <div class="row"> *@
+    @*     <b class="col">Total: @(_backlogItems?.Count() ?? 0)</b> *@
+    @*     <b class="col">Ready: @(_backlogItems?.Where(bi => bi.State == WorkflowState.Ready).Count() ?? 0)</b> *@
+    @* </div> *@
+    @* *@
+    @* <br/> *@
+    @* *@
+    @* @foreach (var backlogItem in _backlogItems ?? Enumerable.Empty<Item>()) *@
+    @* { *@
+    @*     <BacklogItem Item="backlogItem"/> *@
+    @* } *@
     
 </RadzenCard>

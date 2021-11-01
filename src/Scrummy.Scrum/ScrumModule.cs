@@ -1,8 +1,8 @@
 ﻿using Autofac;
-using Scrummy.Scrum.Contracts.Metrics;
-using Scrummy.Scrum.Contracts.Providers;
 using Scrummy.Scrum.Metrics;
 using Scrummy.Scrum.Providers;
+using IChartGenerator = Scrummy.Scrum.Providers.IChartGenerator;
+using IVelocityCalculator = Scrummy.Scrum.Metrics.IVelocityCalculator;
 
 namespace Scrummy.Scrum
 {

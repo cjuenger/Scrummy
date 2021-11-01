@@ -1,0 +1,27 @@
+﻿using System;
+using System.Collections.Generic;
+using Scrummy.DataAccess.Contracts.Enums;
+
+namespace Scrummy.DataAccess.Contracts.Models
+{
+    public class Item
+    {
+        public string Title { get; set; }
+        
+        public ItemType Type { get; set; }
+
+        public WorkflowState State { get; set; }
+        
+        public string Description { get; set; }
+        
+        public DateTime CreatedAt { get; set; }
+        
+        public DateTime StartedAt { get; set; }
+
+        public DateTime? ClosedAt { get; set; }
+        
+        public IEnumerable<string> Tasks { get; set; }
+
+        public string Link { get; set; }
+    }
+}

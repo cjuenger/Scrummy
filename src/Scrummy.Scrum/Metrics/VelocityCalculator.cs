@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Scrummy.Scrum.Contracts.Enums;
-using Scrummy.Scrum.Contracts.Metrics;
-using Scrummy.Scrum.Contracts.Models;
+using Scrummy.DataAccess.Contracts.Enums;
+using Scrummy.DataAccess.Contracts.Models;
 using Scrummy.Scrum.Util;
 
 namespace Scrummy.Scrum.Metrics
