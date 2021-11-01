@@ -18,3 +18,7 @@ src/Scrummy.Scrum/bin/
 src/Scrummy.GitLab.GraphQl.Contracts/bin/
 src/Scrummy.Scrum.Contracts/bin/
 src/Scrummy.sln.DotSettings.user
+src/Scrummy.DataAccess.Contracts/bin/
+src/Scrummy.DataAccess.Contracts/obj/
+src/Scrummy.DataAccess.GitLab/bin/
+src/Scrummy.DataAccess.GitLab/obj/

@@ -4,18 +4,14 @@ using System.Threading.Tasks;
 using IO.Juenger.GitLab.Api;
 using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
-using Scrummy.GitLab.Contracts.Parsers;
-using Scrummy.GitLab.Parsers;
-using Scrummy.Scrum.Contracts.Enums;
-using Scrummy.Scrum.Contracts.Models;
+using Scrummy.DataAccess.Contracts.Enums;
+using Scrummy.DataAccess.Contracts.Models;
+using Scrummy.DataAccess.GitLab.Parsers;
 
 namespace Scrummy.UI.Shared
 {
     public partial class StoriesOverview
     {
-        [Inject]
-        private IItemParser ItemParser { get; set; }
-        
         [Parameter]
         public IEnumerable<Story> Stories { get; set; }
         

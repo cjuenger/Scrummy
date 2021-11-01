@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Scrummy.Scrum.Contracts.Models;
-using Scrummy.Scrum.Contracts.Providers;
+using Scrummy.DataAccess.Contracts.Models;
+using Scrummy.Scrum.Models;
 
 namespace Scrummy.Scrum.Providers
 {
@@ -206,6 +206,33 @@ namespace Scrummy.Scrum.Providers
                 estimatedXy
             };
         }
-       
+
+        public IEnumerable<Xy<DateTime, int>> GetVelocityChart(IEnumerable<Sprint> sprints, bool tillToday = true)
+        {
+            var sprintArray = sprints?.ToArray() ?? Array.Empty<Sprint>();
+
+            var velocity = sprintArray
+                .OrderBy(s => s.EndTime)
+                .Select(s => new Xy<DateTime, int>
+                {
+                    X = s.EndTime,
+                    Y = s.Velocity
+                })
+                .ToList();
+
+            if (velocity.Count <= 0) return velocity;
+
+            if (!tillToday) return velocity;
+            
+            var lastVelocity = velocity.LastOrDefault();
+            var current = new Xy<DateTime, int>
+            {
+                X = DateTime.Now,
+                Y = lastVelocity?.Y ?? 0
+            };
+            velocity = velocity.Append(current).ToList();
+
+            return velocity;
+        }
     }
 }

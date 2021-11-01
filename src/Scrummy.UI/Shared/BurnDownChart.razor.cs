@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Components;
-using Scrummy.Scrum.Contracts.Metrics;
-using Scrummy.Scrum.Contracts.Models;
-using Scrummy.Scrum.Contracts.Providers;
+using Scrummy.DataAccess.Contracts.Models;
+using Scrummy.Scrum.Metrics;
+using Scrummy.Scrum.Models;
+using Scrummy.Scrum.Providers;
 
 namespace Scrummy.UI.Shared
 {
@@ -36,7 +37,7 @@ namespace Scrummy.UI.Shared
             
             _burnDown = ChartGenerator.GetBurnDownChart(Stories);
             
-            var velocity = VelocityCalculator.GetVelocityPerDay(Stories, StartDate, DateTime.Now);
+            var velocity = VelocityCalculator.GetAverageVelocityPerSingleDay(Stories, StartDate, DateTime.Now);
             _estimate = ChartGenerator.GetBurnDownEstimationChart(Stories, velocity);
         }
     }

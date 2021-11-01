@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Scrummy.Scrum.Contracts.Models;
+using Scrummy.DataAccess.Contracts.Models;
 
 namespace Scrummy.UI.Shared
 {

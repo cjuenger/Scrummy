@@ -3,9 +3,9 @@
 <h3>Scrum Dashboard</h3>
 
 <div style="display: flex; justify-content: flex-start; width: 90vw; flex-wrap: wrap">
-    <Velocity Stories="@_stories" SprintLength="@_sprintLength" StartDate="@_startDate"/>
-    <BurnUpChart Stories="@_stories" StartDate="@_startDate"/>
-    <BurnDownChart Stories="@_stories" StartDate="@_startDate"/>
+    <Velocity Stories="@_stories" SprintLength="@ScrumConfig.SprintLength" StartDate="@ScrumConfig.ProjectStart"/>
+    <BurnUpChart Stories="@_stories" StartDate="@ScrumConfig.ProjectStart"/>
+    <BurnDownChart Stories="@_stories" StartDate="@ScrumConfig.ProjectStart"/>
     <IssuesChart Issues="@_issues" Label="Story"/>
     <IssuesChart Issues="@_issues" Label="Bug"/>
     <IssuesChart Issues="@_issues"/>

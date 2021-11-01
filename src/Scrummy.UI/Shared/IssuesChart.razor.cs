@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using IO.Juenger.GitLab.Api;
 using IO.Juenger.GitLab.Model;
 using Microsoft.AspNetCore.Components;
-using Scrummy.Scrum.Contracts.Models;
+using Scrummy.Scrum.Models;
 
 namespace Scrummy.UI.Shared
 {
