@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Scrummy.DataAccess.Contracts.Models;
@@ -7,6 +8,8 @@ namespace Scrummy.UI.Shared
 {
     public partial class ItemComponent
     {
+        private Item _dragLeaveItem = null;
+        
         [Parameter] public Item Item { get; set; }
         
         [CascadingParameter] protected BoardComponent Board { get; set; }
@@ -20,6 +23,7 @@ namespace Scrummy.UI.Shared
         private void HandleDragStarted(DragEventArgs e)
         {
             Board.DragItem = Item;
+            Board.Items.Remove(Board.DragItem);
             Debug.WriteLine($"Started dragging item {Item.Title}");
         }
         
@@ -29,6 +33,10 @@ namespace Scrummy.UI.Shared
             
             Board.Items.Remove(Board.DragItem);
             var index = Board.Items.IndexOf(Item);
+            
+            index += GetDragDirection();
+            index = index < 0 ? 0 : index;
+            
             Board.Items.Insert(index, Board.DragItem);
             
 
@@ -42,6 +50,25 @@ namespace Scrummy.UI.Shared
             // {
             //     _dropClass = "can-drop";
             // }
+        }
+
+        private void HandleDragLeave()
+        {
+            _dragLeaveItem = Item;
+            
+            if(Item == Board.DragItem) return;
+            if (Board.Items.Last() != Item) return;
+            
+            Board.Items.Remove(Board.DragItem);
+            Board.Items.Add(Board.DragItem);
+        }
+
+        private int GetDragDirection()
+        {
+            var index = Board.Items.IndexOf(Board.DragItem);
+            var dragLeaveIndex = Board.Items.IndexOf(_dragLeaveItem);
+
+            return index >= dragLeaveIndex ? 1 : 0;
         }
     }
 }

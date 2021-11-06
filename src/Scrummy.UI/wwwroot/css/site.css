@@ -1,12 +1,11 @@
 ﻿.board-component {
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
 }
 
 .list-component {
     width: 300px;
-    border: 10px;
-    background: transparent;
+    margin-left: 10px;
 }
 
 .dropzone {

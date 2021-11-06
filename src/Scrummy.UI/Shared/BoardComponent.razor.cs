@@ -23,10 +23,10 @@ namespace Scrummy.UI.Shared
                 new() {Title = "Mock Item 2", State = WorkflowState.Planned},
                 new() {Title = "Mock Item 3", State = WorkflowState.Processing},
                 new() {Title = "Mock Item 4", State = WorkflowState.Opened},
-                new Story{Title = "Mock Story 1", State = WorkflowState.Opened},
-                new Story{Title = "Mock Story 2", State = WorkflowState.Opened},
-                new Story{Title = "Mock Story 3", State = WorkflowState.Opened},
-                new Story{Title = "Mock Story 4", State = WorkflowState.Opened},
+                new Story{Title = "Mock Story 1", State = WorkflowState.Opened, Type = ItemType.Story},
+                new Story{Title = "Mock Story 2", State = WorkflowState.Opened, Type = ItemType.Story},
+                new Story{Title = "Mock Story 3", State = WorkflowState.Opened, Type = ItemType.Story},
+                new Story{Title = "Mock Story 4", State = WorkflowState.Opened, Type = ItemType.Story},
             };
             
             await base.OnInitializedAsync();

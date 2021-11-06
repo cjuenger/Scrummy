@@ -6,12 +6,13 @@
 <li draggable="true" 
     @ondragstart="HandleDragStarted" 
     ondragover="event.preventDefault();"
-    @ondragenter="HandleDragEnter">
+    @ondragenter="HandleDragEnter"
+    @ondragleave="HandleDragLeave">
     
     <RadzenButton
         ButtonStyle="ButtonStyle.Light"
         Click="@FollowLink"
-        Style="margin-bottom: 20px; height: auto; padding: 5px"
+        Style="margin-bottom: 20px; height: auto; padding: 5px; width: 100%;"
         class="position-relative">
 
         <div style="text-align: start">@Item.Title</div>
