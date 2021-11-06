@@ -1,0 +1,29 @@
+﻿@using Scrummy.DataAccess.Contracts.Enums
+@using Scrummy.DataAccess.Contracts.Models
+
+<div class="list-component">
+    
+    <h3>@Title</h3>
+
+    <div class="row">
+        <b class="col">Total: @(Items?.Count() ?? 0)</b>
+        <b class="col">Ready: @(Items?.Where(bi => bi.State == WorkflowState.Ready).Count() ?? 0)</b>
+    </div>
+
+    <br/>
+
+    <ul class="dropzone @_dropClass"
+        ondragover="event.preventDefault();"
+        ondragstart="event.dataTransfer.setData('', event.target.id);"
+        @ondrop="HandleDrop"
+        @ondragenter="HandleDragEnter"
+        @ondragleave="HandleDragLeave">
+
+        @foreach (var item in Items ?? Enumerable.Empty<Item>())
+        {
+            <ItemComponent Item="item"/>
+        }
+
+    </ul>
+    
+</div>
