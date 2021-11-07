@@ -3,13 +3,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Scrummy.DataAccess.Contracts.Enums;
 using Scrummy.DataAccess.Contracts.Models;
+using Scrummy.UI.Services;
 
 namespace Scrummy.UI.Shared
 {
     public partial class BoardComponent
     {
-        [Parameter] public string Title { get; set; }
+        [Inject] public IDragAndDropService<Item> DragAndDropService { get; set; } 
         
+        [Parameter] public string Title { get; set; }
         [Parameter] public List<Item> Items { get; set; }
         [Parameter] public RenderFragment ChildContent { get; set; }
 
@@ -28,6 +30,8 @@ namespace Scrummy.UI.Shared
                 new Story{Title = "Mock Story 3", State = WorkflowState.Opened, Type = ItemType.Story},
                 new Story{Title = "Mock Story 4", State = WorkflowState.Opened, Type = ItemType.Story},
             };
+
+            DragAndDropService.Items = Items;
             
             await base.OnInitializedAsync();
         }

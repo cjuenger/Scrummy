@@ -1,7 +1,9 @@
 ﻿using Autofac;
+using Scrummy.DataAccess.Contracts.Models;
 using Scrummy.DataAccess.GitLab;
 using Scrummy.Scrum;
 using Scrummy.UI.Configs;
+using Scrummy.UI.Services;
 
 namespace Scrummy.UI
 {
@@ -22,6 +24,9 @@ namespace Scrummy.UI
             builder.RegisterType<ScrumConfig>()
                 .As<IScrumConfig>()
                 .SingleInstance();
+
+            builder.RegisterGeneric(typeof(DragAndDropService<>))
+                .As(typeof(IDragAndDropService<>));
         }
         
         private static void RegisterModules(ContainerBuilder builder)
