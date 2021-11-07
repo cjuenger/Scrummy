@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -9,6 +10,9 @@ namespace Scrummy.UI.Shared
     public partial class ItemComponent
     {
         private Item _dragLeaveItem = null;
+
+        private double _previousX;
+        private double _previousY;
         
         [Parameter] public Item Item { get; set; }
         
@@ -22,38 +26,42 @@ namespace Scrummy.UI.Shared
         
         private void HandleDragStarted(DragEventArgs e)
         {
+            Debug.WriteLine($"Dragging item {Item.Title} started at x={e.ScreenX} y={e.ScreenY}");
+
+            _previousX = e.ScreenX;
+            _previousY = e.ScreenY;
+            
             Board.DragItem = Item;
             Board.Items.Remove(Board.DragItem);
-            Debug.WriteLine($"Started dragging item {Item.Title}");
+        }
+
+        private void HandleDragEnded(DragEventArgs e)
+        {
+            Debug.WriteLine($"Dragging item {Board.DragItem.Title} ended at x={e.ScreenX} y={e.ScreenY}");
         }
         
-        private void HandleDragEnter()
+        private void HandleDragEnter(DragEventArgs e)
         {
+            Debug.WriteLine($"Dragged item {Board.DragItem.Title} entered {Item.Title} at at x={e.ScreenX} y={e.ScreenY}");
+            
             if(Item == Board.DragItem) return;
             
+            var index = GetDragIndex(e);
             Board.Items.Remove(Board.DragItem);
-            var index = Board.Items.IndexOf(Item);
-            
-            index += GetDragDirection();
-            index = index < 0 ? 0 : index;
-            
-            Board.Items.Insert(index, Board.DragItem);
-            
-
-            // if (ListStatus == Container.Payload.Status) return;
-            //
-            // if (AllowedStatuses != null && !AllowedStatuses.Contains(Container.Payload.Status))
-            // {
-            //     _dropClass = "no-drop";
-            // }
-            // else
-            // {
-            //     _dropClass = "can-drop";
-            // }
+            if (index < Board.Items.Count)
+            {
+                Board.Items.Insert(index, Board.DragItem);
+            }
+            else
+            {
+                Board.Items.Add(Board.DragItem);
+            }
         }
 
-        private void HandleDragLeave()
+        private void HandleDragLeave(DragEventArgs e)
         {
+            Debug.WriteLine($"Dragged item {Board.DragItem.Title} leaves {Item.Title} at at x={e.ScreenX} y={e.ScreenY}");
+            
             _dragLeaveItem = Item;
             
             if(Item == Board.DragItem) return;
@@ -63,12 +71,27 @@ namespace Scrummy.UI.Shared
             Board.Items.Add(Board.DragItem);
         }
 
-        private int GetDragDirection()
+        private int GetDragIndex(DragEventArgs e)
         {
-            var index = Board.Items.IndexOf(Board.DragItem);
-            var dragLeaveIndex = Board.Items.IndexOf(_dragLeaveItem);
+            var currentX = e.ScreenX;
+            var currentY = e.ScreenY;
 
-            return index >= dragLeaveIndex ? 1 : 0;
+            var deltaX = currentX - _previousX;
+            var deltaY = currentY - _previousY;
+            
+            var isUpDirection = double.IsNegative(deltaY);
+            
+            var index = Board.Items.IndexOf(Item);
+
+            _previousX = currentX;
+            _previousY = currentY;
+            
+            index += (isUpDirection ? 0 : 1);
+            index = index < 0 ? 0 : index;
+
+            Debug.WriteLine($"Dragged {(isUpDirection ? "up" : "down")} to index={index} from x={_previousX} y={_previousY} to x={currentX} y={currentY} by ∆x={deltaX} ∆y={deltaY}");
+            
+            return index;
         }
     }
 }

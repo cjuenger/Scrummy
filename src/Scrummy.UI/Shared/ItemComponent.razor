@@ -4,7 +4,8 @@
 @using Scrummy.DataAccess.Contracts.Models
 
 <li draggable="true" 
-    @ondragstart="HandleDragStarted" 
+    @ondragstart="HandleDragStarted"
+    @ondragend="HandleDragEnded"
     ondragover="event.preventDefault();"
     @ondragenter="HandleDragEnter"
     @ondragleave="HandleDragLeave">
