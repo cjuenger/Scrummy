@@ -3,12 +3,14 @@
 @using Scrummy.DataAccess.Contracts.Enums
 @using Scrummy.DataAccess.Contracts.Models
 
-<li draggable="true" 
-    @ondragstart="HandleDragStarted"
+<li id="@Id"
+    draggable="true"
     @ondragend="HandleDragEnded"
     ondragover="event.preventDefault();"
     @ondragenter="HandleDragEnter"
     @ondragleave="HandleDragLeave">
+
+    @* ondragstart="onHandleDragonStart" *@
     
     <RadzenButton
         ButtonStyle="ButtonStyle.Light"

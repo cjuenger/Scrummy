@@ -33,5 +33,25 @@
 
 <script src="_framework/blazor.server.js"></script>
 <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
+<script>
+  function addOnDragStartEventHandler(objReference, id)
+  {
+      let element = document.getElementById(id);
+      let objRef = objReference;
+      
+      console.log("obj-ref: " + objRef);
+      console.log("id: " + id);
+      console.log("element: " + element);    
+      
+      element.addEventListener(
+          'dragstart', 
+          function(event) { 
+            console.log("handling dragstart event on target " + event.target.id);
+            event.dataTransfer.setData('text', event.currentTarget.id);
+            console.log("dataTransfer data set");
+            return objRef.invokeMethodAsync('HandleDragStarted', event);
+          });    
+  }  
+</script>
 </body>
 </html>

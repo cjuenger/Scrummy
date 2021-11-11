@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Scrummy.DataAccess.Contracts.Models;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace Scrummy.UI.Services
 {
@@ -9,20 +9,36 @@ namespace Scrummy.UI.Services
     {
         private double _previousX;
         private double _previousY;
+
+        private T _lastEnteredItem;
         
         public T DragItem { get; set; }
         
         public List<T> Items { get; set; }
         
-        public void HandleDragStarted(T item, double x, double y)
+        public void HandleDragStarted(T item, DragEventArgs e)
         {
-            Debug.WriteLine($"Dragging item {item} started at x={x} y={y}");
+            Debug.WriteLine($"Event type {e?.Type}");
+
+            _previousX = e?.ScreenX ?? 0d;
+            _previousY = e?.ScreenY ?? 0d;
             
-            _previousX = x;
-            _previousY = y;
+            Debug.WriteLine($"Dragging item {item} started at x={_previousX} y={_previousY}");
             
             DragItem = item;
-            Items.Remove(item);
+            // Items.Remove(item);
+        }
+        
+        public void HandleDragEnded(T draggedItem, double x, double y)
+        {
+            Debug.WriteLine($"Dragging item {draggedItem} ended at x={x} y={y}");
+
+            if (_lastEnteredItem is null || _lastEnteredItem.Equals(default))
+            {
+                Items.Add(draggedItem);
+            }
+
+            _lastEnteredItem = default;
         }
 
         public void HandleDragEnter(T enteredItem, double x, double y)
@@ -41,6 +57,8 @@ namespace Scrummy.UI.Services
             {
                 Items.Add(DragItem);
             }
+
+            _lastEnteredItem = enteredItem;
         }
 
         public void HandleDragLeave(T item)
