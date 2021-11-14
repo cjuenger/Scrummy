@@ -3,20 +3,15 @@
 @using Scrummy.DataAccess.Contracts.Enums
 @using Scrummy.DataAccess.Contracts.Models
 
-<li id="@Id"
-    draggable="true"
-    @ondragend="HandleDragEnded"
-    ondragover="event.preventDefault();"
-    @ondragenter="HandleDragEnter"
-    @ondragleave="HandleDragLeave">
+<li style="padding: 5px;">
 
-    @* ondragstart="onHandleDragonStart" *@
-    
     <RadzenButton
+        id="@Id"
+        draggable="true"
         ButtonStyle="ButtonStyle.Light"
         Click="@FollowLink"
-        Style="margin-bottom: 20px; height: auto; padding: 5px; width: 100%;"
-        class="position-relative">
+        Style="height: auto; padding: 5px; width: 100%;"
+        class="position-relative item-dropzone">
 
         <div style="text-align: start">@Item.Title</div>
 
@@ -47,5 +42,5 @@
         </div>
 
     </RadzenButton>
-    
+
 </li>

@@ -11,26 +11,33 @@ namespace Scrummy.UI.Shared
 {
     public partial class ItemComponent
     {
-        [Parameter] public Item Item { get; set; }
-        
-        private string Id { get; }
-        
-        [CascadingParameter] protected BoardComponent Board { get; set; }
-        
-        [Inject] private IJSRuntime JsRuntime { get; set; }
-        
         private DotNetObjectReference<ItemComponent> _objRef;
 
         public ItemComponent() => Id = Guid.NewGuid().ToString();
-        
+        [Parameter] public Item Item { get; set; }
+
+        public string Id { get; }
+
+        public string Style { get; set; } = "";
+
+        [CascadingParameter] protected BoardComponent Board { get; set; }
+
+        [Inject] private IJSRuntime JsRuntime { get; set; }
+
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
             {
                 _objRef = DotNetObjectReference.Create(this);
-                await JsRuntime.InvokeVoidAsync("addOnDragStartEventHandler", _objRef, Id);
+                
+                await JsRuntime.InvokeVoidAsync("addDragStartEventHandler", _objRef, Id);
+                await JsRuntime.InvokeVoidAsync("addDragEnterEventHandler", _objRef, Id);
+                await JsRuntime.InvokeVoidAsync("addDragLeaveEventHandler", _objRef, Id);
+                await JsRuntime.InvokeVoidAsync("addDragOverEventHandler", _objRef, Id);
+                await JsRuntime.InvokeVoidAsync("addDragEndEventHandler", _objRef, Id);
+                await JsRuntime.InvokeVoidAsync("addDropEventHandler", _objRef, Id);
             }
-            
+	
             await base.OnAfterRenderAsync(firstRender);
         }
 
@@ -39,14 +46,18 @@ namespace Scrummy.UI.Shared
             // var link = Item.Link;
             // TODO: 20210815 CJ: Open link in new tab!
         }
-        
-        [JSInvokable]
-        public void HandleDragStarted(DragEventArgs e) => Board.DragAndDropService.HandleDragStarted(Item, e);
 
-        private void HandleDragEnded(DragEventArgs e) => Board.DragAndDropService.HandleDragEnded(Item, e.ScreenX, e.ScreenY);
+        private void HandleDragStarted(DragEventArgs e) => Board.DragAndDropService.HandleItemDragStarted(this);
 
-        private void HandleDragEnter(DragEventArgs e) => Board.DragAndDropService.HandleDragEnter(Item, e.ScreenX, e.ScreenY);
+        private void HandleDragEnded(DragEventArgs e)
+        {
+            Board.DragAndDropService.HandleItemDragEnded(this);
+        }
 
-        private void HandleDragLeave(DragEventArgs e) => Board.DragAndDropService.HandleDragLeave(Item);
+        private void HandleDragEnter(DragEventArgs e) => Board.DragAndDropService.HandleItemDragEnter(this);
+
+        private void HandleDragLeave(DragEventArgs e) => Board.DragAndDropService.HandleItemDragLeave(this);
+
+        private void HandleDrop(DragEventArgs e) => Board.DragAndDropService.HandleItemDrop(this);
     }
 }

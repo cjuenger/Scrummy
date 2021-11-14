@@ -9,7 +9,7 @@ namespace Scrummy.UI.Shared
 {
     public partial class BoardComponent
     {
-        [Inject] public IDragAndDropService<Item> DragAndDropService { get; set; } 
+        [Inject] public IDragAndDropService DragAndDropService { get; set; } 
         
         [Parameter] public string Title { get; set; }
         [Parameter] public List<Item> Items { get; set; }
@@ -31,7 +31,7 @@ namespace Scrummy.UI.Shared
                 new Story{Title = "Mock Story 4", State = WorkflowState.Opened, Type = ItemType.Story},
             };
 
-            DragAndDropService.Items = Items;
+            DragAndDropService.CurrentList = Items;
             
             await base.OnInitializedAsync();
         }

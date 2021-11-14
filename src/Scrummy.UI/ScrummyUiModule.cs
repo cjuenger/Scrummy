@@ -25,8 +25,11 @@ namespace Scrummy.UI
                 .As<IScrumConfig>()
                 .SingleInstance();
 
-            builder.RegisterGeneric(typeof(DragAndDropService<>))
-                .As(typeof(IDragAndDropService<>));
+            builder.RegisterType<DragAndDropService>()
+                .As<IDragAndDropService>();
+            
+            // builder.RegisterGeneric(typeof(DragAndDropService<>))
+            //     .As(typeof(IDragAndDropService<>));
         }
         
         private static void RegisterModules(ContainerBuilder builder)

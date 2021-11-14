@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Components.Web;
+using Scrummy.DataAccess.Contracts.Models;
+using Scrummy.UI.Shared;
 
 namespace Scrummy.UI.Services
 {
-    public interface IDragAndDropService<T>
+    public interface IDragAndDropService
     {
-        T DragItem { get; set; }
-        List<T> Items { get; set; }
-        void HandleDragStarted(T item, DragEventArgs e);
-        void HandleDragEnded(T draggedItem, double x, double y);
-        void HandleDragEnter(T enteredItem, double x, double y);
-        void HandleDragLeave(T item);
+        List<Item> CurrentList { get; set; }
+        void HandleItemDragStarted(ItemComponent itemComponent);
+        void HandleItemDragEnded(ItemComponent itemComponent);
+        void HandleItemDragEnter(ItemComponent itemComponent);
+        void HandleItemDragLeave(ItemComponent itemComponent);
+        void HandleItemDrop(ItemComponent itemComponent);
     }
 }

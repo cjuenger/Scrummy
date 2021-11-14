@@ -34,24 +34,143 @@
 <script src="_framework/blazor.server.js"></script>
 <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
 <script>
-  function addOnDragStartEventHandler(objReference, id)
-  {
-      let element = document.getElementById(id);
-      let objRef = objReference;
-      
-      console.log("obj-ref: " + objRef);
-      console.log("id: " + id);
-      console.log("element: " + element);    
-      
-      element.addEventListener(
-          'dragstart', 
-          function(event) { 
-            console.log("handling dragstart event on target " + event.target.id);
-            event.dataTransfer.setData('text', event.currentTarget.id);
-            console.log("dataTransfer data set");
-            return objRef.invokeMethodAsync('HandleDragStarted', event);
-          });    
-  }  
+    
+    var eventTarget = undefined;
+    
+    // 'dragstart' handling
+    function addDragStartEventHandler(objReference, id)
+    {
+        let element = document.getElementById(id);
+        let objRef = objReference;
+        
+        console.log("adding 'dragstart' event handler to element of id " + id);  
+        
+        element.addEventListener('dragstart', handleDragStart);
+        
+        // element.addEventListener(
+        //   'dragstart', 
+        //   function(event) { 
+        //     console.log("handling dragstart event on target " + event.target.id);
+        //     event.dataTransfer.setData('text', event.currentTarget.id);
+        //     console.log("dataTransfer data set");
+        //     return objRef.invokeMethodAsync('HandleDragStarted', event);
+        //   });    
+    }
+    
+    function handleDragStart(event) {
+        console.log("'dragstart' event fired");
+        event.dataTransfer.setData('text', event.target.id);
+    }
+    
+    // 'dragenter' handling
+    function addDragEnterEventHandler(objReference, id) {
+            
+        let element = document.getElementById(id);
+        let objRef = objReference;
+        
+        console.log("adding 'dragenter' event handler to element of id " + id); 
+        
+        element.addEventListener('dragenter', handleDragEnter);
+    }
+    
+    function handleDragEnter(event) {
+        
+        console.log("'dragenter' event fired");
+        eventTarget = event.target; 
+        // event.stopPropagation();
+        // event.preventDefault();
+
+        if (!event.target.className.includes("item-dropzone")) return;
+
+        console.log("handling 'dragenter' event of target " + event.target.id);
+
+        event.target.style.marginLeft = "5px";
+        event.target.style.opacity = "0.5";      
+    }
+    
+    // 'dragleave' handling
+    function addDragLeaveEventHandler(objReference, id) {
+                
+        let element = document.getElementById(id);
+        let objRef = objReference;
+        
+        console.log("adding 'dragleave' event handler to element of id " + id); 
+        
+        element.addEventListener('dragleave', handleDragLeave);
+    }
+        
+    function handleDragLeave(event) {
+        
+        console.log("'dragleave' event fired");
+        
+        if (eventTarget === event.target) {
+            // event.stopPropagation();
+            // event.preventDefault();
+
+            if (!event.target.className.includes("item-dropzone")) return;
+
+            console.log("handling 'dragleave' of target " + event.target.id);
+
+            event.target.style.marginLeft = "";
+            event.target.style.opacity = "";
+
+            eventTarget = undefined;            
+        }      
+    }
+    
+    // 'dragover' handling
+    function addDragOverEventHandler(objReference, id) {
+        
+        let element = document.getElementById(id);
+        let objRef = objReference;
+        
+        console.log("adding 'dragover' event handler to element of id " + id); 
+        
+        element.addEventListener('dragover', handleDragOver);
+    }
+    
+    function handleDragOver(event) {
+        console.log("handling 'dragover' event");
+        event.preventDefault();
+    }
+    
+    // 'dragend' handling
+    function addDragEndEventHandler(objReference, id) {
+        
+        let element = document.getElementById(id);
+        let objRef = objReference;
+        
+        console.log("adding 'dragend' event handler to element of id " + id); 
+        
+        element.addEventListener('dragend', handleDragEnd);
+    }
+    
+    function handleDragEnd(event) {
+        console.log("handling 'dragend' event");
+        event.target.style.marginLeft = "";
+        event.target.style.opacity = "";
+        eventTarget = undefined;
+    }
+    
+    // 'drop' handling
+    function addDropEventHandler(objReference, id) {
+        
+        let element = document.getElementById(id);
+        let objRef = objReference;
+        
+        console.log("adding 'drop' event handler to element of id " + id); 
+        
+        element.addEventListener('drop', handleDrop);
+    }
+    
+    function handleDrop(event) {
+        console.log("handling 'drop' event");
+        event.preventDefault();
+        event.currentTarget.style.marginLeft = "";
+        event.currentTarget.style.opacity = "";
+        eventTarget = undefined;
+    }  
+    
 </script>
 </body>
 </html>
