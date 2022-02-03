@@ -30,7 +30,7 @@ namespace Scrummy.DataAccess.GitLab.Providers
             _config = config ?? throw new ArgumentNullException(nameof(config));
         }
         
-        public async Task<Sprint> GetCurrentSprintAsync(string projectId, CancellationToken ct = default)
+        public async Task<(bool IsSuccess, Sprint Sprint)> TryGetCurrentSprintAsync(string projectId, CancellationToken ct = default)
         {
             if (string.IsNullOrWhiteSpace(projectId))
             {
@@ -44,11 +44,11 @@ namespace Scrummy.DataAccess.GitLab.Providers
                     s.StartTime <= DateTime.Now 
                     && s.EndTime >= DateTime.Now);
 
-            if (currentSprint == null) throw new SprintNotFoundException();
-            
+            if (currentSprint == null) return (false, null);
+
             currentSprint.Items = (await GetItemsOfSprintAsync(projectId, currentSprint.Name, ct)).ToList();
             
-            return currentSprint;
+            return (true, currentSprint);
         }
 
         public async Task<IEnumerable<Sprint>> GetAllSprintsAsync(string projectId, CancellationToken ct = default)

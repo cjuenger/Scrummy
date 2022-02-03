@@ -8,7 +8,7 @@ using Scrummy.Scrum.Providers;
 
 namespace Scrummy.UI.Shared
 {
-    public partial class BurnUpChart
+    public partial class ReleaseBurnUpChart
     {
         private IEnumerable<Xy<DateTime, int>> _burnUp;
         

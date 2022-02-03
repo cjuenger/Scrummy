@@ -4,8 +4,8 @@
 
 <div style="display: flex; justify-content: flex-start; width: 90vw; flex-wrap: wrap">
     <Velocity Stories="@_stories" SprintLength="@ScrumConfig.SprintLength" StartDate="@ScrumConfig.ProjectStart"/>
-    <BurnUpChart Stories="@_stories" StartDate="@ScrumConfig.ProjectStart"/>
-    <BurnDownChart Stories="@_stories" StartDate="@ScrumConfig.ProjectStart"/>
+    <ReleaseBurnUpChart Stories="@_stories" StartDate="@ScrumConfig.ProjectStart"/>
+    <ReleaseBurnDownChart Stories="@_stories" StartDate="@ScrumConfig.ProjectStart"/>
     <IssuesChart Issues="@_issues" Label="Story"/>
     <IssuesChart Issues="@_issues" Label="Bug"/>
     <IssuesChart Issues="@_issues"/>
