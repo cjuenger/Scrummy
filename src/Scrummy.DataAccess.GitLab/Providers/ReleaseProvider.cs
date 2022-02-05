@@ -10,30 +10,42 @@ using Scrummy.DataAccess.GitLab.Parsers;
 
 namespace Scrummy.DataAccess.GitLab.Providers
 {
-    internal class ItemsProvider : IItemsProvider
+    internal class ReleaseProvider : IReleaseProvider
     {
         private readonly IProjectApi _projectApi;
         private readonly IItemParser _itemParser;
 
-        public ItemsProvider(
-            IProjectApi projectApi, 
-            IItemParser itemParser)
+        public ReleaseProvider(IProjectApi projectApi, IItemParser itemParser)
         {
             _projectApi = projectApi ?? throw new ArgumentNullException(nameof(projectApi));
             _itemParser = itemParser ?? throw new ArgumentNullException(nameof(itemParser));
         }
         
-        public async Task<IEnumerable<Item>> GetAllItemsAsync(
+        public async Task<Release> GetReleaseAsync(
             string projectId, 
+            ReleaseInfo releaseInfo, 
             CancellationToken ct = default)
         {
             if (string.IsNullOrWhiteSpace(projectId))
             {
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(projectId));
             }
-            
+
+            var items = 
+                await GetAllItemsOfReleaseAsync(projectId, releaseInfo, ct)
+                    .ConfigureAwait(false);
+
+            var release = new Release(releaseInfo, items.ToList());
+            return release;
+        }
+        
+        private async Task<IEnumerable<Item>> GetAllItemsOfReleaseAsync(
+            string projectId, 
+            ReleaseInfo releaseInfo, 
+            CancellationToken ct = default)
+        {
             var issues = await _projectApi
-                .GetProjectIssuesAsync(projectId, cancellationToken: ct)
+                .GetAllIssuesOfProjectMilestoneAsync(projectId, releaseInfo.Id, ct)
                 .ConfigureAwait(false);
 
             var items = issues.Select(i => _itemParser.Parse(i));

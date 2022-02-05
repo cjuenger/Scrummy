@@ -4,7 +4,8 @@ using IO.Juenger.GitLab.Api;
 using IO.Juenger.GitLab.Client;
 using IO.Juenger.GitLab.Model;
 using Microsoft.Extensions.Configuration;
-using Scrummy.DataAccess.Contracts.Providers;
+using Scrummy.DataAccess.Contracts.Interfaces;
+using Scrummy.DataAccess.Contracts.Models;
 using Scrummy.DataAccess.GitLab.Configs;
 using Scrummy.DataAccess.GitLab.GraphQl.Queries;
 using Scrummy.DataAccess.GitLab.Parsers;
@@ -69,7 +70,11 @@ namespace Scrummy.DataAccess.GitLab
         
         private static void RegisterMappers(ContainerBuilder builder)
         {
-            var mapperConfig = new MapperConfiguration(cfg => cfg.CreateMap<Issue, Issue>());
+            var mapperConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Issue, Issue>();
+                cfg.CreateMap<Milestone, ReleaseInfo>();
+            });
             var mapper = new Mapper(mapperConfig);
             builder.Register(_ => mapper).As<IMapper>();
         }

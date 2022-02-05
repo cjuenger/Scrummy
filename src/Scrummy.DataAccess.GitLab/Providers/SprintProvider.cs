@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using IO.Juenger.GitLab.Api;
 using IO.Juenger.GitLab.Model;
 using Scrummy.DataAccess.Contracts.Exceptions;
+using Scrummy.DataAccess.Contracts.Interfaces;
 using Scrummy.DataAccess.Contracts.Models;
-using Scrummy.DataAccess.Contracts.Providers;
 using Scrummy.DataAccess.GitLab.Configs;
 using Scrummy.DataAccess.GitLab.Parsers;
 

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using IO.Juenger.GitLab.Api;
 using IO.Juenger.GitLab.Model;
 using Microsoft.AspNetCore.Components;
+using Scrummy.DataAccess.Contracts.Interfaces;
 using Scrummy.DataAccess.Contracts.Models;
-using Scrummy.DataAccess.Contracts.Providers;
 using Scrummy.UI.Configs;
 
 namespace Scrummy.UI.Pages

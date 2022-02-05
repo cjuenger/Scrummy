@@ -5,9 +5,5 @@
         <AssemblyName>Scrummy.DataAccess.Contracts</AssemblyName>
         <RootNamespace>Scrummy.DataAccess.Contracts</RootNamespace>
     </PropertyGroup>
-    
-    <ItemGroup>
-      <PackageReference Include="IO.Juenger.GitLab" Version="1.0.0-unstable0002" />
-    </ItemGroup>
 
 </Project>
