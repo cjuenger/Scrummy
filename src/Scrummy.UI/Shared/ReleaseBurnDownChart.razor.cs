@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Scrummy.DataAccess.Contracts.Models;
 using Scrummy.Scrum.Metrics;
@@ -29,11 +30,19 @@ namespace Scrummy.UI.Shared
         [Parameter]
         public DateTime StartDate { get; set; }
         
-        protected override void OnParametersSet()
+        protected override async Task OnParametersSetAsync()
         {
-            base.OnParametersSet();
+            await base.OnParametersSetAsync().ConfigureAwait(false);
             
-            if(Stories == null || !Stories.Any()) return;
+            if(Stories == null || !Stories.Any())
+            {
+                _burnDown = Enumerable.Empty<Xy<DateTime, int>>();
+                _estimate = Enumerable.Empty<Xy<DateTime, int>>();
+                
+                await InvokeAsync(StateHasChanged).ConfigureAwait(false);
+                
+                return;
+            }
             
             _burnDown = ChartGenerator.GetBurnDownChart(Stories);
             

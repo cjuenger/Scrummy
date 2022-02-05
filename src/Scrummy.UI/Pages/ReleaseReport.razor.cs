@@ -19,17 +19,17 @@ namespace Scrummy.UI.Pages
         private IEnumerable<Item> OpenItems => 
             _selectedRelease?
                 .Items
-                .Where(i => i.State == WorkflowState.Opened);
+                .Where(i => i.State == WorkflowState.Opened) ?? Enumerable.Empty<Item>();
         
         private IEnumerable<Item> ClosedItems => 
             _selectedRelease?
                 .Items
-                .Where(i => i.State == WorkflowState.Closed);
+                .Where(i => i.State == WorkflowState.Closed) ?? Enumerable.Empty<Item>();
 
         private IEnumerable<Story> Stories =>
             _selectedRelease?
                 .Items
-                .OfType<Story>();
+                .OfType<Story>() ?? Enumerable.Empty<Story>();
         
         [Inject]
         private IReleaseInfoProvider ReleaseInfoProvider { get; set; }
@@ -59,23 +59,38 @@ namespace Scrummy.UI.Pages
             if (isSuccess)
             {
                 _selectedReleaseInfo = releaseInfo;
-                _selectedRelease = 
-                    await ReleaseProvider
-                        .GetReleaseAsync(GitLabConfig.ProjectId, releaseInfo)
-                        .ConfigureAwait(false);
             }
             else if (_releaseInfos != null)
             {
-                _selectedReleaseInfo = _releaseInfos.Last();//[^1];
-                _selectedRelease = 
-                    await ReleaseProvider
-                        .GetReleaseAsync(GitLabConfig.ProjectId, _selectedReleaseInfo)
-                        .ConfigureAwait(false);
+                _selectedReleaseInfo = _releaseInfos.Last();
             }
+            
+            await LoadReleaseAsync(_selectedReleaseInfo).ConfigureAwait(false);
+        }
+
+        private async Task LoadReleaseAsync(ReleaseInfo releaseInfo)
+        {
+            _selectedRelease = 
+                await ReleaseProvider
+                    .GetReleaseAsync(GitLabConfig.ProjectId, releaseInfo)
+                    .ConfigureAwait(false);
         }
         
-        private void OnChange(object value)
+        private async void OnChange(object value)
         {
+            switch (value)
+            {
+                case null:
+                    _selectedReleaseInfo = null;
+                    _selectedRelease = null;
+                    break;
+                case ReleaseInfo releaseInfo:
+                    await LoadReleaseAsync(releaseInfo).ConfigureAwait(false);
+                    break;
+            }
+            
+            await InvokeAsync(StateHasChanged).ConfigureAwait(false);
+
             Debug.WriteLine($"Value of {value} changed");
         }
     }
