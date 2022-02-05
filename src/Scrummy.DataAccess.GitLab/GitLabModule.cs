@@ -40,6 +40,14 @@ namespace Scrummy.DataAccess.GitLab
             builder.RegisterType<BacklogProvider>()
                 .As<IBacklogProvider>()
                 .SingleInstance();
+
+            builder.RegisterType<ReleaseInfoProvider>()
+                .As<IReleaseInfoProvider>()
+                .SingleInstance();
+
+            builder.RegisterType<ReleaseProvider>()
+                .As<IReleaseProvider>()
+                .SingleInstance();
             
             builder.RegisterType<BoardQueries>()
                 .As<IBoardQueries>()
