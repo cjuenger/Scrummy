@@ -13,5 +13,11 @@ namespace Scrummy.UI.Shared
             get => GitLabConfig.ProjectId; 
             set => GitLabConfig.ProjectId = value;
         }
+
+        private string AccessToken
+        {
+            get => GitLabConfig.AccessToken;
+            set => GitLabConfig.AccessToken = value;
+        }
     }
 }
