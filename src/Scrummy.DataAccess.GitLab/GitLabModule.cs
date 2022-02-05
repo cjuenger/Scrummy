@@ -48,6 +48,10 @@ namespace Scrummy.DataAccess.GitLab
             builder.RegisterType<ReleaseProvider>()
                 .As<IReleaseProvider>()
                 .SingleInstance();
+
+            builder.RegisterType<VelocityProvider>()
+                .As<IVelocityProvider>()
+                .SingleInstance();
             
             builder.RegisterType<BoardQueries>()
                 .As<IBoardQueries>()
@@ -55,10 +59,6 @@ namespace Scrummy.DataAccess.GitLab
 
             builder.RegisterType<Configuration>()
                 .As<IReadableConfiguration>()
-                .SingleInstance();
-            
-            builder.Register(GetProjectApi)
-                .As<IProjectApi>()
                 .SingleInstance();
 
             builder.RegisterType<ProjectApiProvider>()

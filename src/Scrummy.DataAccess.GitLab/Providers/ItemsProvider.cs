@@ -12,14 +12,14 @@ namespace Scrummy.DataAccess.GitLab.Providers
 {
     internal class ItemsProvider : IItemsProvider
     {
-        private readonly IProjectApi _projectApi;
+        private readonly IProjectApiProvider _projectApiProvider;
         private readonly IItemParser _itemParser;
 
         public ItemsProvider(
-            IProjectApi projectApi, 
+            IProjectApiProvider projectApiProvider, 
             IItemParser itemParser)
         {
-            _projectApi = projectApi ?? throw new ArgumentNullException(nameof(projectApi));
+            _projectApiProvider = projectApiProvider ?? throw new ArgumentNullException(nameof(projectApiProvider));
             _itemParser = itemParser ?? throw new ArgumentNullException(nameof(itemParser));
         }
         
@@ -32,7 +32,7 @@ namespace Scrummy.DataAccess.GitLab.Providers
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(projectId));
             }
             
-            var issues = await _projectApi
+            var issues = await _projectApiProvider.ProjectApi
                 .GetProjectIssuesAsync(projectId, cancellationToken: ct)
                 .ConfigureAwait(false);
 

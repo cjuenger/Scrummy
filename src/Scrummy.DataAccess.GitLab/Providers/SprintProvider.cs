@@ -16,16 +16,16 @@ namespace Scrummy.DataAccess.GitLab.Providers
 {
     internal class SprintProvider : ISprintProvider
     {
-        private readonly IProjectApi _projectApi;
+        private readonly IProjectApiProvider _projectApiProvider;
         private readonly IItemParser _itemParser;
         private readonly ISprintProviderConfig _config;
         
         public SprintProvider(
-            IProjectApi projectApi, 
+            IProjectApiProvider projectApiProvider, 
             IItemParser itemParser,
             ISprintProviderConfig config)
         {
-            _projectApi = projectApi ?? throw new ArgumentNullException(nameof(projectApi));
+            _projectApiProvider = projectApiProvider ?? throw new ArgumentNullException(nameof(projectApiProvider));
             _itemParser = itemParser ?? throw new ArgumentNullException(nameof(itemParser));
             _config = config ?? throw new ArgumentNullException(nameof(config));
         }
@@ -102,7 +102,7 @@ namespace Scrummy.DataAccess.GitLab.Providers
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(projectId));
             }
             
-            var labels = await _projectApi
+            var labels = await _projectApiProvider.ProjectApi
                 .GetProjectLabelsAsync(projectId, cancellationToken: ct)
                 .ConfigureAwait(false);
 
@@ -166,7 +166,7 @@ namespace Scrummy.DataAccess.GitLab.Providers
             string sprintId, 
             CancellationToken ct = default)
         {
-            var issues = await _projectApi
+            var issues = await _projectApiProvider.ProjectApi
                 .GetProjectIssuesAsync(projectId, labels: new List<string> {sprintId}, cancellationToken: ct)
                 .ConfigureAwait(false);
             
