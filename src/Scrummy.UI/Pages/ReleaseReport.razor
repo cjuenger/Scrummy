@@ -1,5 +1,16 @@
-﻿@page "/ReleaseReport"
-<h3>ReleaseReport</h3>
+﻿@using Radzen.Blazor
+@using Scrummy.DataAccess.Contracts.Models
+
+@page "/ReleaseReport"
+<h1>ReleaseReport</h1>
+
+<RadzenDropDown AllowClear="true" TValue="ReleaseInfo" 
+                Data="@_releaseInfos"
+                TValue="ReleaseInfo"
+                TextProperty="Title"
+                Change="@OnChange" 
+                @bind-value="_selectedReleaseInfo"
+                Placeholder="Select..."/>
 
 <div style="display: flex; justify-content: flex-start; width: 90vw; flex-wrap: wrap">
     <ReleaseBurnDownChart Stories="@Stories" StartDate="@ScrumConfig.ProjectStart"/>

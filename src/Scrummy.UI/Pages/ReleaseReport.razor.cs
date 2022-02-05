@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
@@ -11,8 +12,8 @@ namespace Scrummy.UI.Pages
 {
     public partial class ReleaseReport
     {
+        private IEnumerable<ReleaseInfo> _releaseInfos;
         private ReleaseInfo _selectedReleaseInfo;
-        
         private Release _selectedRelease;
 
         private IEnumerable<Item> OpenItems => 
@@ -46,7 +47,7 @@ namespace Scrummy.UI.Pages
         {
             await base.OnInitializedAsync().ConfigureAwait(false);
 
-            var releaseInfos = 
+            _releaseInfos = 
                 await ReleaseInfoProvider
                     .GetAllReleasesAsync(GitLabConfig.ProjectId)
                     .ConfigureAwait(false);
@@ -63,14 +64,19 @@ namespace Scrummy.UI.Pages
                         .GetReleaseAsync(GitLabConfig.ProjectId, releaseInfo)
                         .ConfigureAwait(false);
             }
-            else if (releaseInfos != null)
+            else if (_releaseInfos != null)
             {
-                _selectedReleaseInfo = releaseInfos[^1];
+                _selectedReleaseInfo = _releaseInfos.Last();//[^1];
                 _selectedRelease = 
                     await ReleaseProvider
                         .GetReleaseAsync(GitLabConfig.ProjectId, _selectedReleaseInfo)
                         .ConfigureAwait(false);
             }
+        }
+        
+        private void OnChange(object value)
+        {
+            Debug.WriteLine($"Value of {value} changed");
         }
     }
 }
