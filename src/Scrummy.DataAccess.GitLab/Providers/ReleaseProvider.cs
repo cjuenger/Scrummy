@@ -12,12 +12,12 @@ namespace Scrummy.DataAccess.GitLab.Providers
 {
     internal class ReleaseProvider : IReleaseProvider
     {
-        private readonly IProjectApi _projectApi;
+        private readonly IProjectApiProvider _projectApiProvider;
         private readonly IItemParser _itemParser;
 
-        public ReleaseProvider(IProjectApi projectApi, IItemParser itemParser)
+        public ReleaseProvider(IProjectApiProvider projectApiProvider, IItemParser itemParser)
         {
-            _projectApi = projectApi ?? throw new ArgumentNullException(nameof(projectApi));
+            _projectApiProvider = projectApiProvider ?? throw new ArgumentNullException(nameof(projectApiProvider));
             _itemParser = itemParser ?? throw new ArgumentNullException(nameof(itemParser));
         }
         
@@ -44,7 +44,7 @@ namespace Scrummy.DataAccess.GitLab.Providers
             ReleaseInfo releaseInfo, 
             CancellationToken ct = default)
         {
-            var issues = await _projectApi
+            var issues = await _projectApiProvider.ProjectApi
                 .GetAllIssuesOfProjectMilestoneAsync(projectId, releaseInfo.Id, ct)
                 .ConfigureAwait(false);
 

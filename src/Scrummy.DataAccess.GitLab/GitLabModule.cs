@@ -57,13 +57,27 @@ namespace Scrummy.DataAccess.GitLab
                 .As<IReadableConfiguration>()
                 .SingleInstance();
             
-            builder.Register(ctx => new ProjectApi(GetGitLabApiConfiguration(ctx)))
+            builder.Register(GetProjectApi)
                 .As<IProjectApi>()
                 .SingleInstance();
 
-            
-            
+            builder.RegisterType<ProjectApiProvider>()
+                .As<IProjectApiProvider>()
+                .SingleInstance();
+
+            builder.Register(GetGitLabApiConfiguration)
+                .As<IReadableConfiguration>()
+                .SingleInstance();
+
             RegisterMappers(builder);
+        }
+
+        private static IProjectApi GetProjectApi(IComponentContext ctx)
+        {
+            var configuration = ctx.Resolve<IReadableConfiguration>() as Configuration;
+            var projectApi = new ProjectApi(configuration);
+
+            return projectApi;
         }
         
         private static Configuration GetGitLabApiConfiguration(IComponentContext ctx)

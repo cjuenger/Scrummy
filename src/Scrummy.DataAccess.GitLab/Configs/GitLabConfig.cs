@@ -1,4 +1,4 @@
-﻿namespace Scrummy.UI.Configs
+﻿namespace Scrummy.DataAccess.GitLab.Configs
 {
     public class GitLabConfig : IGitLabConfig
     {

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using IO.Juenger.GitLab.Api;
 using IO.Juenger.GitLab.Model;
 using Scrummy.DataAccess.Contracts.Interfaces;
 using Scrummy.DataAccess.Contracts.Models;
@@ -13,12 +12,12 @@ namespace Scrummy.DataAccess.GitLab.Providers
 {
     internal class ReleaseInfoProvider : IReleaseInfoProvider
     {
-        private readonly IProjectApi _projectApi;
+        private readonly IProjectApiProvider _projectApiProvider;
         private readonly IMapper _mapper;
 
-        public ReleaseInfoProvider(IProjectApi projectApi, IMapper mapper)
+        public ReleaseInfoProvider(IProjectApiProvider projectApiProvider, IMapper mapper)
         {
-            _projectApi = projectApi ?? throw new ArgumentNullException(nameof(projectApi));
+            _projectApiProvider = projectApiProvider ?? throw new ArgumentNullException(nameof(projectApiProvider));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
         
@@ -29,7 +28,8 @@ namespace Scrummy.DataAccess.GitLab.Providers
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(projectId));
             }
             
-            var activeMilestones = await _projectApi
+            var projectApi = _projectApiProvider.ProjectApi;
+            var activeMilestones = await projectApi
                 .GetProjectMilestonesAsync(projectId, cancellationToken: ct)
                 .ConfigureAwait(false);
 
@@ -53,7 +53,8 @@ namespace Scrummy.DataAccess.GitLab.Providers
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(projectId));
             }
 
-            var milestones = await _projectApi
+            var projectApi = _projectApiProvider.ProjectApi;
+            var milestones = await projectApi
                 .GetProjectMilestonesAsync(projectId, cancellationToken: ct)
                 .ConfigureAwait(false);
 

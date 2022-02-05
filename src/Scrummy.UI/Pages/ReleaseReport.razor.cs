@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components;
 using Scrummy.DataAccess.Contracts.Enums;
 using Scrummy.DataAccess.Contracts.Interfaces;
 using Scrummy.DataAccess.Contracts.Models;
+using Scrummy.DataAccess.GitLab.Configs;
 using Scrummy.UI.Configs;
 
 namespace Scrummy.UI.Pages

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Scrummy.DataAccess.GitLab.Configs;
 using Scrummy.UI.Configs;
 
 namespace Scrummy.UI.Shared
