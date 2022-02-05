@@ -3,6 +3,9 @@
 
 <div style="display: flex; justify-content: flex-start; width: 90vw; flex-wrap: wrap">
     <ReleaseBurnDownChart Stories="@Stories" StartDate="@ScrumConfig.ProjectStart"/>
-    <ItemsOverview Title="Open Items" Items="@OpenItems"/>
-    <ItemsOverview Title="Closed Items" Items="@ClosedItems"/>
+</div>
+
+<div style="display: flex; justify-content: flex-start; width: 90vw; flex-wrap: wrap; gap: 10px">
+    <ItemsOverview Title="Completed" Items="@ClosedItems"/>
+    <ItemsOverview Title="Open" Items="@OpenItems"/>
 </div>

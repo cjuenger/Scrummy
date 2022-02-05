@@ -4,15 +4,19 @@
 
 <RadzenCard Style="width:500px; height:550px;">
     
-    <h5 class="card-title">@Title</h5>
+    <h3 class="card-title">@Title</h3>
     
     <br>
     
-    <RadzenDataList WrapItems="true" AllowPaging="true" Data="@Items" TItem="Item">
+    <div class="row">
+        <b class="col">Stories: @(_countOfStories)</b>
+        <b class="col">Bugs: @(_countOfBugs)</b>
+        <b class="col">Others: @(_countOfOthers)</b>
+    </div>
+    
+    <RadzenDataList WrapItems="true" Data="@Items" TItem="Item">
         <Template Context="item">
-            <RadzenCard Style="width: 100%; padding: 0; overflow: hidden;">
-                <BacklogItem Item="@item"/>
-            </RadzenCard>
+            <BacklogItem Item="@item"/>
         </Template>
     </RadzenDataList>
     
