@@ -1,0 +1,8 @@
+﻿@page "/ReleaseReport"
+<h3>ReleaseReport</h3>
+
+<div style="display: flex; justify-content: flex-start; width: 90vw; flex-wrap: wrap">
+    <ReleaseBurnDownChart Stories="@Stories" StartDate="@ScrumConfig.ProjectStart"/>
+    <ItemsOverview Title="Open Items" Items="@OpenItems"/>
+    <ItemsOverview Title="Closed Items" Items="@ClosedItems"/>
+</div>

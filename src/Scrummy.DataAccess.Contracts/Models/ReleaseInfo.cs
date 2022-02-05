@@ -47,7 +47,7 @@ namespace Scrummy.DataAccess.Contracts.Models
         /// <summary>
         ///     Gets or Sets Expired
         /// </summary>
-        public DateTime? Expired { get; set; }
+        public bool? Expired { get; set; }
 
         /// <summary>
         ///     Gets or Sets WebUrl

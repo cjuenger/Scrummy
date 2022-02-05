@@ -1,0 +1,19 @@
+﻿@using Scrummy.DataAccess.Contracts.Models
+@using Radzen.Blazor
+@using Radzen
+
+<RadzenCard Style="width:500px; height:550px;">
+    
+    <h5 class="card-title">@Title</h5>
+    
+    <br>
+    
+    <RadzenDataList WrapItems="true" AllowPaging="true" Data="@Items" TItem="Item">
+        <Template Context="item">
+            <RadzenCard Style="width: 100%; padding: 0; overflow: hidden;">
+                <BacklogItem Item="@item"/>
+            </RadzenCard>
+        </Template>
+    </RadzenDataList>
+    
+</RadzenCard>

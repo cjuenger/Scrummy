@@ -30,15 +30,17 @@ namespace Scrummy.DataAccess.GitLab.Providers
             }
             
             var activeMilestones = await _projectApi
-                .GetProjectMilestonesAsync(projectId, state: MilestoneState.Active, cancellationToken: ct)
+                .GetProjectMilestonesAsync(projectId, cancellationToken: ct)
                 .ConfigureAwait(false);
 
-            var orderedActiveMilestones = activeMilestones.OrderBy(m => m?.DueDate ?? default);
+            var orderedActiveMilestones = activeMilestones.OrderBy(m => m.DueDate);
 
             var now = DateTime.UtcNow;
             var nextUpcomingMilestone =
                 orderedActiveMilestones.FirstOrDefault(m => m.DueDate != null && now < m.DueDate);
 
+            if (nextUpcomingMilestone == null) return (false, null);
+            
             var nextUpcomingRelease = _mapper.Map<ReleaseInfo>(nextUpcomingMilestone);
 
             return (true, nextUpcomingRelease);
