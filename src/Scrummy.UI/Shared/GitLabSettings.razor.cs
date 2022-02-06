@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Scrummy.DataAccess.GitLab.Configs;
 using Scrummy.UI.Configs;
 
 namespace Scrummy.UI.Shared
@@ -12,6 +13,12 @@ namespace Scrummy.UI.Shared
         {
             get => GitLabConfig.ProjectId; 
             set => GitLabConfig.ProjectId = value;
+        }
+
+        private string AccessToken
+        {
+            get => GitLabConfig.AccessToken;
+            set => GitLabConfig.AccessToken = value;
         }
     }
 }

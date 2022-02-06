@@ -1,0 +1,24 @@
+﻿@using Radzen.Blazor
+@using Scrummy.DataAccess.Contracts.Models
+
+@page "/ReleaseReport"
+<h1>Release Report</h1>
+
+<RadzenDropDown AllowClear="true" TValue="ReleaseInfo" 
+                Data="@_releaseInfos"
+                TValue="ReleaseInfo"
+                TextProperty="Title"
+                Change="@OnChange" 
+                @bind-value="_selectedReleaseInfo"
+                Placeholder="Select..."
+                Style="width:500px;"/>
+
+<div style="display: flex; justify-content: flex-start; width: 90vw; flex-wrap: wrap">
+    <ReleaseBurnDownChart Stories="@Stories" StartDate="@_startDate" DueDate="@_dueDate"/>
+</div>
+
+<div style="margin-top: 10px; display: flex; justify-content: flex-start; width: 90vw; flex-wrap: wrap; gap: 10px">
+    <ItemsOverview Title="Completed" Items="@ClosedItems"/>
+    <ItemsOverview Title="Open" Items="@OpenItems"/>
+    <BacklogItemPieChart Items="@TotalItems"/>
+</div>

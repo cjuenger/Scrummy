@@ -1,8 +1,14 @@
 ﻿@using Radzen.Blazor
+@using Radzen
 @using Scrummy.DataAccess.Contracts.Enums
 @using Scrummy.DataAccess.Contracts.Models
 
-<RadzenCard Style="width: 100%; padding-top: 5px; padding-right: 5px; ">
+<RadzenButton 
+    ButtonStyle="ButtonStyle.Light"
+    Click="@FollowLink" 
+    Style="margin-bottom: 20px; height: auto; padding: 5px" 
+    class="position-relative">
+    
     <div style="text-align: start">@Item.Title</div>
     
     @* Adding story points badge, if story points are available. *@
@@ -30,4 +36,5 @@
         }
         
     </div>
-</RadzenCard>
+
+</RadzenButton>

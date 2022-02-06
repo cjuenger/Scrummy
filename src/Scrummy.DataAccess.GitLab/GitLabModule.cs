@@ -4,7 +4,8 @@ using IO.Juenger.GitLab.Api;
 using IO.Juenger.GitLab.Client;
 using IO.Juenger.GitLab.Model;
 using Microsoft.Extensions.Configuration;
-using Scrummy.DataAccess.Contracts.Providers;
+using Scrummy.DataAccess.Contracts.Interfaces;
+using Scrummy.DataAccess.Contracts.Models;
 using Scrummy.DataAccess.GitLab.Configs;
 using Scrummy.DataAccess.GitLab.GraphQl.Queries;
 using Scrummy.DataAccess.GitLab.Parsers;
@@ -39,6 +40,18 @@ namespace Scrummy.DataAccess.GitLab
             builder.RegisterType<BacklogProvider>()
                 .As<IBacklogProvider>()
                 .SingleInstance();
+
+            builder.RegisterType<ReleaseInfoProvider>()
+                .As<IReleaseInfoProvider>()
+                .SingleInstance();
+
+            builder.RegisterType<ReleaseProvider>()
+                .As<IReleaseProvider>()
+                .SingleInstance();
+
+            builder.RegisterType<VelocityProvider>()
+                .As<IVelocityProvider>()
+                .SingleInstance();
             
             builder.RegisterType<BoardQueries>()
                 .As<IBoardQueries>()
@@ -47,14 +60,24 @@ namespace Scrummy.DataAccess.GitLab
             builder.RegisterType<Configuration>()
                 .As<IReadableConfiguration>()
                 .SingleInstance();
-            
-            builder.Register(ctx => new ProjectApi(GetGitLabApiConfiguration(ctx)))
-                .As<IProjectApi>()
+
+            builder.RegisterType<ProjectApiProvider>()
+                .As<IProjectApiProvider>()
                 .SingleInstance();
 
-            
-            
+            builder.Register(GetGitLabApiConfiguration)
+                .As<IReadableConfiguration>()
+                .SingleInstance();
+
             RegisterMappers(builder);
+        }
+
+        private static IProjectApi GetProjectApi(IComponentContext ctx)
+        {
+            var configuration = ctx.Resolve<IReadableConfiguration>() as Configuration;
+            var projectApi = new ProjectApi(configuration);
+
+            return projectApi;
         }
         
         private static Configuration GetGitLabApiConfiguration(IComponentContext ctx)
@@ -69,7 +92,11 @@ namespace Scrummy.DataAccess.GitLab
         
         private static void RegisterMappers(ContainerBuilder builder)
         {
-            var mapperConfig = new MapperConfiguration(cfg => cfg.CreateMap<Issue, Issue>());
+            var mapperConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Issue, Issue>();
+                cfg.CreateMap<Milestone, ReleaseInfo>();
+            });
             var mapper = new Mapper(mapperConfig);
             builder.Register(_ => mapper).As<IMapper>();
         }

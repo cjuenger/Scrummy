@@ -1,0 +1,22 @@
+﻿@using Scrummy.DataAccess.Contracts.Models
+@using Radzen.Blazor
+
+<RadzenCard Style="width:500px; height:550px;">
+    
+    <h3 class="card-title">@Title</h3>
+    
+    <br>
+    
+    <div class="row">
+        <b class="col">Stories: @(_countOfStories)</b>
+        <b class="col">Bugs: @(_countOfBugs)</b>
+        <b class="col">Others: @(_countOfOthers)</b>
+    </div>
+    
+    <RadzenDataList WrapItems="true" Data="@Items" TItem="Item">
+        <Template Context="item">
+            <BacklogItem Item="@item"/>
+        </Template>
+    </RadzenDataList>
+    
+</RadzenCard>

@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Scrummy.DataAccess.Contracts.Models;
 
-namespace Scrummy.DataAccess.Contracts.Providers
+namespace Scrummy.DataAccess.Contracts.Interfaces
 {
     public interface IBacklogProvider
     {

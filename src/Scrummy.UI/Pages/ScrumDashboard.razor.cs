@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using IO.Juenger.GitLab.Api;
 using IO.Juenger.GitLab.Model;
 using Microsoft.AspNetCore.Components;
+using Scrummy.DataAccess.Contracts.Interfaces;
 using Scrummy.DataAccess.Contracts.Models;
-using Scrummy.DataAccess.Contracts.Providers;
+using Scrummy.DataAccess.GitLab.Configs;
+using Scrummy.DataAccess.GitLab.Providers;
 using Scrummy.UI.Configs;
 
 namespace Scrummy.UI.Pages
@@ -19,7 +20,7 @@ namespace Scrummy.UI.Pages
         private ISprintProvider SprintProvider { get; set; }
         
         [Inject]
-        private IProjectApi ProjectApi { get; set; }
+        private IProjectApiProvider ProjectApiProvider { get; set; }
         
         [Inject]
         private IItemsProvider ItemsProvider { get; set; }
@@ -84,7 +85,7 @@ namespace Scrummy.UI.Pages
             var request = await SprintProvider.TryGetCurrentSprintAsync(GitLabConfig.ProjectId);
             Debug.WriteLine($"The current sprint is {request.IsSuccess}");
             
-            var issues = await ProjectApi
+            var issues = await ProjectApiProvider.ProjectApi
                 .GetProjectIssuesAsync(GitLabConfig.ProjectId)
                 .ConfigureAwait(false);
 

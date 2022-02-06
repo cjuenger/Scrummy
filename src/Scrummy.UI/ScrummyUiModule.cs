@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Scrummy.DataAccess.GitLab;
+using Scrummy.DataAccess.GitLab.Configs;
 using Scrummy.Scrum;
 using Scrummy.UI.Configs;
 
