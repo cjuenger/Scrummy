@@ -31,6 +31,8 @@ namespace Scrummy.UI.Pages
                 .Items
                 .Where(i => i.State == WorkflowState.Closed) ?? Enumerable.Empty<Item>();
 
+        private IEnumerable<Item> TotalItems => _selectedRelease?.Items;
+        
         private IEnumerable<Story> Stories =>
             _selectedRelease?
                 .Items
