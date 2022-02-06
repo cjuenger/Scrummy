@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,6 +18,9 @@ namespace Scrummy.UI.Pages
         private ReleaseInfo _selectedReleaseInfo;
         private Release _selectedRelease;
 
+        private DateTime _startDate;
+        private DateTime? _dueDate;
+        
         private IEnumerable<Item> OpenItems => 
             _selectedRelease?
                 .Items
@@ -48,6 +52,8 @@ namespace Scrummy.UI.Pages
         {
             await base.OnInitializedAsync().ConfigureAwait(false);
 
+            _startDate = ScrumConfig.ProjectStart;
+            
             _releaseInfos = 
                 await ReleaseInfoProvider
                     .GetAllReleasesAsync(GitLabConfig.ProjectId)
@@ -75,6 +81,8 @@ namespace Scrummy.UI.Pages
                 await ReleaseProvider
                     .GetReleaseAsync(GitLabConfig.ProjectId, releaseInfo)
                     .ConfigureAwait(false);
+
+            _dueDate = _selectedRelease.Info.DueDate;
         }
         
         private async void OnChange(object value)

@@ -14,7 +14,7 @@
                 Style="width:500px;"/>
 
 <div style="display: flex; justify-content: flex-start; width: 90vw; flex-wrap: wrap">
-    <ReleaseBurnDownChart Stories="@Stories" StartDate="@ScrumConfig.ProjectStart"/>
+    <ReleaseBurnDownChart Stories="@Stories" StartDate="@_startDate" DueDate="@_dueDate"/>
 </div>
 
 <div style="margin-top: 10px; display: flex; justify-content: flex-start; width: 90vw; flex-wrap: wrap; gap: 10px">
