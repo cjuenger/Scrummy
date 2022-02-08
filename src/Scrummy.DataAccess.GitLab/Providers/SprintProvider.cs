@@ -102,11 +102,21 @@ namespace Scrummy.DataAccess.GitLab.Providers
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(projectId));
             }
             
-            var labels = await _projectApiProvider.ProjectApi
-                .GetProjectLabelsAsync(projectId, cancellationToken: ct)
-                .ConfigureAwait(false);
+            var page = 1;
+            List<Label> pagedLabels;
+            var totalLabels = new List<Label>();
+            do
+            {
+                pagedLabels = await _projectApiProvider.ProjectApi
+                    .GetProjectLabelsAsync(projectId, cancellationToken: ct)
+                    .ConfigureAwait(false);
+                
+                totalLabels.AddRange(pagedLabels);
+                page++;
+            } 
+            while (pagedLabels.Any());
 
-            var sprintLabels = labels.Where(FilterSprintLabel);
+            var sprintLabels = totalLabels.Where(FilterSprintLabel);
 
             var sprints = new List<Sprint>();
             
@@ -166,11 +176,21 @@ namespace Scrummy.DataAccess.GitLab.Providers
             string sprintId, 
             CancellationToken ct = default)
         {
-            var issues = await _projectApiProvider.ProjectApi
-                .GetProjectIssuesAsync(projectId, labels: new List<string> {sprintId}, cancellationToken: ct)
-                .ConfigureAwait(false);
+            var page = 1;
+            List<Issue> pagedIssues;
+            var totalIssues = new List<Issue>();
+            do
+            {
+                pagedIssues = await _projectApiProvider.ProjectApi
+                    .GetProjectIssuesAsync(projectId, page, labels: new List<string> {sprintId}, cancellationToken: ct)
+                    .ConfigureAwait(false);
+                
+                totalIssues.AddRange(pagedIssues);
+                page++;
+            } 
+            while (pagedIssues.Any());
             
-            var items = issues.Select(i => _itemParser.Parse(i));
+            var items = totalIssues.Select(i => _itemParser.Parse(i));
 
             return items;
         }

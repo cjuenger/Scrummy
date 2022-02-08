@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using IO.Juenger.GitLab.Api;
+using IO.Juenger.GitLab.Model;
 using Scrummy.DataAccess.Contracts.Interfaces;
 using Scrummy.DataAccess.Contracts.Models;
 using Scrummy.DataAccess.GitLab.Parsers;
@@ -44,11 +45,21 @@ namespace Scrummy.DataAccess.GitLab.Providers
             ReleaseInfo releaseInfo, 
             CancellationToken ct = default)
         {
-            var issues = await _projectApiProvider.ProjectApi
-                .GetAllIssuesOfProjectMilestoneAsync(projectId, releaseInfo.Id, ct)
-                .ConfigureAwait(false);
+            var page = 1;
+            List<Issue> pagedIssues;
+            var totalIssues = new List<Issue>();
+            do
+            {
+                pagedIssues = await _projectApiProvider.ProjectApi
+                    .GetAllIssuesOfProjectMilestoneAsync(projectId, releaseInfo.Id, page, ct)
+                    .ConfigureAwait(false);
+                
+                totalIssues.AddRange(pagedIssues);
+                page++;
+            } 
+            while (pagedIssues.Any());
 
-            var items = issues.Select(i => _itemParser.Parse(i));
+            var items = totalIssues.Select(i => _itemParser.Parse(i));
             return items;
         }
     }
