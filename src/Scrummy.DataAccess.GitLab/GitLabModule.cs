@@ -69,6 +69,10 @@ namespace Scrummy.DataAccess.GitLab
                 .As<IReadableConfiguration>()
                 .SingleInstance();
 
+            builder.RegisterType<PaginationService>()
+                .As<IPaginationService>()
+                .SingleInstance();
+            
             RegisterMappers(builder);
         }
 

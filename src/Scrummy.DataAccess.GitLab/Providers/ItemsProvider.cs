@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using IO.Juenger.GitLab.Api;
 using Scrummy.DataAccess.Contracts.Interfaces;
 using Scrummy.DataAccess.Contracts.Models;
 using Scrummy.DataAccess.GitLab.Parsers;
@@ -13,13 +12,16 @@ namespace Scrummy.DataAccess.GitLab.Providers
     internal class ItemsProvider : IItemsProvider
     {
         private readonly IProjectApiProvider _projectApiProvider;
+        private readonly IPaginationService _paginationService;
         private readonly IItemParser _itemParser;
 
         public ItemsProvider(
-            IProjectApiProvider projectApiProvider, 
+            IProjectApiProvider projectApiProvider,
+            IPaginationService paginationService,
             IItemParser itemParser)
         {
             _projectApiProvider = projectApiProvider ?? throw new ArgumentNullException(nameof(projectApiProvider));
+            _paginationService = paginationService ?? throw new ArgumentNullException(nameof(paginationService));
             _itemParser = itemParser ?? throw new ArgumentNullException(nameof(itemParser));
         }
         
@@ -31,9 +33,12 @@ namespace Scrummy.DataAccess.GitLab.Providers
             {
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(projectId));
             }
-            
-            var issues = await _projectApiProvider.ProjectApi
-                .GetProjectIssuesAsync(projectId, cancellationToken: ct)
+
+            var issues = await _paginationService
+                .BrowseAllAsync(page => 
+                    _projectApiProvider
+                        .ProjectApi
+                        .GetProjectIssuesAsync(projectId, page, cancellationToken: ct))
                 .ConfigureAwait(false);
 
             var items = issues.Select(i => _itemParser.Parse(i));

@@ -4,9 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using IO.Juenger.GitLab.Api;
 using IO.Juenger.GitLab.Model;
-using Scrummy.DataAccess.Contracts.Exceptions;
 using Scrummy.DataAccess.Contracts.Interfaces;
 using Scrummy.DataAccess.Contracts.Models;
 using Scrummy.DataAccess.GitLab.Configs;
@@ -18,15 +16,18 @@ namespace Scrummy.DataAccess.GitLab.Providers
     {
         private readonly IProjectApiProvider _projectApiProvider;
         private readonly IItemParser _itemParser;
+        private readonly IPaginationService _paginationService;
         private readonly ISprintProviderConfig _config;
         
         public SprintProvider(
             IProjectApiProvider projectApiProvider, 
             IItemParser itemParser,
+            IPaginationService paginationService,
             ISprintProviderConfig config)
         {
             _projectApiProvider = projectApiProvider ?? throw new ArgumentNullException(nameof(projectApiProvider));
             _itemParser = itemParser ?? throw new ArgumentNullException(nameof(itemParser));
+            _paginationService = paginationService ?? throw new ArgumentNullException(nameof(paginationService));
             _config = config ?? throw new ArgumentNullException(nameof(config));
         }
         
@@ -101,22 +102,8 @@ namespace Scrummy.DataAccess.GitLab.Providers
             {
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(projectId));
             }
-            
-            var page = 1;
-            List<Label> pagedLabels;
-            var totalLabels = new List<Label>();
-            do
-            {
-                pagedLabels = await _projectApiProvider.ProjectApi
-                    .GetProjectLabelsAsync(projectId, cancellationToken: ct)
-                    .ConfigureAwait(false);
-                
-                totalLabels.AddRange(pagedLabels);
-                page++;
-            } 
-            while (pagedLabels.Any());
 
-            var sprintLabels = totalLabels.Where(FilterSprintLabel);
+            var sprintLabels = await GetAllSprintLabelsAsync(projectId, ct);
 
             var sprints = new List<Sprint>();
             
@@ -134,6 +121,18 @@ namespace Scrummy.DataAccess.GitLab.Providers
             }
 
             return sprints;
+        }
+
+        private async Task<IEnumerable<Label>> GetAllSprintLabelsAsync(string projectId, CancellationToken ct = default)
+        {
+            var totalLabels = await _paginationService
+                .BrowseAllAsync(page => 
+                    _projectApiProvider
+                        .ProjectApi
+                        .GetProjectLabelsAsync(projectId, page, cancellationToken: ct))
+                .ConfigureAwait(false);
+
+            return totalLabels.Where(FilterSprintLabel);
         }
         
         private bool FilterSprintLabel(Label label)
@@ -176,19 +175,12 @@ namespace Scrummy.DataAccess.GitLab.Providers
             string sprintId, 
             CancellationToken ct = default)
         {
-            var page = 1;
-            List<Issue> pagedIssues;
-            var totalIssues = new List<Issue>();
-            do
-            {
-                pagedIssues = await _projectApiProvider.ProjectApi
-                    .GetProjectIssuesAsync(projectId, page, labels: new List<string> {sprintId}, cancellationToken: ct)
-                    .ConfigureAwait(false);
-                
-                totalIssues.AddRange(pagedIssues);
-                page++;
-            } 
-            while (pagedIssues.Any());
+            var totalIssues = await _paginationService
+                .BrowseAllAsync(page => 
+                    _projectApiProvider
+                        .ProjectApi
+                        .GetProjectIssuesAsync(projectId, page, labels: new List<string> {sprintId}, cancellationToken: ct))
+                .ConfigureAwait(false);
             
             var items = totalIssues.Select(i => _itemParser.Parse(i));
 
