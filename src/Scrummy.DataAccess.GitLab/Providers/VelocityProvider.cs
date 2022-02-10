@@ -39,11 +39,13 @@ namespace Scrummy.DataAccess.GitLab.Providers
                 .GetAllSprintsAsync(projectId, ct)
                 .ConfigureAwait(false);
 
-            var listOfSprints = sprints.ToList();
+            var sprintsWithStoryPoints = sprints
+                .Where(sp => sp.StoryPoints > 0)
+                .ToList();
             
-            CalculateTotalTimeRange(listOfSprints);
-            CalculateVelocity(listOfSprints);
-            CalculateDayAverageVelocity();
+            CalculateTotalTimeRange(sprintsWithStoryPoints);
+            CalculateVelocity(sprintsWithStoryPoints);
+            CalculateDayAverageVelocity(sprintsWithStoryPoints.Count);
         }
 
         private void CalculateTotalTimeRange(IEnumerable<Sprint> sprints)
@@ -69,22 +71,23 @@ namespace Scrummy.DataAccess.GitLab.Providers
                 .OrderBy(sp => sp)
                 .ToList();
 
-            SprintAverageVelocity = GetVelocity(storyPoints);
-            Best3SprintsAverageVelocity = GetVelocity(storyPoints.TakeLast(3).ToList());
-            Worst3SprintsAverageVelocity = GetVelocity(storyPoints.Take(3).ToList());
+            SprintAverageVelocity = GetSprintAverageVelocity(storyPoints);
+            Best3SprintsAverageVelocity = GetSprintAverageVelocity(storyPoints.TakeLast(3).ToList());
+            Worst3SprintsAverageVelocity = GetSprintAverageVelocity(storyPoints.Take(3).ToList());
         }
 
-        private void CalculateDayAverageVelocity()
+        private void CalculateDayAverageVelocity(int countOfSprints)
         {
             var businessDays = StartTimeOfFirstSprint.GetBusinessDaysUntil(EndTimeOfLastSprint);
+            var averageBusinessDaysPerSprint = (float) businessDays / countOfSprints;
 
-            DayAverageVelocity = SprintAverageVelocity / Math.Max(1, businessDays);
-            Best3SprintsDayAverageVelocity = Best3SprintsAverageVelocity / businessDays;
-            Worst3SprintsDayAverageVelocity = Worst3SprintsAverageVelocity / businessDays;
+            DayAverageVelocity = SprintAverageVelocity / averageBusinessDaysPerSprint;
+            Best3SprintsDayAverageVelocity = Best3SprintsAverageVelocity / averageBusinessDaysPerSprint;
+            Worst3SprintsDayAverageVelocity = Worst3SprintsAverageVelocity / averageBusinessDaysPerSprint;
 
         }
         
-        private static float GetVelocity(IReadOnlyCollection<int> storyPoints)
+        private static float GetSprintAverageVelocity(IReadOnlyCollection<int> storyPoints)
         {
             var totalStoryPoints = storyPoints.Sum();
             var averageStoryPoints = totalStoryPoints / Math.Max(1,storyPoints.Count);
