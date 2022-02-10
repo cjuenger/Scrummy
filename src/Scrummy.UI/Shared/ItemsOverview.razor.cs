@@ -17,6 +17,8 @@ namespace Scrummy.UI.Shared
         private int _countOfBugs;
 
         private int _countOfOthers;
+
+        private int _totalCount;
         
         [Parameter]
         public IEnumerable<Item> Items { get; set; }
@@ -30,6 +32,7 @@ namespace Scrummy.UI.Shared
             _countOfStories = Items.OfType<Story>().Count();
             _countOfBugs = Items.Count(i => i.Type == ItemType.Bug);
             _countOfOthers = Items.Count() - _countOfStories - _countOfBugs;
+            _totalCount = _countOfStories + _countOfBugs + _countOfOthers;
         }
     }
 }

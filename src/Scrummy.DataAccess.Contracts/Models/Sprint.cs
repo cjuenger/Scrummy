@@ -15,9 +15,9 @@ namespace Scrummy.DataAccess.Contracts.Models
 
         public List<Item> Items { get; set; }
 
-        public int Velocity => GetVelocityOfSprint();
+        public int StoryPoints => GetStoryPoints();
 
-        private int GetVelocityOfSprint()
+        private int GetStoryPoints()
         {
 
             if (!Items.Any()) return 0;

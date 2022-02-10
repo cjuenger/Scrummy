@@ -5,11 +5,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Scrummy.DataAccess.Contracts\Scrummy.DataAccess.Contracts.csproj"/>
+      <ProjectReference Include="..\Scrummy.DataAccess.Contracts\Scrummy.DataAccess.Contracts.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Autofac" Version="6.2.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
     </ItemGroup>
 
 </Project>

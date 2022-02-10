@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using IO.Juenger.GitLab.Model;
+using Microsoft.Extensions.Logging;
 using Scrummy.DataAccess.Contracts.Interfaces;
 using Scrummy.DataAccess.Contracts.Models;
 using Scrummy.DataAccess.GitLab.Configs;
@@ -18,17 +19,20 @@ namespace Scrummy.DataAccess.GitLab.Providers
         private readonly IItemParser _itemParser;
         private readonly IPaginationService _paginationService;
         private readonly ISprintProviderConfig _config;
-        
+        private readonly ILogger<SprintProvider> _logger;
+
         public SprintProvider(
             IProjectApiProvider projectApiProvider, 
             IItemParser itemParser,
             IPaginationService paginationService,
-            ISprintProviderConfig config)
+            ISprintProviderConfig config,
+            ILogger<SprintProvider> logger)
         {
             _projectApiProvider = projectApiProvider ?? throw new ArgumentNullException(nameof(projectApiProvider));
             _itemParser = itemParser ?? throw new ArgumentNullException(nameof(itemParser));
             _paginationService = paginationService ?? throw new ArgumentNullException(nameof(paginationService));
             _config = config ?? throw new ArgumentNullException(nameof(config));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
         
         public async Task<(bool IsSuccess, Sprint Sprint)> TryGetCurrentSprintAsync(string projectId, CancellationToken ct = default)
@@ -51,7 +55,7 @@ namespace Scrummy.DataAccess.GitLab.Providers
             
             return (true, currentSprint);
         }
-
+        
         public async Task<IEnumerable<Sprint>> GetAllSprintsAsync(string projectId, CancellationToken ct = default)
         {
             if (string.IsNullOrWhiteSpace(projectId))
@@ -64,6 +68,12 @@ namespace Scrummy.DataAccess.GitLab.Providers
             foreach (var sprint in sprints)
             {
                 sprint.Items = (await GetItemsOfSprintAsync(projectId, sprint.Name, ct)).ToList();
+                
+                _logger.LogDebug("Retrieved sprint {SprintName}, Start: {SprintStart}, End: {SprintEnd}, Story Points: {StoryPoints}", 
+                    sprint.Name,
+                    sprint.StartTime, 
+                    sprint.EndTime,
+                    sprint.StoryPoints);
             }
 
             return sprints;
@@ -117,6 +127,7 @@ namespace Scrummy.DataAccess.GitLab.Providers
                     StartTime = from,
                     EndTime = to
                 };
+
                 sprints.Add(sprint);
             }
 
