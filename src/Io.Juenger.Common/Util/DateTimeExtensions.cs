@@ -1,6 +1,7 @@
 ﻿// ReSharper disable once IdentifierTypo
 
 using System;
+using System.Linq;
 
 // ReSharper disable once IdentifierTypo
 namespace Io.Juenger.Common.Util
@@ -82,22 +83,17 @@ namespace Io.Juenger.Common.Util
         }
 
         /// <summary>
-        ///     Get total days until due date, considering:
-        ///         - weekends (Saturdays and Sundays)
-        ///         - holidays in the middle of the week
+        ///     Gets the weekend days within between the given dates.
         /// </summary>
-        /// <param name="startDate">Start date from where the due shall be calculated</param>
-        /// <param name="requiredTotalWorkDays">Required total work days</param>
-        /// <param name="excludeDates">Days to exclude</param>
-        /// <returns>Number of total days till due date</returns>
-        public static double GetTotalDaysUntilDueDate(
-            this DateTime startDate, 
-            float requiredTotalWorkDays, 
-            params DateTime[] excludeDates)
+        /// <param name="startDate">Start date from where the weekends shall be cumulated.</param>
+        /// <param name="endDate">End date till where the weekends shall be cumulated.</param>
+        /// <returns></returns>
+        public static int GetWeekendDaysUntil(this DateTime startDate, DateTime endDate)
         {
-            var excludedDays = startDate.GetExcludedDays(requiredTotalWorkDays, excludeDates);
-            var days = requiredTotalWorkDays + excludedDays;
-            return days;
+            var totalTime = endDate - startDate + TimeSpan.FromDays(1);
+            var totalDays = totalTime.TotalDays;
+            var daysInWeekend = startDate.GetExcludedDays(totalDays);
+            return daysInWeekend;
         }
 
         /// <summary>
@@ -109,20 +105,34 @@ namespace Io.Juenger.Common.Util
         ///     NOTE that the passed required total work time is pure time necessary to complete the project.
         /// </remarks>
         /// <param name="startDate">Start date from where the due shall be calculated</param>
-        /// <param name="requiredTotalWorkTime">Required total work time</param>
+        /// <param name="totalWorkTime">Required total work time</param>
+        /// <param name="businessWeekDays">Number of days of a business week</param>
         /// <param name="dailyWorkHours">Daily working hours</param>
         /// <param name="excludeDates">Days to exclude</param>
         /// <returns>Returns the due date</returns>
         public static DateTime GetBusinessDueDate(
             this DateTime startDate, 
-            TimeSpan requiredTotalWorkTime, 
+            TimeSpan totalWorkTime, 
+            int businessWeekDays = 5,
             float dailyWorkHours = 8,
             params DateTime[] excludeDates)
         {
-            var requiredTotalWorkDays = requiredTotalWorkTime.TotalHours / dailyWorkHours;
-            var dueDate = startDate.AddDays(requiredTotalWorkDays);
-            var excludedDays = startDate.GetExcludedDays(requiredTotalWorkDays, excludeDates);
+            var totalWorkDays = (int)(totalWorkTime.TotalHours / dailyWorkHours);
+
+            var fullWeekCount = totalWorkDays / businessWeekDays;
+            var remainingDays = totalWorkDays % businessWeekDays;
+
+            var weekendDays = fullWeekCount * 2;
+            var dueDate = startDate.AddDays(totalWorkDays + weekendDays - 1);
+
+            var countOfExcludedDates = excludeDates.Count(d => d >= startDate && d <= dueDate);
+            dueDate = dueDate.AddDays(countOfExcludedDates);
+
+            if (remainingDays < 1) return dueDate;
+            
+            var excludedDays = dueDate.GetExcludedDays(remainingDays, excludeDates);
             dueDate = dueDate.AddDays(excludedDays);
+
             return dueDate;
         }
 
@@ -132,29 +142,58 @@ namespace Io.Juenger.Common.Util
         ///         - holidays in the middle of the week    
         /// </summary>
         /// <param name="startDate">Start date from where the due shall be calculated</param>
-        /// <param name="requiredTotalWorkDays">Required total work days</param>
+        /// <param name="totalWorkDays">Required total work days</param>
+        /// <param name="businessWeekDays">Number of days of a business week</param>
         /// <param name="dailyWorkHours">Daily working hours</param>
         /// <param name="excludeDates">Days to exclude</param>
         /// <returns>Returns the due date</returns>
         public static DateTime GetBusinessDueDate(
             this DateTime startDate, 
-            float requiredTotalWorkDays, 
+            float totalWorkDays, 
+            int businessWeekDays = 5,
             float dailyWorkHours = 8,
             params DateTime[] excludeDates)
         {
-            var requiredTotalWorkTime = TimeSpan.FromHours(requiredTotalWorkDays * dailyWorkHours);
-            return GetBusinessDueDate(startDate, requiredTotalWorkTime, dailyWorkHours, excludeDates);
+            var requiredTotalWorkTime = TimeSpan.FromHours(totalWorkDays * dailyWorkHours);
+            return GetBusinessDueDate(startDate, requiredTotalWorkTime, businessWeekDays, dailyWorkHours, excludeDates);
         }
-        
-        private static double GetExcludedDays(
+
+        public static int GetExcludedDays(
             this DateTime startDate, 
-            double requiredTotalWorkDays, 
+            double totalDays, 
             params DateTime[] excludeDates)
         {
-            var dueDate = startDate.AddDays(requiredTotalWorkDays);
-            var businessDays = startDate.GetBusinessDaysUntil(dueDate, excludeDates);
-            var daysToAdd = requiredTotalWorkDays - businessDays;
-            return daysToAdd;
+            var fullWeekCount = (int) totalDays / 7;
+            var remainingDays = (int) totalDays % 7;
+            
+            var countOfExcludedDates = fullWeekCount * 2;
+
+            var currentEndDate = startDate;
+            
+            if (countOfExcludedDates > 0)
+            {
+                currentEndDate = startDate.AddDays((int) totalDays + countOfExcludedDates - 1);
+                countOfExcludedDates += excludeDates.Count(d => d >= startDate && d <= currentEndDate);
+            }
+
+            if (remainingDays == 1)
+            {
+                if (startDate.DayOfWeek == DayOfWeek.Saturday || startDate.DayOfWeek == DayOfWeek.Sunday )
+                {
+                    countOfExcludedDates++;
+                }
+            }
+            else if (remainingDays > 1)
+            {
+                var endDate = currentEndDate + TimeSpan.FromDays(remainingDays - 1);
+                var businessDays = currentEndDate.GetBusinessDaysUntil(endDate);
+                var daysToAdd = remainingDays - businessDays;
+                countOfExcludedDates += daysToAdd;
+
+                return countOfExcludedDates;
+            }
+
+            return countOfExcludedDates;
         }
     }
 }
