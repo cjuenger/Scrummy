@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Components;
-using Scrummy.DataAccess.Contracts.Models;
+using Scrummy.Scrum.Contracts.Models;
 using Scrummy.Scrum.Models;
 using Scrummy.Scrum.Providers;
 

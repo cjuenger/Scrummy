@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Scrummy.DataAccess.Contracts.Enums;
 
-namespace Scrummy.DataAccess.Contracts.Models
+namespace Scrummy.Scrum.Contracts.Models
 {
     public class Sprint
     {

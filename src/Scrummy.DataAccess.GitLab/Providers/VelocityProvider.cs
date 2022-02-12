@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Io.Juenger.Common.Util;
 using Scrummy.DataAccess.Contracts.Enums;
 using Scrummy.DataAccess.Contracts.Interfaces;
-using Scrummy.DataAccess.Contracts.Models;
-using Scrummy.DataAccess.GitLab.Util;
+using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.DataAccess.GitLab.Providers
 {

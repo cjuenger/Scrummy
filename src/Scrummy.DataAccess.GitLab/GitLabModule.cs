@@ -5,11 +5,11 @@ using IO.Juenger.GitLab.Client;
 using IO.Juenger.GitLab.Model;
 using Microsoft.Extensions.Configuration;
 using Scrummy.DataAccess.Contracts.Interfaces;
-using Scrummy.DataAccess.Contracts.Models;
 using Scrummy.DataAccess.GitLab.Configs;
 using Scrummy.DataAccess.GitLab.GraphQl.Queries;
 using Scrummy.DataAccess.GitLab.Parsers;
 using Scrummy.DataAccess.GitLab.Providers;
+using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.DataAccess.GitLab
 {

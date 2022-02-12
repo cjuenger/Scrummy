@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Io.Juenger.Common.Util;
 using Scrummy.DataAccess.Contracts.Enums;
-using Scrummy.DataAccess.Contracts.Models;
-using Scrummy.Scrum.Util;
+using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.Scrum.Metrics
 {

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Scrummy.DataAccess.Contracts.Interfaces;
-using Scrummy.DataAccess.Contracts.Models;
 using Scrummy.DataAccess.GitLab.Parsers;
+using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.DataAccess.GitLab.Providers
 {

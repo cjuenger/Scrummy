@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Scrummy.DataAccess.Contracts.Models;
+using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.Scrum.Metrics
 {

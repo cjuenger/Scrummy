@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using IO.Juenger.GitLab.Model;
 using Microsoft.Extensions.Logging;
 using Scrummy.DataAccess.Contracts.Interfaces;
-using Scrummy.DataAccess.Contracts.Models;
 using Scrummy.DataAccess.GitLab.Configs;
 using Scrummy.DataAccess.GitLab.Parsers;
+using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.DataAccess.GitLab.Providers
 {

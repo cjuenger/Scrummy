@@ -5,10 +5,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Scrummy.DataAccess.Contracts.Exceptions;
 using Scrummy.DataAccess.Contracts.Interfaces;
-using Scrummy.DataAccess.Contracts.Models;
 using Scrummy.DataAccess.GitLab.Configs;
 using Scrummy.DataAccess.GitLab.GraphQl.Queries;
 using Scrummy.DataAccess.GitLab.GraphQl.Responses;
+using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.DataAccess.GitLab.Providers
 {

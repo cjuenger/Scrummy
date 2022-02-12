@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Io.Juenger.Common\Io.Juenger.Common.csproj" />
       <ProjectReference Include="..\Scrummy.DataAccess.Contracts\Scrummy.DataAccess.Contracts.csproj" />
     </ItemGroup>
 

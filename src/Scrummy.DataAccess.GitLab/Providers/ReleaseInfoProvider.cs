@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using IO.Juenger.GitLab.Model;
 using Scrummy.DataAccess.Contracts.Interfaces;
-using Scrummy.DataAccess.Contracts.Models;
+using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.DataAccess.GitLab.Providers
 {

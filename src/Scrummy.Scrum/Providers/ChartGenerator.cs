@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Io.Juenger.Common.Util;
 using Microsoft.Extensions.Logging;
-using Scrummy.DataAccess.Contracts.Models;
+using Scrummy.Scrum.Contracts.Models;
 using Scrummy.Scrum.Models;
 
 namespace Scrummy.Scrum.Providers
@@ -186,7 +187,7 @@ namespace Scrummy.Scrum.Providers
             return burnDown;
         }
         
-        public IEnumerable<Xy<DateTime, int>> GetBurnDownEstimationChart(IEnumerable<Story> stories, double velocityPerDay)
+        public IEnumerable<Xy<DateTime, int>> GetBurnDownEstimationChart(IEnumerable<Story> stories, float velocityPerDay)
         {
             var storyArray = stories?.ToArray() ?? Array.Empty<Story>();
             
@@ -200,7 +201,7 @@ namespace Scrummy.Scrum.Providers
             
             // NOTE, if the velocity is zero a velocity of 0.1 (equals 1 SP per a two weeks sprint)
             // story point per day is assumed.
-            velocityPerDay = velocityPerDay <= 0 ? 0.1 : velocityPerDay;
+            velocityPerDay = velocityPerDay <= 0 ? 0.1f : velocityPerDay;
 
             var daysToGo = remainingStoryPoints / velocityPerDay;
 
@@ -209,10 +210,13 @@ namespace Scrummy.Scrum.Providers
                 daysToGo, 
                 remainingStoryPoints,
                 velocityPerDay);
+
+            // TODO: 20220212 CJ: Consider hours of a work day!
+            var dueDate = lastBurnDown.X.GetBusinessDueDate(daysToGo);
             
             var estimatedXy = new Xy<DateTime, int>
             {
-                X = lastBurnDown.X.AddDays(daysToGo),
+                X = dueDate,
                 Y = 0
             };
 

@@ -23,3 +23,5 @@ src/Scrummy.DataAccess.Contracts/obj/
 src/Scrummy.DataAccess.GitLab/bin/
 src/Scrummy.DataAccess.GitLab/obj/
 src/Scrummy.UI/appsettings.Development.json
+src/Io.Juenger.Common/bin/
+src/Io.Juenger.Common/obj/
