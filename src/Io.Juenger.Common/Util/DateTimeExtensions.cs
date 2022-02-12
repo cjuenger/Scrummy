@@ -39,8 +39,13 @@ namespace Io.Juenger.Common.Util
             {
                 // we are here to find out if there is a 1-day or 2-days weekend
                 // in the time interval remaining after subtracting the complete weeks
-                var firstDayOfWeek = (int) firstDay.DayOfWeek;
-                var lastDayOfWeek = (int) lastDay.DayOfWeek;
+                // var firstDayOfWeek = (int) firstDay.DayOfWeek;
+                // var lastDayOfWeek = (int) lastDay.DayOfWeek;
+                var firstDayOfWeek = firstDay.DayOfWeek == DayOfWeek.Sunday 
+                    ? 7 : (int)firstDay.DayOfWeek;
+                var lastDayOfWeek = lastDay.DayOfWeek == DayOfWeek.Sunday
+                    ? 7 : (int)lastDay.DayOfWeek;
+                
                 if (lastDayOfWeek < firstDayOfWeek)
                     lastDayOfWeek += 7;
                 switch (firstDayOfWeek)
