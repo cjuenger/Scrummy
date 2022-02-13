@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Scrummy.DataAccess.Contracts.Interfaces
+namespace Scrummy.Scrum.Contracts.Interfaces
 {
     public interface IVelocityProvider
     {
@@ -14,6 +14,7 @@ namespace Scrummy.DataAccess.Contracts.Interfaces
         float Worst3SprintsDayAverageVelocity { get; }
         DateTime StartTimeOfFirstSprint { get; set; }
         DateTime EndTimeOfLastSprint { get; set; }
-        Task LoadVelocityAsync(string projectId, CancellationToken ct = default);
+        Task CalculateVelocityAsync(string projectId, DateTime endTime, CancellationToken ct = default);
+        Task CalculateVelocityAsync(string projectId, CancellationToken ct = default);
     }
 }

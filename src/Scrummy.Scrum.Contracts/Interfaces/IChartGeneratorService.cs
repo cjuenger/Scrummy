@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Scrummy.Scrum.Contracts.Models;
-using Scrummy.Scrum.Models;
 
-namespace Scrummy.Scrum.Providers
+namespace Scrummy.Scrum.Contracts.Interfaces
 {
-    public interface IChartGenerator
+    public interface IChartGeneratorService
     {
         IEnumerable<Xy<DateTime, int>> GetOpenedStoryChart(IEnumerable<Story> stories);
         

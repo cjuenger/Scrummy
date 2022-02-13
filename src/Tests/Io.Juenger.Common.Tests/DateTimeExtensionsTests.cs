@@ -2,7 +2,6 @@
 using FluentAssertions;
 using Io.Juenger.Common.Util;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace Io.Juenger.Common.Tests
 {

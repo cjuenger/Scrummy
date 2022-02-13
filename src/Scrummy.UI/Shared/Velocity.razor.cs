@@ -6,9 +6,9 @@ using IO.Juenger.GitLab.Api;
 using Microsoft.AspNetCore.Components;
 using Scrummy.DataAccess.Contracts.Interfaces;
 using Scrummy.DataAccess.GitLab.Parsers;
+using Scrummy.Scrum.Contracts.Interfaces;
 using Scrummy.Scrum.Contracts.Models;
 using Scrummy.Scrum.Metrics;
-using Scrummy.Scrum.Models;
 using Scrummy.Scrum.Providers;
 
 namespace Scrummy.UI.Shared
@@ -22,7 +22,7 @@ namespace Scrummy.UI.Shared
         private readonly bool _smooth = false;
         
         [Inject]
-        private IChartGenerator ChartGenerator { get; set; }
+        private IChartGeneratorService ChartGeneratorService { get; set; }
         
         [Inject]
         private ISprintProvider SprintProvider { get; set; }
@@ -49,7 +49,7 @@ namespace Scrummy.UI.Shared
                                SprintLength * 5);
 
             var sprints = await SprintProvider.GetAllSprintsAsync("28355012");
-            _velocitySeries = ChartGenerator.GetVelocityChart(sprints);
+            _velocitySeries = ChartGeneratorService.GetVelocityChart(sprints);
         }
     }
 }

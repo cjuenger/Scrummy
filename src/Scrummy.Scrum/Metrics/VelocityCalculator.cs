@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Io.Juenger.Common.Util;
 using Scrummy.DataAccess.Contracts.Enums;
+using Scrummy.Scrum.Contracts.Interfaces;
 using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.Scrum.Metrics

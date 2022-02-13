@@ -27,3 +27,7 @@ src/Io.Juenger.Common/bin/
 src/Io.Juenger.Common/obj/
 src/Io.Juenger.Common.Tests/obj/
 src/Io.Juenger.Common.Tests/bin/
+src/Tests/Io.Juenger.Common.Tests/bin/
+src/Tests/Io.Juenger.Common.Tests/obj/
+src/Tests/Scrummy.Scrum.Tests/bin/
+src/Tests/Scrummy.Scrum.Tests/obj/

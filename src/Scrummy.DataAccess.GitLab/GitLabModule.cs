@@ -9,6 +9,7 @@ using Scrummy.DataAccess.GitLab.Configs;
 using Scrummy.DataAccess.GitLab.GraphQl.Queries;
 using Scrummy.DataAccess.GitLab.Parsers;
 using Scrummy.DataAccess.GitLab.Providers;
+using Scrummy.Scrum.Contracts.Interfaces;
 using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.DataAccess.GitLab
@@ -49,10 +50,6 @@ namespace Scrummy.DataAccess.GitLab
                 .As<IReleaseProvider>()
                 .SingleInstance();
 
-            builder.RegisterType<VelocityProvider>()
-                .As<IVelocityProvider>()
-                .SingleInstance();
-            
             builder.RegisterType<BoardQueries>()
                 .As<IBoardQueries>()
                 .SingleInstance();

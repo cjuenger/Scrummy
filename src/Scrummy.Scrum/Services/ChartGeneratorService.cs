@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using Io.Juenger.Common.Util;
 using Microsoft.Extensions.Logging;
+using Scrummy.Scrum.Contracts.Interfaces;
 using Scrummy.Scrum.Contracts.Models;
-using Scrummy.Scrum.Models;
 
-namespace Scrummy.Scrum.Providers
+namespace Scrummy.Scrum.Services
 {
-    public class ChartGenerator : IChartGenerator
+    public class ChartGeneratorService : IChartGeneratorService
     {
-        private readonly ILogger<ChartGenerator> _logger;
+        private readonly ILogger<ChartGeneratorService> _logger;
 
-        public ChartGenerator(ILogger<ChartGenerator> logger)
+        public ChartGeneratorService(ILogger<ChartGeneratorService> logger)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -236,7 +236,7 @@ namespace Scrummy.Scrum.Providers
                 .Select(s => new Xy<DateTime, int>
                 {
                     X = s.EndTime,
-                    Y = s.StoryPoints
+                    Y = s.CompletedStoryPoints
                 })
                 .ToList();
 

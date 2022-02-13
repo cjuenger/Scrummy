@@ -73,7 +73,7 @@ namespace Scrummy.DataAccess.GitLab.Providers
                     sprint.Name,
                     sprint.StartTime, 
                     sprint.EndTime,
-                    sprint.StoryPoints);
+                    sprint.CompletedStoryPoints);
             }
 
             return sprints;

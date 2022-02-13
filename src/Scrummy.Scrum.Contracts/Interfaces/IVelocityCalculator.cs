@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Scrummy.Scrum.Contracts.Models;
 
-namespace Scrummy.Scrum.Metrics
+namespace Scrummy.Scrum.Contracts.Interfaces
 {
     public interface IVelocityCalculator
     {
