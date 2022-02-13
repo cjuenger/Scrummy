@@ -1,8 +1,7 @@
 ﻿using Autofac;
-using Scrummy.Scrum.Metrics;
+using Scrummy.Scrum.Contracts.Interfaces;
 using Scrummy.Scrum.Providers;
-using IChartGenerator = Scrummy.Scrum.Providers.IChartGenerator;
-using IVelocityCalculator = Scrummy.Scrum.Metrics.IVelocityCalculator;
+using Scrummy.Scrum.Services;
 
 namespace Scrummy.Scrum
 {
@@ -10,12 +9,12 @@ namespace Scrummy.Scrum
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<VelocityCalculator>()
-                .As<IVelocityCalculator>()
+            builder.RegisterType<VelocityProvider>()
+                .As<IVelocityProvider>()
                 .SingleInstance();
             
-            builder.RegisterType<ChartGenerator>()
-                .As<IChartGenerator>()
+            builder.RegisterType<ChartService>()
+                .As<IChartService>()
                 .SingleInstance();
         }
     }

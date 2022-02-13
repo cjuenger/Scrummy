@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using IO.Juenger.GitLab.Api;
 using Scrummy.DataAccess.Contracts.Interfaces;
-using Scrummy.DataAccess.Contracts.Models;
 using Scrummy.DataAccess.GitLab.Parsers;
+using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.DataAccess.GitLab.Providers
 {
@@ -14,11 +13,16 @@ namespace Scrummy.DataAccess.GitLab.Providers
     {
         private readonly IProjectApiProvider _projectApiProvider;
         private readonly IItemParser _itemParser;
+        private readonly IPaginationService _paginationService;
 
-        public ReleaseProvider(IProjectApiProvider projectApiProvider, IItemParser itemParser)
+        public ReleaseProvider(
+            IProjectApiProvider projectApiProvider, 
+            IItemParser itemParser,
+            IPaginationService paginationService)
         {
             _projectApiProvider = projectApiProvider ?? throw new ArgumentNullException(nameof(projectApiProvider));
             _itemParser = itemParser ?? throw new ArgumentNullException(nameof(itemParser));
+            _paginationService = paginationService ?? throw new ArgumentNullException(nameof(paginationService));
         }
         
         public async Task<Release> GetReleaseAsync(
@@ -44,11 +48,15 @@ namespace Scrummy.DataAccess.GitLab.Providers
             ReleaseInfo releaseInfo, 
             CancellationToken ct = default)
         {
-            var issues = await _projectApiProvider.ProjectApi
-                .GetAllIssuesOfProjectMilestoneAsync(projectId, releaseInfo.Id, ct)
-                .ConfigureAwait(false);
-
-            var items = issues.Select(i => _itemParser.Parse(i));
+            var totalIssues=  
+                await _paginationService
+                    .BrowseAllAsync(page => 
+                        _projectApiProvider
+                            .ProjectApi
+                            .GetAllIssuesOfProjectMilestoneAsync(projectId, releaseInfo.Id, page, ct))
+                    .ConfigureAwait(false);
+            
+            var items = totalIssues.Select(i => _itemParser.Parse(i));
             return items;
         }
     }

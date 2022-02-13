@@ -6,18 +6,23 @@ using System.Threading.Tasks;
 using AutoMapper;
 using IO.Juenger.GitLab.Model;
 using Scrummy.DataAccess.Contracts.Interfaces;
-using Scrummy.DataAccess.Contracts.Models;
+using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.DataAccess.GitLab.Providers
 {
     internal class ReleaseInfoProvider : IReleaseInfoProvider
     {
         private readonly IProjectApiProvider _projectApiProvider;
+        private readonly IPaginationService _paginationService;
         private readonly IMapper _mapper;
 
-        public ReleaseInfoProvider(IProjectApiProvider projectApiProvider, IMapper mapper)
+        public ReleaseInfoProvider(
+            IProjectApiProvider projectApiProvider, 
+            IPaginationService paginationService,
+            IMapper mapper)
         {
             _projectApiProvider = projectApiProvider ?? throw new ArgumentNullException(nameof(projectApiProvider));
+            _paginationService = paginationService ?? throw new ArgumentNullException(nameof(paginationService));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
         
@@ -29,8 +34,10 @@ namespace Scrummy.DataAccess.GitLab.Providers
             }
             
             var projectApi = _projectApiProvider.ProjectApi;
-            var activeMilestones = await projectApi
-                .GetProjectMilestonesAsync(projectId, cancellationToken: ct)
+            var activeMilestones = await _paginationService
+                .BrowseAllAsync(page => 
+                    projectApi
+                        .GetProjectMilestonesAsync(projectId, page: page, cancellationToken: ct))
                 .ConfigureAwait(false);
 
             var orderedActiveMilestones = activeMilestones.OrderBy(m => m.DueDate);
@@ -54,11 +61,14 @@ namespace Scrummy.DataAccess.GitLab.Providers
             }
 
             var projectApi = _projectApiProvider.ProjectApi;
-            var milestones = await projectApi
-                .GetProjectMilestonesAsync(projectId, cancellationToken: ct)
+
+            var milestones = await _paginationService
+                .BrowseAllAsync(page => 
+                    projectApi
+                        .GetProjectMilestonesAsync(projectId, page: page, cancellationToken: ct))
                 .ConfigureAwait(false);
 
-            var releaseInfos = _mapper.Map<List<Milestone>, List<ReleaseInfo>>(milestones);
+            var releaseInfos = _mapper.Map<IEnumerable<Milestone>, List<ReleaseInfo>>(milestones);
 
             return releaseInfos;
         }

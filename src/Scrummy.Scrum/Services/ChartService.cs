@@ -1,13 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Scrummy.DataAccess.Contracts.Models;
-using Scrummy.Scrum.Models;
+using Io.Juenger.Common.Util;
+using Microsoft.Extensions.Logging;
+using Scrummy.Scrum.Contracts.Interfaces;
+using Scrummy.Scrum.Contracts.Models;
 
-namespace Scrummy.Scrum.Providers
+namespace Scrummy.Scrum.Services
 {
-    public class ChartGenerator : IChartGenerator
+    public class ChartService : IChartService
     {
+        private readonly ILogger<ChartService> _logger;
+
+        public ChartService(ILogger<ChartService> logger)
+        {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+        
         public IEnumerable<Xy<DateTime, int>> GetOpenedStoryChart(IEnumerable<Story> stories)
         {
             var graph = stories?
@@ -178,25 +187,36 @@ namespace Scrummy.Scrum.Providers
             return burnDown;
         }
         
-        public IEnumerable<Xy<DateTime, int>> GetBurnDownEstimationChart(IEnumerable<Story> stories, double velocity)
+        public IEnumerable<Xy<DateTime, int>> GetBurnDownEstimationChart(IEnumerable<Story> stories, float velocityPerDay)
         {
             var storyArray = stories?.ToArray() ?? Array.Empty<Story>();
             
             var burnDown = GetBurnDownChart(storyArray);
-            var opened = GetCumulatedOpenedStoryChart(storyArray);
             
             var lastBurnDown = burnDown.LastOrDefault();
-            var lastOpened = opened.LastOrDefault();
             
-            if(lastBurnDown == null || lastOpened == null) return Enumerable.Empty<Xy<DateTime, int>>();
+            if(lastBurnDown == null) return Enumerable.Empty<Xy<DateTime, int>>();
 
-            var remainingStoryPoints = lastOpened.Y - lastBurnDown.Y;
+            var remainingStoryPoints = lastBurnDown.Y;
+            
+            // NOTE, if the velocity is zero a velocity of 0.1 (equals 1 SP per a two weeks sprint)
+            // story point per day is assumed.
+            velocityPerDay = velocityPerDay <= 0 ? 0.1f : velocityPerDay;
 
-            var daysToGo = remainingStoryPoints / velocity;
+            var daysToGo = remainingStoryPoints / velocityPerDay;
 
+            _logger.LogDebug(
+                "{DaysToGo} days to go to complete {StoryPoints} story points by a velocity of {VelocityPerDay} per day", 
+                daysToGo, 
+                remainingStoryPoints,
+                velocityPerDay);
+
+            // TODO: 20220212 CJ: Consider hours of a work day!
+            var dueDate = lastBurnDown.X.GetBusinessDueDate(daysToGo);
+            
             var estimatedXy = new Xy<DateTime, int>
             {
-                X = lastBurnDown.X.AddDays(daysToGo),
+                X = dueDate,
                 Y = 0
             };
 
@@ -216,7 +236,7 @@ namespace Scrummy.Scrum.Providers
                 .Select(s => new Xy<DateTime, int>
                 {
                     X = s.EndTime,
-                    Y = s.Velocity
+                    Y = s.CompletedStoryPoints
                 })
                 .ToList();
 

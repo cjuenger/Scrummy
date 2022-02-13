@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Scrummy.DataAccess.Contracts.Models
+namespace Scrummy.Scrum.Contracts.Models
 {
     public class ReleaseInfo
     {

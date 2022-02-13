@@ -6,4 +6,8 @@
         <RootNamespace>Scrummy.DataAccess.Contracts</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Scrummy.Scrum.Contracts\Scrummy.Scrum.Contracts.csproj" />
+    </ItemGroup>
+
 </Project>

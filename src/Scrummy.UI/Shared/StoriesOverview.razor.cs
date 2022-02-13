@@ -5,8 +5,8 @@ using IO.Juenger.GitLab.Api;
 using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
 using Scrummy.DataAccess.Contracts.Enums;
-using Scrummy.DataAccess.Contracts.Models;
 using Scrummy.DataAccess.GitLab.Parsers;
+using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.UI.Shared
 {

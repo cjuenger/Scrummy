@@ -2,13 +2,12 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using IO.Juenger.GitLab.Api;
 using IO.Juenger.GitLab.Model;
 using Microsoft.AspNetCore.Components;
 using Scrummy.DataAccess.Contracts.Interfaces;
-using Scrummy.DataAccess.Contracts.Models;
 using Scrummy.DataAccess.GitLab.Configs;
 using Scrummy.DataAccess.GitLab.Providers;
+using Scrummy.Scrum.Contracts.Models;
 using Scrummy.UI.Configs;
 
 namespace Scrummy.UI.Pages

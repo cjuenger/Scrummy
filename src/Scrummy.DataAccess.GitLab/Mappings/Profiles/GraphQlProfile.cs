@@ -1,9 +1,9 @@
 ﻿using System;
 using AutoMapper;
 using Scrummy.DataAccess.Contracts.Enums;
-using Scrummy.DataAccess.Contracts.Models;
 using Scrummy.DataAccess.GitLab.GraphQl.Responses;
 using Scrummy.DataAccess.GitLab.Parsers;
+using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.DataAccess.GitLab.Mappings.Profiles
 {

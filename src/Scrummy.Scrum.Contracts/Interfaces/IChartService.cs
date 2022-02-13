@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Scrummy.DataAccess.Contracts.Models;
-using Scrummy.Scrum.Models;
+using Scrummy.Scrum.Contracts.Models;
 
-namespace Scrummy.Scrum.Providers
+namespace Scrummy.Scrum.Contracts.Interfaces
 {
-    public interface IChartGenerator
+    public interface IChartService
     {
         IEnumerable<Xy<DateTime, int>> GetOpenedStoryChart(IEnumerable<Story> stories);
         
@@ -19,7 +18,7 @@ namespace Scrummy.Scrum.Providers
         
         IEnumerable<Xy<DateTime, int>> GetBurnDownChart(IEnumerable<Story> stories, bool tillToday = true);
         
-        IEnumerable<Xy<DateTime, int>> GetBurnDownEstimationChart(IEnumerable<Story> stories, double velocity);
+        IEnumerable<Xy<DateTime, int>> GetBurnDownEstimationChart(IEnumerable<Story> stories, float velocityPerDay);
 
         IEnumerable<Xy<DateTime, int>> GetVelocityChart(IEnumerable<Sprint> sprints, bool tillToday = true);
     }

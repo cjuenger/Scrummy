@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using IO.Juenger.GitLab.Model;
 using Scrummy.DataAccess.Contracts.Enums;
-using Scrummy.DataAccess.Contracts.Models;
 using Scrummy.DataAccess.GitLab.Configs;
+using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.DataAccess.GitLab.Parsers
 {

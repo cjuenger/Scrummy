@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Components;
-using Scrummy.DataAccess.Contracts.Models;
-using Scrummy.Scrum.Models;
+using Scrummy.Scrum.Contracts.Interfaces;
+using Scrummy.Scrum.Contracts.Models;
 using Scrummy.Scrum.Providers;
 
 namespace Scrummy.UI.Shared
@@ -15,7 +15,7 @@ namespace Scrummy.UI.Shared
         private readonly bool _smooth = false;
         
         [Inject]
-        private IChartGenerator ChartGenerator { get; set; }
+        private IChartService ChartService { get; set; }
         
         [Parameter] 
         public IEnumerable<Story> Stories { get; set; }
@@ -27,7 +27,7 @@ namespace Scrummy.UI.Shared
         {
             base.OnParametersSet();
 
-            _burnUp = ChartGenerator.GetBurnUpChart(Stories);
+            _burnUp = ChartService.GetBurnUpChart(Stories);
         }
     }
 }

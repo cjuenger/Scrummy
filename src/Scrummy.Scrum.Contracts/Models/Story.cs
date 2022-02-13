@@ -1,4 +1,4 @@
-﻿namespace Scrummy.DataAccess.Contracts.Models
+﻿namespace Scrummy.Scrum.Contracts.Models
 {
     public class Story : Item
     {
