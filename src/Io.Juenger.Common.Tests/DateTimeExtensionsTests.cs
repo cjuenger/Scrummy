@@ -22,23 +22,23 @@ namespace Io.Juenger.Common.Tests
         }
 
         [Test]
-        public void GetExcludedDaysUntil_Over_One_Holiday()
+        public void GetCountOfExcludedDaysWithinBusinessDaysUntil_Over_One_Holiday()
         {
             var start = new DateTime(2022, 04, 11);
             var end = new DateTime(2022, 04, 15);
             var goodFriday = new DateTime(2022, 04, 15);
 
-            start.GetExcludedDaysUntil(end, goodFriday).Should().Be(1);
+            start.GetCountOfExcludedDaysWithinBusinessDaysUntil(end, goodFriday).Should().Be(1);
         }
         
         [Test]
-        public void GetExcludedDaysUntil_Over_one_Holiday_And_One_Weekend()
+        public void GetCountOfExcludedDaysWithinBusinessDaysUntil_Over_one_Holiday_And_One_Weekend()
         {
             var start = new DateTime(2022, 04, 11);
             var end = new DateTime(2022, 04, 17);
             var goodFriday = new DateTime(2022, 04, 15);
 
-            start.GetExcludedDaysUntil(end, goodFriday).Should().Be(3);
+            start.GetCountOfExcludedDaysWithinBusinessDaysUntil(end, goodFriday).Should().Be(3);
         }
         
         [TestCaseSource(nameof(_getBusinessDueDateByWorkTimeTestCases))]
@@ -54,9 +54,9 @@ namespace Io.Juenger.Common.Tests
         }
 
         [TestCaseSource(nameof(_getExcludedDaysTestCases))]
-        public void GetExcludedDays(DateTime startDate, double totalDays, int expectedCountOfExcluded)
+        public void GetCountOfExcludedDaysWithinBusinessDays(DateTime startDate, double totalDays, int expectedCountOfExcluded)
         {
-            startDate.GetExcludedDays(totalDays).Should().Be(expectedCountOfExcluded);
+            startDate.GetCountOfExcludedDaysWithinBusinessDays(totalDays).Should().Be(expectedCountOfExcluded);
         }
 
         private static object[] _getBusinessDaysUntilTestCases =

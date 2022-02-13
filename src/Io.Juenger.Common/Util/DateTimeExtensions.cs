@@ -92,7 +92,7 @@ namespace Io.Juenger.Common.Util
         {
             var totalTime = endDate - startDate + TimeSpan.FromDays(1);
             var totalDays = totalTime.TotalDays;
-            var daysInWeekend = startDate.GetExcludedDays(totalDays);
+            var daysInWeekend = startDate.GetCountOfExcludedDaysWithinBusinessDays(totalDays);
             return daysInWeekend;
         }
 
@@ -103,7 +103,10 @@ namespace Io.Juenger.Common.Util
         /// <param name="endDate"></param>
         /// <param name="excludeDates"></param>
         /// <returns></returns>
-        public static int GetExcludedDaysUntil(this DateTime startDate, DateTime endDate, params DateTime[] excludeDates)
+        public static int GetCountOfExcludedDaysWithinBusinessDaysUntil(
+            this DateTime startDate, 
+            DateTime endDate, 
+            params DateTime[] excludeDates)
         {
             var excludedDays = startDate.GetWeekendDaysUntil(endDate);
             excludedDays += excludeDates.Count(d => d >= startDate && d <= endDate);
@@ -139,7 +142,7 @@ namespace Io.Juenger.Common.Util
 
             var correctedDays = totalWorkDays + totalWeekendDays;
             
-            var excludedDays = startDate.GetExcludedDays(correctedDays + remainingDays, excludeDates);
+            var excludedDays = startDate.GetCountOfExcludedDaysWithinBusinessDays(correctedDays + remainingDays, excludeDates);
             correctedDays += excludedDays;
             var dueDate = startDate.AddDays(correctedDays - totalWeekendDays - 1);
 
@@ -168,7 +171,15 @@ namespace Io.Juenger.Common.Util
             return GetBusinessDueDate(startDate, requiredTotalWorkTime, businessWeekDays, dailyWorkHours, excludeDates);
         }
 
-        public static int GetExcludedDays(
+        /// <summary>
+        ///     Gets the count of days that had been excluded between a start date and a count of consecutive
+        ///     business days
+        /// </summary>
+        /// <param name="startDate">Start date</param>
+        /// <param name="totalDays">Count of consecutive business days</param>
+        /// <param name="excludeDates">Special day - other than weekends - to exclude</param>
+        /// <returns></returns>
+        public static int GetCountOfExcludedDaysWithinBusinessDays(
             this DateTime startDate, 
             double totalDays, 
             params DateTime[] excludeDates)
