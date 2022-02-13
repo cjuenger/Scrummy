@@ -83,7 +83,7 @@ namespace Io.Juenger.Common.Util
         }
 
         /// <summary>
-        ///     Gets the weekend days within between the given dates.
+        ///     Gets the weekend days within the given dates range.
         /// </summary>
         /// <param name="startDate">Start date from where the weekends shall be cumulated.</param>
         /// <param name="endDate">End date till where the weekends shall be cumulated.</param>
@@ -96,6 +96,20 @@ namespace Io.Juenger.Common.Util
             return daysInWeekend;
         }
 
+        /// <summary>
+        ///     Gets all excluded days within the given dates range.
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <param name="excludeDates"></param>
+        /// <returns></returns>
+        public static int GetExcludedDaysUntil(this DateTime startDate, DateTime endDate, params DateTime[] excludeDates)
+        {
+            var excludedDays = startDate.GetWeekendDaysUntil(endDate);
+            excludedDays += excludeDates.Count(d => d >= startDate && d <= endDate);
+            return excludedDays;
+        }
+        
         /// <summary>
         ///     Gets the due date from the passed required total work time, taking into account:
         ///         - weekends (Saturdays and Sundays)
@@ -118,20 +132,16 @@ namespace Io.Juenger.Common.Util
             params DateTime[] excludeDates)
         {
             var totalWorkDays = (int)(totalWorkTime.TotalHours / dailyWorkHours);
+            var fullWeekCount = totalWorkDays == businessWeekDays ? 0 : totalWorkDays/ businessWeekDays;
+            var weekendLength = 7 - businessWeekDays;
+            var totalWeekendDays = fullWeekCount * weekendLength;
+            var remainingDays =  totalWorkDays > 7 ? totalWorkDays % businessWeekDays : 0;
 
-            var fullWeekCount = totalWorkDays / businessWeekDays;
-            var remainingDays = totalWorkDays % businessWeekDays;
-
-            var weekendDays = fullWeekCount * 2;
-            var dueDate = startDate.AddDays(totalWorkDays + weekendDays - 1);
-
-            var countOfExcludedDates = excludeDates.Count(d => d >= startDate && d <= dueDate);
-            dueDate = dueDate.AddDays(countOfExcludedDates);
-
-            if (remainingDays < 1) return dueDate;
+            var correctedDays = totalWorkDays + totalWeekendDays;
             
-            var excludedDays = dueDate.GetExcludedDays(remainingDays, excludeDates);
-            dueDate = dueDate.AddDays(excludedDays);
+            var excludedDays = startDate.GetExcludedDays(correctedDays + remainingDays, excludeDates);
+            correctedDays += excludedDays;
+            var dueDate = startDate.AddDays(correctedDays - totalWeekendDays - 1);
 
             return dueDate;
         }

@@ -21,16 +21,36 @@ namespace Io.Juenger.Common.Tests
             start.GetWeekendDaysUntil(end).Should().Be(expectedWeekendDays);
         }
 
-        [TestCaseSource(nameof(_getBusinessDueDateTestCases))]
-        public void GetBusinessDueDate_From_Required_Total_Work_Days(DateTime start, float totalWorkDays, DateTime expectedDueDate)
+        [Test]
+        public void GetExcludedDaysUntil_Over_One_Holiday()
         {
-            start.GetBusinessDueDate(totalWorkDays).Should().Be(expectedDueDate);
+            var start = new DateTime(2022, 04, 11);
+            var end = new DateTime(2022, 04, 15);
+            var goodFriday = new DateTime(2022, 04, 15);
+
+            start.GetExcludedDaysUntil(end, goodFriday).Should().Be(1);
         }
         
         [Test]
-        public void GetBusinessDueDate_From_Required_Total_Time()
+        public void GetExcludedDaysUntil_Over_one_Holiday_And_One_Weekend()
         {
-            Assert.Fail();
+            var start = new DateTime(2022, 04, 11);
+            var end = new DateTime(2022, 04, 17);
+            var goodFriday = new DateTime(2022, 04, 15);
+
+            start.GetExcludedDaysUntil(end, goodFriday).Should().Be(3);
+        }
+        
+        [TestCaseSource(nameof(_getBusinessDueDateByWorkTimeTestCases))]
+        public void GetBusinessDueDate_From_Required_Total_Time(DateTime start, TimeSpan totalWorkTime, DateTime expectedDueDate)
+        {
+            start.GetBusinessDueDate(totalWorkTime).Should().Be(expectedDueDate);
+        }
+
+        [TestCaseSource(nameof(_getBusinessDueDateByWorkDaysTestCases))]
+        public void GetBusinessDueDate_From_Required_Total_Work_Days(DateTime start, float totalWorkDays, DateTime expectedDueDate)
+        {
+            start.GetBusinessDueDate(totalWorkDays).Should().Be(expectedDueDate);
         }
 
         [TestCaseSource(nameof(_getExcludedDaysTestCases))]
@@ -133,31 +153,71 @@ namespace Io.Juenger.Common.Tests
             
         };
         
-        private static object[] _getBusinessDueDateTestCases =
+        private static object[] _getBusinessDueDateByWorkTimeTestCases =
         {
+            new object[] // 1 day 
+            {
+                new DateTime(2022, 02, 07), // Monday  (inclusive) 
+                TimeSpan.FromHours(8),
+                new DateTime(2022, 02, 07) // expected due day
+            },
+            new object[] // 1 business week
+            {
+                new DateTime(2022, 02, 07), // Monday  (inclusive) 
+                TimeSpan.FromHours(40),
+                new DateTime(2022, 02, 11) // expected due day
+            },
+            new object[] // 1 whole week
+            {
+                new DateTime(2022, 02, 07), // Saturday  (inclusive) 
+                TimeSpan.FromHours(56),
+                new DateTime(2022, 02, 15) // expected due day
+            },
+            new object[] // 1 weekend
+            {
+                new DateTime(2022, 02, 12), // Saturday  (inclusive) 
+                TimeSpan.FromHours(16),
+                new DateTime(2022, 02, 15) // expected due day
+            },
             new object[] // whole February
             {
-                new DateTime(2022, 02, 01), // Tuesday
+                new DateTime(2022, 02, 01), // Tuesday  (inclusive) 
+                TimeSpan.FromHours(160),
+                new DateTime(2022, 02, 28) // expected due day
+            }
+        };
+        
+        private static object[] _getBusinessDueDateByWorkDaysTestCases =
+        {
+            new object[] // 1 day 
+            {
+                new DateTime(2022, 02, 07), // Monday  (inclusive) 
+                1f,
+                new DateTime(2022, 02, 07) // expected due day
+            },
+            new object[] // 1 business week
+            {
+                new DateTime(2022, 02, 07), // Monday  (inclusive) 
+                5f,
+                new DateTime(2022, 02, 11) // expected due day
+            },
+            new object[] // 1 whole week
+            {
+                new DateTime(2022, 02, 07), // Saturday  (inclusive) 
+                7f,
+                new DateTime(2022, 02, 15) // expected due day
+            },
+            new object[] // 1 weekend
+            {
+                new DateTime(2022, 02, 12), // Saturday  (inclusive) 
+                2f,
+                new DateTime(2022, 02, 15) // expected due day
+            },
+            new object[] // whole February
+            {
+                new DateTime(2022, 02, 01), // Tuesday  (inclusive) 
                 20f,
                 new DateTime(2022, 02, 28) // expected due day
-            },
-            new object[] // 3 days from Tuesday (inclusive) 
-            {
-                new DateTime(2022, 02, 01), // Tuesday
-                3f,
-                new DateTime(2022, 02, 03) // expected due day
-            },
-            new object[] // 4 days from Tuesday (inclusive) 
-            {
-                new DateTime(2022, 02, 01), // Tuesday
-                4f,
-                new DateTime(2022, 02, 04) // expected due day
-            },
-            new object[] // 5 days from Tuesday (inclusive; reaches into weekend) 
-            {
-                new DateTime(2022, 02, 01), // Tuesday
-                5f,
-                new DateTime(2022, 02, 06) // expected due day
             }
         };
         
