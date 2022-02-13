@@ -4,7 +4,7 @@ using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.Scrum.Contracts.Interfaces
 {
-    public interface IChartGeneratorService
+    public interface IChartService
     {
         IEnumerable<Xy<DateTime, int>> GetOpenedStoryChart(IEnumerable<Story> stories);
         

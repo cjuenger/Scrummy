@@ -8,11 +8,11 @@ using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.Scrum.Services
 {
-    public class ChartGeneratorService : IChartGeneratorService
+    public class ChartService : IChartService
     {
-        private readonly ILogger<ChartGeneratorService> _logger;
+        private readonly ILogger<ChartService> _logger;
 
-        public ChartGeneratorService(ILogger<ChartGeneratorService> logger)
+        public ChartService(ILogger<ChartService> logger)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }

@@ -7,7 +7,6 @@ using Scrummy.DataAccess.Contracts.Interfaces;
 using Scrummy.DataAccess.GitLab.Configs;
 using Scrummy.Scrum.Contracts.Interfaces;
 using Scrummy.Scrum.Contracts.Models;
-using Scrummy.Scrum.Metrics;
 using Scrummy.Scrum.Providers;
 
 namespace Scrummy.UI.Shared
@@ -31,7 +30,7 @@ namespace Scrummy.UI.Shared
         private IVelocityProvider VelocityProvider { get; set; }
         
         [Inject]
-        private IChartGeneratorService ChartGeneratorService { get; set; }
+        private IChartService ChartService { get; set; }
         
         [Parameter] 
         public IEnumerable<Story> Stories { get; set; }
@@ -56,19 +55,19 @@ namespace Scrummy.UI.Shared
                 return;
             }
             
-            _burnDown = ChartGeneratorService.GetBurnDownChart(Stories);
+            _burnDown = ChartService.GetBurnDownChart(Stories);
 
             _maxYValue = _burnDown.Select(bd => bd.Y).Max() + 5;
             
             await VelocityProvider.CalculateVelocityAsync(GitLabConfig.ProjectId).ConfigureAwait(false);
             
-            _estimate = ChartGeneratorService
+            _estimate = ChartService
                 .GetBurnDownEstimationChart(Stories, VelocityProvider.DayAverageVelocity);
             
-            _bestEstimate = ChartGeneratorService
+            _bestEstimate = ChartService
                 .GetBurnDownEstimationChart(Stories, VelocityProvider.Best3SprintsDayAverageVelocity);
             
-            _worstEstimate = ChartGeneratorService
+            _worstEstimate = ChartService
                 .GetBurnDownEstimationChart(Stories, VelocityProvider.Worst3SprintsDayAverageVelocity);
 
             CalculateDueLine();
