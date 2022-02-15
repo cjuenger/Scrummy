@@ -76,14 +76,6 @@ namespace Scrummy.DataAccess.GitLab
             
             RegisterMappers(builder);
         }
-
-        private static IProjectApi GetProjectApi(IComponentContext ctx)
-        {
-            var configuration = ctx.Resolve<IReadableConfiguration>() as Configuration;
-            var projectApi = new ProjectApi(configuration);
-
-            return projectApi;
-        }
         
         private static Configuration GetGitLabApiConfiguration(IComponentContext ctx)
         {
