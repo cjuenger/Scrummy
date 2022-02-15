@@ -7,5 +7,7 @@ namespace Scrummy.DataAccess.GitLab.Configs
         public string ProjectId { get; set; }
         
         public string AccessToken { get; set; }
+        
+        public string BaseUrl { get; set; }
     }
 }

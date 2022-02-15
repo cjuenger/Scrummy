@@ -22,9 +22,22 @@ namespace Scrummy.DataAccess.GitLab.Providers
         private Configuration GetGitLabApiConfiguration()
         {
             var configurationSection = _configuration.GetSection("GitLab");
-            var basePath = configurationSection.GetValue("BasePath", "https://gitlab.com/api");
-            var apiToken = _dataAccessConfig.AccessToken ?? configurationSection.GetValue<string>("AccessToken", null);
+
+            var basePath = _dataAccessConfig.BaseUrl; 
+            if (string.IsNullOrWhiteSpace(basePath))
+            {
+                basePath = configurationSection.GetValue("BasePath", "https://gitlab.com");
+            }
+            basePath += "/api";
+
+            var apiToken = _dataAccessConfig.AccessToken;
+            if (string.IsNullOrWhiteSpace(apiToken))
+            {
+                apiToken = configurationSection.GetValue<string>("AccessToken", null);
+            }
+            
             var config = new Configuration { BasePath = basePath, AccessToken = apiToken };
+            
             return config;
         }
     }
