@@ -8,7 +8,7 @@ using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.Scrum.Services
 {
-    public class ChartService : IChartService
+    internal class ChartService : IChartService
     {
         private readonly ILogger<ChartService> _logger;
 

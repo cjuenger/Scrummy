@@ -2,27 +2,28 @@
 using IO.Juenger.GitLab.Api;
 using IO.Juenger.GitLab.Client;
 using Microsoft.Extensions.Configuration;
+using Scrummy.DataAccess.Contracts.Interfaces;
 using Scrummy.DataAccess.GitLab.Configs;
 
 namespace Scrummy.DataAccess.GitLab.Providers
 {
-    public class ProjectApiProvider : IProjectApiProvider
+    internal class ProjectApiProvider : IProjectApiProvider
     {
         private readonly IConfiguration _configuration;
-        private readonly IGitLabConfig _gitLabConfig;
+        private readonly IDataAccessConfig _dataAccessConfig;
         public IProjectApi ProjectApi => new ProjectApi(GetGitLabApiConfiguration());
 
-        public ProjectApiProvider(IConfiguration configuration, IGitLabConfig gitLabConfig)
+        public ProjectApiProvider(IConfiguration configuration, IDataAccessConfig dataAccessConfig)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-            _gitLabConfig = gitLabConfig ?? throw new ArgumentNullException(nameof(gitLabConfig));
+            _dataAccessConfig = dataAccessConfig ?? throw new ArgumentNullException(nameof(dataAccessConfig));
         }
         
         private Configuration GetGitLabApiConfiguration()
         {
             var configurationSection = _configuration.GetSection("GitLab");
             var basePath = configurationSection.GetValue("BasePath", "https://gitlab.com/api");
-            var apiToken = _gitLabConfig.AccessToken ?? configurationSection.GetValue<string>("AccessToken", null);
+            var apiToken = _dataAccessConfig.AccessToken ?? configurationSection.GetValue<string>("AccessToken", null);
             var config = new Configuration { BasePath = basePath, AccessToken = apiToken };
             return config;
         }

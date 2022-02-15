@@ -5,7 +5,7 @@ using Scrummy.Scrum.Services;
 
 namespace Scrummy.Scrum
 {
-    public class ScrumModule : Module
+    internal class ScrumModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {

@@ -2,7 +2,7 @@
 
 namespace Scrummy.DataAccess.GitLab.Providers
 {
-    public interface IProjectApiProvider
+    internal interface IProjectApiProvider
     {
         IProjectApi ProjectApi { get; }
     }

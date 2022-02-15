@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using IO.Juenger.GitLab.Api;
 using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
 using Scrummy.DataAccess.Contracts.Enums;

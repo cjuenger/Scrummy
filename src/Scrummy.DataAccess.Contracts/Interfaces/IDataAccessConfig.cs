@@ -1,6 +1,6 @@
-﻿namespace Scrummy.DataAccess.GitLab.Configs
+﻿namespace Scrummy.DataAccess.Contracts.Interfaces
 {
-    public interface IGitLabConfig
+    public interface IDataAccessConfig
     {
         string ProjectId { get; set; }
 

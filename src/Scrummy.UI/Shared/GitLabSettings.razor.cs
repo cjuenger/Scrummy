@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Scrummy.DataAccess.Contracts.Interfaces;
 using Scrummy.DataAccess.GitLab.Configs;
 using Scrummy.UI.Configs;
 
@@ -7,18 +8,18 @@ namespace Scrummy.UI.Shared
     public partial class GitLabSettings
     {
         [Inject]
-        private IGitLabConfig GitLabConfig { get; set; }
+        private IDataAccessConfig DataAccessConfig { get; set; }
         
         private string ProjectId
         {
-            get => GitLabConfig.ProjectId; 
-            set => GitLabConfig.ProjectId = value;
+            get => DataAccessConfig.ProjectId; 
+            set => DataAccessConfig.ProjectId = value;
         }
 
         private string AccessToken
         {
-            get => GitLabConfig.AccessToken;
-            set => GitLabConfig.AccessToken = value;
+            get => DataAccessConfig.AccessToken;
+            set => DataAccessConfig.AccessToken = value;
         }
     }
 }
