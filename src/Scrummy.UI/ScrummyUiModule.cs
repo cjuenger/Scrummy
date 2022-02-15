@@ -1,6 +1,4 @@
 ﻿using Autofac;
-using Scrummy.DataAccess.GitLab;
-using Scrummy.DataAccess.GitLab.Configs;
 using Scrummy.Scrum;
 using Scrummy.UI.Configs;
 
@@ -11,24 +9,23 @@ namespace Scrummy.UI
         protected override void Load(ContainerBuilder builder)
         {
             RegisterTypes(builder);
-            RegisterModules(builder);
+            RegisterComponents(builder);
         }
 
         private static void RegisterTypes(ContainerBuilder builder)
         {
-            builder.RegisterType<GitLabConfig>()
-                .As<IGitLabConfig>()
-                .SingleInstance();
-
             builder.RegisterType<ScrumConfig>()
                 .As<IScrumConfig>()
                 .SingleInstance();
         }
         
-        private static void RegisterModules(ContainerBuilder builder)
+        private static void RegisterComponents(ContainerBuilder builder)
         {
-            builder.RegisterModule<ScrumModule>();
-            builder.RegisterModule<GitLabModule>();
+            var gitLabComponentActivator = new Scrummy.DataAccess.GitLab.ComponentActivator();
+            gitLabComponentActivator.RegisterDependencies(builder);
+
+            var scrumComponentActivator = new Scrummy.Scrum.ComponentActivator();
+            scrumComponentActivator.RegisterDependencies(builder);
         }
     }
 }

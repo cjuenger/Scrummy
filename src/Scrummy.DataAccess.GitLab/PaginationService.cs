@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Scrummy.DataAccess.GitLab
 {
-    public class PaginationService : IPaginationService
+    internal class PaginationService : IPaginationService
     {
         public Task<IEnumerable<T>> BrowseAllAsync<T>(Func<int, Task<List<T>>> func) => BrowseToEndAsync(1, func);
 

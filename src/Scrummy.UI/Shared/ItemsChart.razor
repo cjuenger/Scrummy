@@ -1,17 +1,11 @@
 ﻿@using Radzen.Blazor
 @using Radzen
 @using Humanizer
+@using Scrummy.DataAccess.Contracts.Enums
 
 <RadzenCard Style="width:500px;">
 
-    @if (string.IsNullOrWhiteSpace(Label))
-    {
-        <h3> Issues</h3>
-    }
-    else
-    {
-        <h3> @Label.Pluralize()</h3>   
-    }
+    <h3>@ItemType</h3>
     
     <div class="row">
         <b class="col">Opened: @(_countOfOpened)</b>
@@ -38,7 +32,7 @@
     
         <RadzenValueAxis>
             <RadzenGridLines Visible="true" />
-            <RadzenAxisTitle Text="Issues" />
+            <RadzenAxisTitle Text="Items" />
         </RadzenValueAxis>
     </RadzenChart>
     

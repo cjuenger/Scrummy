@@ -24,7 +24,7 @@ namespace Scrummy.UI.Shared
         private readonly bool _smooth = false;
         
         [Inject]
-        private IGitLabConfig GitLabConfig { get; set; }
+        private IDataAccessConfig DataAccessConfig { get; set; }
         
         [Inject]
         private IVelocityProvider VelocityProvider { get; set; }
@@ -59,7 +59,7 @@ namespace Scrummy.UI.Shared
 
             _maxYValue = _burnDown.Select(bd => bd.Y).Max() + 5;
             
-            await VelocityProvider.CalculateVelocityAsync(GitLabConfig.ProjectId).ConfigureAwait(false);
+            await VelocityProvider.CalculateVelocityAsync(DataAccessConfig.ProjectId).ConfigureAwait(false);
             
             _estimate = ChartService
                 .GetBurnDownEstimationChart(Stories, VelocityProvider.DayAverageVelocity);

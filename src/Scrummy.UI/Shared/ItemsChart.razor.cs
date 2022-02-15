@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using IO.Juenger.GitLab.Api;
-using IO.Juenger.GitLab.Model;
 using Microsoft.AspNetCore.Components;
+using Scrummy.DataAccess.Contracts.Enums;
 using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.UI.Shared
 {
-    public partial class IssuesChart
+    public partial class ItemsChart
     {
         private int _countOfOpened = 0;
         private int _countOfClosed = 0;
@@ -21,25 +20,23 @@ namespace Scrummy.UI.Shared
         private readonly bool _smooth = false;
         
         [Parameter]
-        public string Label { get; set; }
+        public ItemType ItemType { get; set; }
 
         [Parameter]
-        public IEnumerable<Issue> Issues { get; set; }
+        public IEnumerable<Item> Items { get; set; }
 
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
 
-            _opened = GetOpenedIssuesSeries();
-            _closed = GetClosedIssuesSeries();
+            _opened = GetOpenedItemsSeries();
+            _closed = GetClosedItemsSeries();
         }
 
-        private bool FilterForLabel(Issue issue) => string.IsNullOrWhiteSpace(Label) || issue.Labels.Contains(Label);
-
-        private IEnumerable<Xy<DateTime, int>> GetOpenedIssuesSeries()
+        private IEnumerable<Xy<DateTime, int>> GetOpenedItemsSeries()
         {
-             var opened = Issues?
-                .Where(FilterForLabel)
+             var opened = Items?
+                .Where(i => i.Type == ItemType)
                 .OrderBy(i => i.CreatedAt)
                 .Select((i, idx) => new Xy<DateTime, int>
                 {
@@ -56,11 +53,11 @@ namespace Scrummy.UI.Shared
             return opened;
         }
 
-        private IEnumerable<Xy<DateTime, int>> GetClosedIssuesSeries()
+        private IEnumerable<Xy<DateTime, int>> GetClosedItemsSeries()
         {
-            var closed = Issues?
-                .Where(i => i.State == State.Closed)
-                .Where(FilterForLabel)
+            var closed = Items?
+                .Where(i => i.State == WorkflowState.Closed)
+                .Where(i => i.Type == ItemType)
                 .OrderBy(i => i.ClosedAt)
                 .Where(i => i.ClosedAt != null)
                 .Select((i, idx) => new Xy<DateTime, int>

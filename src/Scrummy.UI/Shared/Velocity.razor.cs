@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using IO.Juenger.GitLab.Api;
 using Microsoft.AspNetCore.Components;
 using Scrummy.DataAccess.Contracts.Interfaces;
 using Scrummy.DataAccess.GitLab.Configs;
@@ -15,14 +14,15 @@ namespace Scrummy.UI.Shared
 {
     public partial class Velocity
     {
-        private int _velocity;
+        private float _velocity;
+        private float _bestVelocity;
+        private float _worstVelocity;
         
         private IEnumerable<Xy<DateTime, int>> _velocitySeries;
-        
         private readonly bool _smooth = false;
         
         [Inject]
-        private IGitLabConfig GitLabConfig { get; set; }
+        private IDataAccessConfig DataAccessConfig { get; set; }
         
         [Inject]
         private IChartService ChartService { get; set; }
@@ -31,7 +31,7 @@ namespace Scrummy.UI.Shared
         private ISprintProvider SprintProvider { get; set; }
         
         [Inject]
-        private IVelocityProvider VelocityCalculator { get; set; }
+        private IVelocityProvider VelocityProvider { get; set; }
         
         [Parameter]
         public IEnumerable<Story> Stories { get; set; }
@@ -48,10 +48,14 @@ namespace Scrummy.UI.Shared
             
             if(Stories == null) return;
 
-            await VelocityCalculator.CalculateVelocityAsync(GitLabConfig.ProjectId).ConfigureAwait(false);
-
+            await VelocityProvider.CalculateVelocityAsync(DataAccessConfig.ProjectId).ConfigureAwait(false);
+            _velocity = VelocityProvider.SprintAverageVelocity;
+            _bestVelocity = VelocityProvider.Best3SprintsAverageVelocity;
+            _worstVelocity = VelocityProvider.Worst3SprintsAverageVelocity;
+            
             var sprints = await SprintProvider.GetAllSprintsAsync("28355012");
             _velocitySeries = ChartService.GetVelocityChart(sprints);
+            
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿@page "/ScrumDashboard"
+@using Scrummy.DataAccess.Contracts.Enums
 
 <h1>Scrum Dashboard</h1>
 
@@ -6,8 +7,8 @@
     <Velocity Stories="@_stories" SprintLength="@ScrumConfig.SprintLength" StartDate="@ScrumConfig.ProjectStart"/>
     <ReleaseBurnUpChart Stories="@_stories" StartDate="@ScrumConfig.ProjectStart"/>
     <ReleaseBurnDownChart Stories="@_stories" StartDate="@ScrumConfig.ProjectStart"/>
-    <IssuesChart Issues="@_issues" Label="Story"/>
-    <IssuesChart Issues="@_issues" Label="Bug"/>
-    <IssuesChart Issues="@_issues"/>
+    <ItemsChart Items="@_items" ItemType="@ItemType.Story"/>
+    <ItemsChart Items="@_items" ItemType="@ItemType.Bug"/>
+    <ItemsChart Items="@_items"/>
     <StoriesOverview Stories="@_stories"/>
 </div>

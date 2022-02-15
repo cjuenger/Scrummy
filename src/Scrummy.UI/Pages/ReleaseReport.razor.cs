@@ -45,7 +45,7 @@ namespace Scrummy.UI.Pages
         private IReleaseProvider ReleaseProvider { get; set; }
         
         [Inject]
-        private IGitLabConfig GitLabConfig { get; set; }
+        private IDataAccessConfig DataAccessConfig { get; set; }
         
         [Inject]
         private IScrumConfig ScrumConfig { get; set; }
@@ -58,11 +58,11 @@ namespace Scrummy.UI.Pages
             
             _releaseInfos = 
                 await ReleaseInfoProvider
-                    .GetAllReleasesAsync(GitLabConfig.ProjectId)
+                    .GetAllReleasesAsync(DataAccessConfig.ProjectId)
                     .ConfigureAwait(false);
 
             var (isSuccess, releaseInfo) = await ReleaseInfoProvider
-                .TryGetNextUpcomingReleaseAsync(GitLabConfig.ProjectId)
+                .TryGetNextUpcomingReleaseAsync(DataAccessConfig.ProjectId)
                 .ConfigureAwait(false);
 
             if (isSuccess)
@@ -81,7 +81,7 @@ namespace Scrummy.UI.Pages
         {
             _selectedRelease = 
                 await ReleaseProvider
-                    .GetReleaseAsync(GitLabConfig.ProjectId, releaseInfo)
+                    .GetReleaseAsync(DataAccessConfig.ProjectId, releaseInfo)
                     .ConfigureAwait(false);
 
             _dueDate = _selectedRelease.Info.DueDate;

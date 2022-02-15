@@ -1,6 +1,7 @@
-﻿@using IO.Juenger.GitLab.Model
-@using Radzen.Blazor
+﻿@using Radzen.Blazor
 @using Radzen
+@using Scrummy.DataAccess.Contracts.Enums
+@using Scrummy.Scrum.Contracts.Models
 
 <RadzenCard Style="width:500px; height:550px;">
     
@@ -8,44 +9,44 @@
     
     <br>
     
-    <RadzenDataGrid @ref="_issuesGrid"
+    <RadzenDataGrid @ref="_itemsGrid"
                     AllowFiltering="true"
                     AllowPaging="true"
                     PageSize="10"
                     AllowSorting="true"
-                    Data="@_issuesGroups"
-                    TItem="IGrouping<string, Issue>">
+                    Data="@_itemsGroups"
+                    TItem="IGrouping<ItemType, Item>">
         <Columns>
 
-            <RadzenDataGridColumn TItem="IGrouping<string, Issue>"
-                                  Property="Labels"
-                                  Title="Issue"
+            <RadzenDataGridColumn TItem="IGrouping<ItemType, Item>"
+                                  Property="State"
+                                  Title="Item"
                                   TextAlign="TextAlign.Center">
                 <Template Context="data">
                     @data.Key
                 </Template>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="IGrouping<string, Issue>"
-                                  Property="Labels"
+            <RadzenDataGridColumn TItem="IGrouping<ItemType, Item>"
+                                  Property="State"
                                   Title="Opened"
                                   TextAlign="TextAlign.Center">
                 <Template Context="data">
-                    @($"{data.Count(i => i.State == State.Opened)}")
+                    @($"{data.Count(i => i.State == WorkflowState.Opened)}")
                 </Template>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="IGrouping<string, Issue>"
-                                  Property="Labels"
+            <RadzenDataGridColumn TItem="IGrouping<ItemType, Item>"
+                                  Property="State"
                                   Title="Closed"
                                   TextAlign="TextAlign.Center">
                 <Template Context="data">
-                    @($"{data.Count(i => i.State == State.Closed)}")
+                    @($"{data.Count(i => i.State == WorkflowState.Closed)}")
                 </Template>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="IGrouping<string, Issue>"
-                                  Property="Labels"
+            <RadzenDataGridColumn TItem="IGrouping<ItemType, Item>"
+                                  Property="State"
                                   Title="Total"
                                   TextAlign="TextAlign.Center">
                 <Template Context="data">

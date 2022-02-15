@@ -10,7 +10,7 @@ using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.Scrum.Providers
 {
-    public class VelocityProvider : IVelocityProvider
+    internal class VelocityProvider : IVelocityProvider
     {
         private readonly ISprintProvider _sprintProvider;
         

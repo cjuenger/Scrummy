@@ -14,7 +14,7 @@ using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.DataAccess.GitLab
 {
-    public class GitLabModule : Module
+    internal class GitLabModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
@@ -69,16 +69,12 @@ namespace Scrummy.DataAccess.GitLab
             builder.RegisterType<PaginationService>()
                 .As<IPaginationService>()
                 .SingleInstance();
+
+            builder.RegisterType<DataAccessConfig>()
+                .As<IDataAccessConfig>()
+                .SingleInstance();
             
             RegisterMappers(builder);
-        }
-
-        private static IProjectApi GetProjectApi(IComponentContext ctx)
-        {
-            var configuration = ctx.Resolve<IReadableConfiguration>() as Configuration;
-            var projectApi = new ProjectApi(configuration);
-
-            return projectApi;
         }
         
         private static Configuration GetGitLabApiConfiguration(IComponentContext ctx)
