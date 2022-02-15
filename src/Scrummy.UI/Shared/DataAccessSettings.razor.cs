@@ -5,7 +5,7 @@ using Scrummy.UI.Configs;
 
 namespace Scrummy.UI.Shared
 {
-    public partial class GitLabSettings
+    public partial class DataAccessSettings
     {
         [Inject]
         private IDataAccessConfig DataAccessConfig { get; set; }
@@ -20,6 +20,12 @@ namespace Scrummy.UI.Shared
         {
             get => DataAccessConfig.AccessToken;
             set => DataAccessConfig.AccessToken = value;
+        }
+
+        private string BaseUrl
+        {
+            get => DataAccessConfig.BaseUrl; 
+            set => DataAccessConfig.BaseUrl = value;
         }
     }
 }
