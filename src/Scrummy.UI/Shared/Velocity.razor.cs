@@ -49,11 +49,11 @@ namespace Scrummy.UI.Shared
             if(Stories == null) return;
 
             await VelocityProvider.CalculateVelocityAsync(DataAccessConfig.ProjectId).ConfigureAwait(false);
-            _velocity = VelocityProvider.SprintAverageVelocity;
-            _bestVelocity = VelocityProvider.Best3SprintsAverageVelocity;
-            _worstVelocity = VelocityProvider.Worst3SprintsAverageVelocity;
+            _velocity = VelocityProvider.Velocity.AverageVelocity;
+            _bestVelocity = VelocityProvider.Velocity.Best3SprintsAverageVelocity;
+            _worstVelocity = VelocityProvider.Velocity.Worst3SprintsAverageVelocity;
             
-            var sprints = await SprintProvider.GetAllSprintsAsync("28355012");
+            var sprints = await SprintProvider.GetAllSprintsAsync(DataAccessConfig.ProjectId);
             _velocitySeries = ChartService.GetVelocityChart(sprints);
             
         }

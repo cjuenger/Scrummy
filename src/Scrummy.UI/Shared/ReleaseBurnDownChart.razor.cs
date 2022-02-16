@@ -62,13 +62,13 @@ namespace Scrummy.UI.Shared
             await VelocityProvider.CalculateVelocityAsync(DataAccessConfig.ProjectId).ConfigureAwait(false);
             
             _estimate = ChartService
-                .GetBurnDownEstimationChart(Stories, VelocityProvider.DayAverageVelocity);
+                .GetBurnDownEstimationChart(Stories, VelocityProvider.Velocity.DayAverageVelocity);
             
             _bestEstimate = ChartService
-                .GetBurnDownEstimationChart(Stories, VelocityProvider.Best3SprintsDayAverageVelocity);
+                .GetBurnDownEstimationChart(Stories, VelocityProvider.Velocity.Best3SprintsDayAverageVelocity);
             
             _worstEstimate = ChartService
-                .GetBurnDownEstimationChart(Stories, VelocityProvider.Worst3SprintsDayAverageVelocity);
+                .GetBurnDownEstimationChart(Stories, VelocityProvider.Velocity.Worst3SprintsDayAverageVelocity);
 
             CalculateDueLine();
         }

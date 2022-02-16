@@ -230,7 +230,7 @@ namespace Scrummy.Scrum.Services
         public IEnumerable<Xy<DateTime, int>> GetVelocityChart(IEnumerable<Sprint> sprints, bool tillToday = true)
         {
             var sprintArray = sprints?.ToArray() ?? Array.Empty<Sprint>();
-
+        
             var velocity = sprintArray
                 .OrderBy(s => s.EndTime)
                 .Select(s => new Xy<DateTime, int>
@@ -239,9 +239,9 @@ namespace Scrummy.Scrum.Services
                     Y = s.CompletedStoryPoints
                 })
                 .ToList();
-
+        
             if (velocity.Count <= 0) return velocity;
-
+        
             if (!tillToday) return velocity;
             
             var lastVelocity = velocity.LastOrDefault();
@@ -251,8 +251,42 @@ namespace Scrummy.Scrum.Services
                 Y = lastVelocity?.Y ?? 0
             };
             velocity = velocity.Append(current).ToList();
-
+        
             return velocity;
         }
+
+        // public IEnumerable<DataSeries> GetVelocityChart(IEnumerable<Sprint> sprints, bool tillToday = true)
+        // {
+        //     var sprintArray = sprints?.ToArray() ?? Array.Empty<Sprint>();
+        //
+        //     var completedStoryPoints = sprintArray
+        //         .OrderBy(s => s.EndTime)
+        //         .Select(s => new Xy<DateTime, int>
+        //         {
+        //             X = s.EndTime,
+        //             Y = s.CompletedStoryPoints
+        //         })
+        //         .ToList();
+        //
+        //     var velocity = 
+        //     foreach (var completedStoryPoint in completedStoryPoints)
+        //     {
+        //         
+        //     }
+        //
+        //     // if (completedStoryPoints.Count <= 0) return completedStoryPoints;
+        //     //
+        //     // if (!tillToday) return completedStoryPoints;
+        //     //
+        //     // var lastVelocity = completedStoryPoints.LastOrDefault();
+        //     // var current = new Xy<DateTime, int>
+        //     // {
+        //     //     X = DateTime.Now,
+        //     //     Y = lastVelocity?.Y ?? 0
+        //     // };
+        //     // completedStoryPoints = completedStoryPoints.Append(current).ToList();
+        //     //
+        //     // return completedStoryPoints;
+        // }
     }
 }
