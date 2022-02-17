@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Scrummy.DataAccess.Contracts.Enums;
+using Scrummy.Scrum.Contracts.Enums;
 
 namespace Scrummy.Scrum.Contracts.Models
 {

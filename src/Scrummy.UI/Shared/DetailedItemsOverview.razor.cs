@@ -4,6 +4,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
 using Scrummy.DataAccess.Contracts.Enums;
+using Scrummy.Scrum.Contracts.Enums;
 using Scrummy.Scrum.Contracts.Models;
 
 // ReSharper disable once IdentifierTypo

@@ -12,6 +12,10 @@ namespace Scrummy.Scrum
             builder.RegisterType<VelocityProvider>()
                 .As<IVelocityProvider>()
                 .SingleInstance();
+
+            builder.RegisterType<VelocityCalculator>()
+                .As<IVelocityCalculator>()
+                .SingleInstance();
             
             builder.RegisterType<ChartService>()
                 .As<IChartService>()

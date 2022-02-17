@@ -1,14 +1,20 @@
 ﻿@page "/ScrumDashboard"
-@using Scrummy.DataAccess.Contracts.Enums
+@using Scrummy.Scrum.Contracts.Enums
 
 <h1>Scrum Dashboard</h1>
 
 <div style="display: flex; justify-content: flex-start; width: 90vw; flex-wrap: wrap">
-    <Velocity Stories="@_stories" SprintLength="@ScrumConfig.SprintLength" StartDate="@ScrumConfig.ProjectStart"/>
-    <ReleaseBurnUpChart Stories="@_stories" StartDate="@ScrumConfig.ProjectStart"/>
     <ReleaseBurnDownChart Stories="@_stories" StartDate="@ScrumConfig.ProjectStart"/>
+</div>
+
+<div style="display: flex; justify-content: flex-start; width: 90vw; flex-wrap: wrap">
+    <ReleaseBurnUpChart Stories="@_stories" StartDate="@ScrumConfig.ProjectStart"/>
+</div>
+
+<div style="margin-top: 10px; display: flex; justify-content: flex-start; width: 90vw; flex-wrap: wrap; gap: 10px">
+    <Velocity Stories="@_stories" SprintLength="@ScrumConfig.SprintLength" StartDate="@ScrumConfig.ProjectStart"/>
     <ItemsChart Items="@_items" ItemType="@ItemType.Story"/>
     <ItemsChart Items="@_items" ItemType="@ItemType.Bug"/>
-    <ItemsChart Items="@_items"/>
+    <ItemsChart Items="@_items" ItemType="@ItemType.Other"/>
     <StoriesOverview Stories="@_stories"/>
 </div>
