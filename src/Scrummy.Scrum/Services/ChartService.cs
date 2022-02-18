@@ -227,32 +227,60 @@ namespace Scrummy.Scrum.Services
             };
         }
 
-        public IEnumerable<Xy<DateTime, int>> GetVelocityChart(IEnumerable<Sprint> sprints, bool tillToday = true)
+        public IReadOnlyList<DataSeries<string, int>> GetVelocityChart(IEnumerable<Sprint> sprints)
         {
             var sprintArray = sprints?.ToArray() ?? Array.Empty<Sprint>();
 
-            var velocity = sprintArray
+            var sprintsAsStoryPoints = sprintArray
                 .OrderBy(s => s.EndTime)
-                .Select(s => new Xy<DateTime, int>
+                .Aggregate(new List<Xy<string, int>>(), (aggregate, sprint) =>
                 {
-                    X = s.EndTime,
-                    Y = s.CompletedStoryPoints
-                })
-                .ToList();
+                    var averageXy = new Xy<string, int>
+                    {
+                        X = $"Sprint {aggregate.Count+1}",
+                        Y = sprint.CompletedStoryPoints
+                    };
+                    
+                    aggregate.Add(averageXy);
+                    
+                    return aggregate;
+                });
 
-            if (velocity.Count <= 0) return velocity;
+            if (sprintsAsStoryPoints.Count <= 0) return Enumerable.Empty<DataSeries<string, int>>().ToList();
 
-            if (!tillToday) return velocity;
-            
-            var lastVelocity = velocity.LastOrDefault();
-            var current = new Xy<DateTime, int>
+            var accumulatedStoryPoints = sprintsAsStoryPoints
+                .Aggregate(new List<int>(), (aggregate, sprint) =>
+                {
+                    var accumulatedValue = aggregate.LastOrDefault() + sprint.Y;
+                    aggregate.Add(accumulatedValue);
+
+                    return aggregate;
+                });
+
+            // Simple Moving Average
+            var smaVelocity = accumulatedStoryPoints
+                .Aggregate(new List<Xy<string, int>>(), (aggregate, accSp) =>
+                {
+                    var average = accSp/(aggregate.Count+1);
+
+                    var averageXy = new Xy<string, int>
+                    {
+                        X = $"Sprint {aggregate.Count+1}",
+                        Y = average
+                    };
+                    
+                    aggregate.Add(averageXy);
+                    
+                    return aggregate;
+                });
+
+            var dataSeries = new List<DataSeries<string, int>>
             {
-                X = DateTime.Now,
-                Y = lastVelocity?.Y ?? 0
+                new() { Series = sprintsAsStoryPoints, Title = "Completed Stories" },
+                new() { Series = smaVelocity, Title = "SMA Velocity" }
             };
-            velocity = velocity.Append(current).ToList();
-
-            return velocity;
+        
+            return dataSeries;
         }
     }
 }

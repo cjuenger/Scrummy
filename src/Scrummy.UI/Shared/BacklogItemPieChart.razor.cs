@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Components;
 using Scrummy.DataAccess.Contracts.Enums;
+using Scrummy.Scrum.Contracts.Enums;
 using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.UI.Shared

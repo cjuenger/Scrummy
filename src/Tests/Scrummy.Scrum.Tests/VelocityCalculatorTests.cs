@@ -1,28 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using ArrangeContext.NSubstitute;
-using FluentAssertions;
-using NSubstitute;
 using NUnit.Framework;
 using Scrummy.DataAccess.Contracts.Enums;
-using Scrummy.DataAccess.Contracts.Interfaces;
-using Scrummy.Scrum.Contracts.Interfaces;
 using Scrummy.Scrum.Contracts.Models;
-using Scrummy.Scrum.Providers;
 using Scrummy.Scrum.Services;
+using ArrangeContext.NSubstitute;
+using FluentAssertions;
 
 namespace Scrummy.Scrum.Tests
 {
     [TestFixture]
-    public class VelocityProviderTests
+    public class VelocityCalculatorTests
     {
         [Test]
-        public async Task GetVelocityAsync_Till_Utc_Now()
+        public void CalculateVelocity()
         {
-            var ctx = CreateTestContext();
+            var ctx = new ArrangeContext<VelocityCalculator>();
             var sut = ctx.Build();
 
             const int weeksPerSprint = 2;
@@ -30,44 +24,15 @@ namespace Scrummy.Scrum.Tests
 
             var sprints = GetDummySprints();
 
-            ctx.For<ISprintProvider>()
-                .GetAllSprintsAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult<IEnumerable<Sprint>>(sprints));
-
-            var velocity = await sut.GetVelocityAsync("projectId");
-
-            Assert(velocity, sprints, weeksPerSprint, businessWeeksPerWeek);
-        }
-        
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(3)]
-        [TestCase(4)]
-        [TestCase(5)]
-        [TestCase(6)]
-        public async Task GetVelocityAsync_Of_N_Sprints(int countOfSprints)
-        {
-            var ctx = CreateTestContext();
-            var sut = ctx.Build();
-
-            const int weeksPerSprint = 2;
-            const int businessWeeksPerWeek = 5;
-
-            var sprints = GetDummySprints().Take(countOfSprints).ToList();
-
-            ctx.For<ISprintProvider>()
-                .GetAllSprintsAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult<IEnumerable<Sprint>>(sprints));
-
-            var velocity = await sut.GetVelocityAsync("projectId", sprints[^1].EndTime);
+            var velocity = sut.CalculateVelocity(sprints);
 
             Assert(velocity, sprints, weeksPerSprint, businessWeeksPerWeek);
         }
 
         [Test]
-        public async Task GetVelocityAsync_With_Some_Sprints_Without_Story_Points()
+        public void CalculateVelocity_With_Some_Sprints_Without_Story_Points()
         {
-            var ctx = CreateTestContext();
+            var ctx = new ArrangeContext<VelocityCalculator>();
             var sut = ctx.Build();
 
             const int weeksPerSprint = 2;
@@ -81,23 +46,12 @@ namespace Scrummy.Scrum.Tests
             var sprint5 = sprints[4];
             sprint5.Items = Enumerable.Empty<Item>().ToList();
             
-            ctx.For<ISprintProvider>()
-                .GetAllSprintsAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult<IEnumerable<Sprint>>(sprints));
-
-            var velocity = await sut.GetVelocityAsync("projectId", sprints[^1].EndTime);
-
+            var velocity = sut.CalculateVelocity(sprints);
+            
             sprints.Remove(sprint3);
             sprints.Remove(sprint5);
             
             Assert(velocity, sprints, weeksPerSprint, businessWeeksPerWeek);
-        }
-
-        private static ArrangeContext<VelocityProvider> CreateTestContext()
-        {
-            var ctx = new ArrangeContext<VelocityProvider>();
-            ctx.Use<IVelocityCalculator>(new VelocityCalculator());
-            return ctx;
         }
         
         private static IReadOnlyList<Sprint> GetDummySprints()

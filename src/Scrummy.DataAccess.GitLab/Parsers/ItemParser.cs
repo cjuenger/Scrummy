@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using IO.Juenger.GitLab.Model;
 using Scrummy.DataAccess.Contracts.Enums;
 using Scrummy.DataAccess.GitLab.Configs;
+using Scrummy.Scrum.Contracts.Enums;
 using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.DataAccess.GitLab.Parsers
@@ -46,7 +47,7 @@ namespace Scrummy.DataAccess.GitLab.Parsers
             {
                 item = new Item
                 {
-                    Type = IsBug(issue) ? ItemType.Bug : ItemType.Unknown,
+                    Type = IsBug(issue) ? ItemType.Bug : ItemType.Other,
                     Title = issue.Title,
                     Description = issue.Description,
                     CreatedAt = issue.CreatedAt,

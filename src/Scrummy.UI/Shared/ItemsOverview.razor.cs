@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Components;
 using Scrummy.DataAccess.Contracts.Enums;
+using Scrummy.Scrum.Contracts.Enums;
 using Scrummy.Scrum.Contracts.Models;
 
 // ReSharper disable once IdentifierTypo
