@@ -59,16 +59,16 @@ namespace Scrummy.UI.Shared
 
             _maxYValue = _burnDown.Select(bd => bd.Y).Max() + 5;
             
-            await VelocityProvider.CalculateVelocityAsync(DataAccessConfig.ProjectId).ConfigureAwait(false);
+            var velocity = await VelocityProvider.GetVelocityAsync(DataAccessConfig.ProjectId).ConfigureAwait(false);
             
             _estimate = ChartService
-                .GetBurnDownEstimationChart(Stories, VelocityProvider.Velocity.DayAverageVelocity);
+                .GetBurnDownEstimationChart(Stories, velocity.DayAverageVelocity);
             
             _bestEstimate = ChartService
-                .GetBurnDownEstimationChart(Stories, VelocityProvider.Velocity.Best3SprintsDayAverageVelocity);
+                .GetBurnDownEstimationChart(Stories, velocity.Best3SprintsDayAverageVelocity);
             
             _worstEstimate = ChartService
-                .GetBurnDownEstimationChart(Stories, VelocityProvider.Velocity.Worst3SprintsDayAverageVelocity);
+                .GetBurnDownEstimationChart(Stories, velocity.Worst3SprintsDayAverageVelocity);
 
             CalculateDueLine();
         }

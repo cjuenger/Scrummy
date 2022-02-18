@@ -20,6 +20,6 @@ namespace Scrummy.Scrum.Contracts.Interfaces
         
         IEnumerable<Xy<DateTime, int>> GetBurnDownEstimationChart(IEnumerable<Story> stories, float velocityPerDay);
 
-        IEnumerable<Xy<DateTime, int>> GetVelocityChart(IEnumerable<Sprint> sprints, bool tillToday = true);
+        IReadOnlyList<DataSeries<string, int>> GetVelocityChart(IEnumerable<Sprint> sprints);
     }
 }

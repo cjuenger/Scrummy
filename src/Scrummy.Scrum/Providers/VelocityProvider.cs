@@ -13,15 +13,13 @@ namespace Scrummy.Scrum.Providers
         private readonly ISprintProvider _sprintProvider;
         private readonly IVelocityCalculator _velocityCalculator;
         
-        public Velocity Velocity { get; private set; }
-        
         public VelocityProvider(ISprintProvider sprintProvider, IVelocityCalculator velocityCalculator)
         {
             _sprintProvider = sprintProvider ?? throw new ArgumentNullException(nameof(sprintProvider));
             _velocityCalculator = velocityCalculator ?? throw new ArgumentNullException(nameof(velocityCalculator));
         }
 
-        public async Task CalculateVelocityAsync(string projectId, DateTime endTime, CancellationToken ct = default)
+        public async Task<Velocity> GetVelocityAsync(string projectId, DateTime endTime, CancellationToken ct = default)
         {
             if (projectId == null) throw new ArgumentNullException(nameof(projectId));
             
@@ -34,12 +32,13 @@ namespace Scrummy.Scrum.Providers
                 .Where(sp => sp.CompletedStoryPoints > 0)
                 .ToList();
 
-            Velocity = _velocityCalculator.CalculateVelocity(sprintsWithStoryPoints);
+            var velocity = _velocityCalculator.CalculateVelocity(sprintsWithStoryPoints);
+            return velocity;
         }
 
-        public Task CalculateVelocityAsync(string projectId, CancellationToken ct = default)
+        public Task<Velocity> GetVelocityAsync(string projectId, CancellationToken ct = default)
         {
-            return CalculateVelocityAsync(projectId, DateTime.UtcNow, ct);
+            return GetVelocityAsync(projectId, DateTime.UtcNow, ct);
         }
     }
 }

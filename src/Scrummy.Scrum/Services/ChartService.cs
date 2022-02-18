@@ -227,66 +227,60 @@ namespace Scrummy.Scrum.Services
             };
         }
 
-        public IEnumerable<Xy<DateTime, int>> GetVelocityChart(IEnumerable<Sprint> sprints, bool tillToday = true)
+        public IReadOnlyList<DataSeries<string, int>> GetVelocityChart(IEnumerable<Sprint> sprints)
         {
             var sprintArray = sprints?.ToArray() ?? Array.Empty<Sprint>();
-        
-            var velocity = sprintArray
-                .OrderBy(s => s.EndTime)
-                .Select(s => new Xy<DateTime, int>
-                {
-                    X = s.EndTime,
-                    Y = s.CompletedStoryPoints
-                })
-                .ToList();
-        
-            if (velocity.Count <= 0) return velocity;
-        
-            if (!tillToday) return velocity;
-            
-            var lastVelocity = velocity.LastOrDefault();
-            var current = new Xy<DateTime, int>
-            {
-                X = DateTime.Now,
-                Y = lastVelocity?.Y ?? 0
-            };
-            velocity = velocity.Append(current).ToList();
-        
-            return velocity;
-        }
 
-        // public IEnumerable<DataSeries> GetVelocityChart(IEnumerable<Sprint> sprints, bool tillToday = true)
-        // {
-        //     var sprintArray = sprints?.ToArray() ?? Array.Empty<Sprint>();
-        //
-        //     var completedStoryPoints = sprintArray
-        //         .OrderBy(s => s.EndTime)
-        //         .Select(s => new Xy<DateTime, int>
-        //         {
-        //             X = s.EndTime,
-        //             Y = s.CompletedStoryPoints
-        //         })
-        //         .ToList();
-        //
-        //     var velocity = 
-        //     foreach (var completedStoryPoint in completedStoryPoints)
-        //     {
-        //         
-        //     }
-        //
-        //     // if (completedStoryPoints.Count <= 0) return completedStoryPoints;
-        //     //
-        //     // if (!tillToday) return completedStoryPoints;
-        //     //
-        //     // var lastVelocity = completedStoryPoints.LastOrDefault();
-        //     // var current = new Xy<DateTime, int>
-        //     // {
-        //     //     X = DateTime.Now,
-        //     //     Y = lastVelocity?.Y ?? 0
-        //     // };
-        //     // completedStoryPoints = completedStoryPoints.Append(current).ToList();
-        //     //
-        //     // return completedStoryPoints;
-        // }
+            var sprintsAsStoryPoints = sprintArray
+                .OrderBy(s => s.EndTime)
+                .Aggregate(new List<Xy<string, int>>(), (aggregate, sprint) =>
+                {
+                    var averageXy = new Xy<string, int>
+                    {
+                        X = $"Sprint {aggregate.Count+1}",
+                        Y = sprint.CompletedStoryPoints
+                    };
+                    
+                    aggregate.Add(averageXy);
+                    
+                    return aggregate;
+                });
+
+            if (sprintsAsStoryPoints.Count <= 0) return Enumerable.Empty<DataSeries<string, int>>().ToList();
+
+            var accumulatedStoryPoints = sprintsAsStoryPoints
+                .Aggregate(new List<int>(), (aggregate, sprint) =>
+                {
+                    var accumulatedValue = aggregate.LastOrDefault() + sprint.Y;
+                    aggregate.Add(accumulatedValue);
+
+                    return aggregate;
+                });
+
+            // Simple Moving Average
+            var smaVelocity = accumulatedStoryPoints
+                .Aggregate(new List<Xy<string, int>>(), (aggregate, accSp) =>
+                {
+                    var average = accSp/(aggregate.Count+1);
+
+                    var averageXy = new Xy<string, int>
+                    {
+                        X = $"Sprint {aggregate.Count+1}",
+                        Y = average
+                    };
+                    
+                    aggregate.Add(averageXy);
+                    
+                    return aggregate;
+                });
+
+            var dataSeries = new List<DataSeries<string, int>>
+            {
+                new() { Series = sprintsAsStoryPoints, Title = "Completed Stories" },
+                new() { Series = smaVelocity, Title = "SMA Velocity" }
+            };
+        
+            return dataSeries;
+        }
     }
 }

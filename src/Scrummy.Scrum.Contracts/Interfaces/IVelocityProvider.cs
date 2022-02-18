@@ -7,8 +7,7 @@ namespace Scrummy.Scrum.Contracts.Interfaces
 {
     public interface IVelocityProvider
     {
-        public Velocity Velocity { get; }
-        Task CalculateVelocityAsync(string projectId, DateTime endTime, CancellationToken ct = default);
-        Task CalculateVelocityAsync(string projectId, CancellationToken ct = default);
+        Task<Velocity> GetVelocityAsync(string projectId, DateTime endTime, CancellationToken ct = default);
+        Task<Velocity> GetVelocityAsync(string projectId, CancellationToken ct = default);
     }
 }

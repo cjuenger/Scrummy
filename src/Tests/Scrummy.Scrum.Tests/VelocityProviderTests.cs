@@ -20,7 +20,7 @@ namespace Scrummy.Scrum.Tests
     public class VelocityProviderTests
     {
         [Test]
-        public async Task CalculateVelocityAsync_Till_Utc_Now()
+        public async Task GetVelocityAsync_Till_Utc_Now()
         {
             var ctx = CreateTestContext();
             var sut = ctx.Build();
@@ -34,9 +34,9 @@ namespace Scrummy.Scrum.Tests
                 .GetAllSprintsAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult<IEnumerable<Sprint>>(sprints));
 
-            await sut.CalculateVelocityAsync("projectId");
+            var velocity = await sut.GetVelocityAsync("projectId");
 
-            Assert(sut, sprints, weeksPerSprint, businessWeeksPerWeek);
+            Assert(velocity, sprints, weeksPerSprint, businessWeeksPerWeek);
         }
         
         [TestCase(1)]
@@ -45,7 +45,7 @@ namespace Scrummy.Scrum.Tests
         [TestCase(4)]
         [TestCase(5)]
         [TestCase(6)]
-        public async Task CalculateVelocityAsync_Of_N_Sprints(int countOfSprints)
+        public async Task GetVelocityAsync_Of_N_Sprints(int countOfSprints)
         {
             var ctx = CreateTestContext();
             var sut = ctx.Build();
@@ -59,13 +59,13 @@ namespace Scrummy.Scrum.Tests
                 .GetAllSprintsAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult<IEnumerable<Sprint>>(sprints));
 
-            await sut.CalculateVelocityAsync("projectId", sprints[^1].EndTime);
+            var velocity = await sut.GetVelocityAsync("projectId", sprints[^1].EndTime);
 
-            Assert(sut, sprints, weeksPerSprint, businessWeeksPerWeek);
+            Assert(velocity, sprints, weeksPerSprint, businessWeeksPerWeek);
         }
 
         [Test]
-        public async Task CalculateVelocityAsync_With_Some_Sprints_Without_Story_Points()
+        public async Task GetVelocityAsync_With_Some_Sprints_Without_Story_Points()
         {
             var ctx = CreateTestContext();
             var sut = ctx.Build();
@@ -85,12 +85,12 @@ namespace Scrummy.Scrum.Tests
                 .GetAllSprintsAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult<IEnumerable<Sprint>>(sprints));
 
-            await sut.CalculateVelocityAsync("projectId", sprints[^1].EndTime);
+            var velocity = await sut.GetVelocityAsync("projectId", sprints[^1].EndTime);
 
             sprints.Remove(sprint3);
             sprints.Remove(sprint5);
             
-            Assert(sut, sprints, weeksPerSprint, businessWeeksPerWeek);
+            Assert(velocity, sprints, weeksPerSprint, businessWeeksPerWeek);
         }
 
         private static ArrangeContext<VelocityProvider> CreateTestContext()
@@ -186,7 +186,7 @@ namespace Scrummy.Scrum.Tests
         }
 
         private static void Assert(
-            IVelocityProvider sut, 
+            Velocity velocity, 
             IReadOnlyList<Sprint> sprints, 
             int weeksPerSprint, 
             int businessWeeksPerWeek)
@@ -214,14 +214,14 @@ namespace Scrummy.Scrum.Tests
             var expectedWorst3SprintsAverageVelocity = (float) closedStoryPointsOfWorstThreeSprints / listOfClosedWorst3StoryPoints.Count;
             var expectedWorst3SprintsDayAverageVelocity = expectedWorst3SprintsAverageVelocity / (weeksPerSprint * businessWeeksPerWeek);
             
-            sut.Velocity.AverageVelocity.Should().Be(expectedSprintAverageVelocity);
-            sut.Velocity.DayAverageVelocity.Should().Be(expectedDayAverageVelocity);
-            sut.Velocity.Best3SprintsAverageVelocity.Should().Be(expectedBest3SprintsAverageVelocity);
-            sut.Velocity.Best3SprintsDayAverageVelocity.Should().Be(expectedBest3SprintsDayAverageVelocity);
-            sut.Velocity.Worst3SprintsAverageVelocity.Should().Be(expectedWorst3SprintsAverageVelocity);
-            sut.Velocity.Worst3SprintsDayAverageVelocity.Should().Be(expectedWorst3SprintsDayAverageVelocity);
-            sut.Velocity.Start.Should().Be(sprints[0].StartTime);
-            sut.Velocity.End.Should().Be(sprints[^1].EndTime);
+            velocity.AverageVelocity.Should().Be(expectedSprintAverageVelocity);
+            velocity.DayAverageVelocity.Should().Be(expectedDayAverageVelocity);
+            velocity.Best3SprintsAverageVelocity.Should().Be(expectedBest3SprintsAverageVelocity);
+            velocity.Best3SprintsDayAverageVelocity.Should().Be(expectedBest3SprintsDayAverageVelocity);
+            velocity.Worst3SprintsAverageVelocity.Should().Be(expectedWorst3SprintsAverageVelocity);
+            velocity.Worst3SprintsDayAverageVelocity.Should().Be(expectedWorst3SprintsDayAverageVelocity);
+            velocity.Start.Should().Be(sprints[0].StartTime);
+            velocity.End.Should().Be(sprints[^1].EndTime);
         }
     }
 }

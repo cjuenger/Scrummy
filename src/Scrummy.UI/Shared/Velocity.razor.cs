@@ -18,7 +18,9 @@ namespace Scrummy.UI.Shared
         private float _bestVelocity;
         private float _worstVelocity;
         
-        private IEnumerable<Xy<DateTime, int>> _velocitySeries;
+        private IEnumerable<Xy<string, int>> _completedStoriesSeries;
+        private IEnumerable<Xy<string, int>> _smaVelocitySeries;
+        
         private readonly bool _smooth = false;
         
         [Inject]
@@ -48,14 +50,20 @@ namespace Scrummy.UI.Shared
             
             if(Stories == null) return;
 
-            await VelocityProvider.CalculateVelocityAsync(DataAccessConfig.ProjectId).ConfigureAwait(false);
-            _velocity = VelocityProvider.Velocity.AverageVelocity;
-            _bestVelocity = VelocityProvider.Velocity.Best3SprintsAverageVelocity;
-            _worstVelocity = VelocityProvider.Velocity.Worst3SprintsAverageVelocity;
+            var velocity = await VelocityProvider
+                .GetVelocityAsync(DataAccessConfig.ProjectId)
+                .ConfigureAwait(false);
+            
+            _velocity = velocity.AverageVelocity;
+            _bestVelocity = velocity.Best3SprintsAverageVelocity;
+            _worstVelocity = velocity.Worst3SprintsAverageVelocity;
             
             var sprints = await SprintProvider.GetAllSprintsAsync(DataAccessConfig.ProjectId);
-            _velocitySeries = ChartService.GetVelocityChart(sprints);
             
+            var series = ChartService.GetVelocityChart(sprints);
+            
+            _completedStoriesSeries = series[0].Series;
+            _smaVelocitySeries = series[^1].Series;
         }
     }
 }
