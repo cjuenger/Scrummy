@@ -11,7 +11,7 @@ using Scrummy.Scrum.Providers;
 
 namespace Scrummy.UI.Shared
 {
-    public partial class ReleaseBurnDownChart
+    public partial class BurnDownChart
     {
         private int _maxYValue;
         
@@ -36,7 +36,7 @@ namespace Scrummy.UI.Shared
         public IEnumerable<Story> Stories { get; set; }
 
         [Parameter]
-        public DateTime StartDate { get; set; }
+        public string Title { get; set; }
         
         [Parameter]
         public DateTime? DueDate { get; set; }
@@ -59,7 +59,9 @@ namespace Scrummy.UI.Shared
 
             _maxYValue = _burnDown.Select(bd => bd.Y).Max() + 5;
             
-            var velocity = await VelocityProvider.GetVelocityAsync(DataAccessConfig.ProjectId).ConfigureAwait(false);
+            var velocity = await VelocityProvider
+                .GetVelocityAsync(DataAccessConfig.ProjectId)
+                .ConfigureAwait(false);
             
             _estimate = ChartService
                 .GetBurnDownEstimationChart(Stories, velocity.DayAverageVelocity);

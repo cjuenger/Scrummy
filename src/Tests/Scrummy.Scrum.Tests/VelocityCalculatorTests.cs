@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Scrummy.DataAccess.Contracts.Enums;
@@ -22,7 +21,7 @@ namespace Scrummy.Scrum.Tests
             const int weeksPerSprint = 2;
             const int businessWeeksPerWeek = 5;
 
-            var sprints = GetDummySprints();
+            var sprints = TestHelper.GetDummySprints();
 
             var velocity = sut.CalculateVelocity(sprints);
 
@@ -38,13 +37,17 @@ namespace Scrummy.Scrum.Tests
             const int weeksPerSprint = 2;
             const int businessWeeksPerWeek = 5;
 
-            var sprints = GetDummySprints().ToList();
+            var sprints = TestHelper.GetDummySprints().ToList();
 
             var sprint3 = sprints[2];
-            sprint3.Items = Enumerable.Empty<Item>().ToList();
+            sprints.Remove(sprint3);
+            sprint3 = new Sprint(sprint3.Info, Enumerable.Empty<Item>().ToList());
+            sprints.Insert(2, sprint3);
             
             var sprint5 = sprints[4];
-            sprint5.Items = Enumerable.Empty<Item>().ToList();
+            sprints.Remove(sprint5);
+            sprint5 = new Sprint(sprint5.Info, Enumerable.Empty<Item>().ToList());
+            sprints.Insert(2, sprint5);
             
             var velocity = sut.CalculateVelocity(sprints);
             
@@ -52,91 +55,6 @@ namespace Scrummy.Scrum.Tests
             sprints.Remove(sprint5);
             
             Assert(velocity, sprints, weeksPerSprint, businessWeeksPerWeek);
-        }
-        
-        private static IReadOnlyList<Sprint> GetDummySprints()
-        {
-            var sprint1 = new Sprint
-            {
-                StartTime = new DateTime(2021, 11, 22),
-                EndTime = new DateTime(2021, 12, 03),
-                Items = new List<Item>
-                {
-                    new Story { State = WorkflowState.Closed, StoryPoints = 13 },
-                    new Story { State = WorkflowState.Closed, StoryPoints = 8 },
-                    new Story { State = WorkflowState.Closed, StoryPoints = 5 },
-                    new Story { State = WorkflowState.Closed, StoryPoints = 20 }
-                }
-            };
-            
-            var sprint2 = new Sprint
-            {
-                StartTime = new DateTime(2021, 12, 06),
-                EndTime = new DateTime(2021, 12, 17),
-                Items = new List<Item>
-                {
-                    new Story { State = WorkflowState.Closed, StoryPoints = 1 },
-                    new Story { State = WorkflowState.Closed, StoryPoints = 2 },
-                    new Story { State = WorkflowState.Closed, StoryPoints = 3 },
-                    new Story { State = WorkflowState.Closed, StoryPoints = 5 }
-                }
-            };
-            
-            var sprint3 = new Sprint
-            {
-                StartTime = new DateTime(2021, 12, 20),
-                EndTime = new DateTime(2021, 12, 31),
-                Items = new List<Item>
-                {
-                    new Story { State = WorkflowState.Closed, StoryPoints = 2 },
-                    new Story { State = WorkflowState.Closed, StoryPoints = 3 },
-                    new Story { State = WorkflowState.Closed, StoryPoints = 5 },
-                    new Story { State = WorkflowState.Closed, StoryPoints = 8 }
-                }
-            };
-            
-            var sprint4 = new Sprint
-            {
-                StartTime = new DateTime(2022, 01, 03),
-                EndTime = new DateTime(2022, 01, 14),
-                Items = new List<Item>
-                {
-                    new Story { State = WorkflowState.Closed, StoryPoints = 3 },
-                    new Story { State = WorkflowState.Closed, StoryPoints = 5 },
-                    new Story { State = WorkflowState.Closed, StoryPoints = 8 },
-                    new Story { State = WorkflowState.Closed, StoryPoints = 13 }
-                }
-            };
-            
-            var sprint5 = new Sprint
-            {
-                StartTime = new DateTime(2022, 01, 17),
-                EndTime = new DateTime(2022, 01, 28),
-                Items = new List<Item>
-                {
-                    new Story { State = WorkflowState.Closed, StoryPoints = 5 },
-                    new Story { State = WorkflowState.Closed, StoryPoints = 8 },
-                    new Story { State = WorkflowState.Closed, StoryPoints = 13 },
-                    new Story { State = WorkflowState.Closed, StoryPoints = 20 }
-                }
-            };
-            
-            var sprint6 = new Sprint
-            {
-                StartTime = new DateTime(2022, 01, 31),
-                EndTime = new DateTime(2022, 02, 11),
-                Items = new List<Item>
-                {
-                    new Story { State = WorkflowState.Closed, StoryPoints = 8 },
-                    new Story { State = WorkflowState.Closed, StoryPoints = 13 },
-                    new Story { State = WorkflowState.Closed, StoryPoints = 20},
-                    new Story { State = WorkflowState.Closed, StoryPoints = 40 }
-                }
-            };
-
-            var sprints = new[] {sprint1, sprint2, sprint3, sprint4, sprint5, sprint6 };
-
-            return sprints;
         }
 
         private static void Assert(
@@ -174,8 +92,8 @@ namespace Scrummy.Scrum.Tests
             velocity.Best3SprintsDayAverageVelocity.Should().Be(expectedBest3SprintsDayAverageVelocity);
             velocity.Worst3SprintsAverageVelocity.Should().Be(expectedWorst3SprintsAverageVelocity);
             velocity.Worst3SprintsDayAverageVelocity.Should().Be(expectedWorst3SprintsDayAverageVelocity);
-            velocity.Start.Should().Be(sprints[0].StartTime);
-            velocity.End.Should().Be(sprints[^1].EndTime);
+            velocity.Start.Should().Be(sprints[0].Info.StartTime);
+            velocity.End.Should().Be(sprints[^1].Info.EndTime);
         }
     }
 }

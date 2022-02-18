@@ -11,36 +11,37 @@ using Scrummy.UI.Configs;
 
 namespace Scrummy.UI.Pages
 {
-    public partial class ReleaseReport
+    public partial class SprintReport
     {
-        private IEnumerable<ReleaseInfo> _releaseInfos;
-        private ReleaseInfo _selectedReleaseInfo;
-        private Release _selectedRelease;
+        private IEnumerable<SprintInfo> _sprintInfos;
+        private SprintInfo _selectedSprintInfo;
+        private Sprint _selectedSprint;
 
-        private DateTime? _dueDate;
+        private DateTime? _startTime;
+        private DateTime? _endTime;
         
         private IEnumerable<Item> OpenItems => 
-            _selectedRelease?
+            _selectedSprint?
                 .Items
                 .Where(i => i.State == WorkflowState.Opened) ?? Enumerable.Empty<Item>();
         
         private IEnumerable<Item> ClosedItems => 
-            _selectedRelease?
+            _selectedSprint?
                 .Items
                 .Where(i => i.State == WorkflowState.Closed) ?? Enumerable.Empty<Item>();
 
-        private IEnumerable<Item> TotalItems => _selectedRelease?.Items;
+        private IEnumerable<Item> TotalItems => _selectedSprint?.Items;
         
         private IEnumerable<Story> Stories =>
-            _selectedRelease?
+            _selectedSprint?
                 .Items
                 .OfType<Story>() ?? Enumerable.Empty<Story>();
         
         [Inject]
-        private IReleaseInfoProvider ReleaseInfoProvider { get; set; }
+        private ISprintInfoProvider SprintInfoProvider { get; set; }
 
         [Inject]
-        private IReleaseProvider ReleaseProvider { get; set; }
+        private ISprintProvider SprintProvider { get; set; }
         
         [Inject]
         private IDataAccessConfig DataAccessConfig { get; set; }
@@ -52,35 +53,35 @@ namespace Scrummy.UI.Pages
         {
             await base.OnInitializedAsync().ConfigureAwait(false);
 
-            _releaseInfos = 
-                await ReleaseInfoProvider
-                    .GetAllReleasesAsync(DataAccessConfig.ProjectId)
+            _sprintInfos = 
+                await SprintInfoProvider
+                    .GetAllSprintsAsync(DataAccessConfig.ProjectId)
                     .ConfigureAwait(false);
 
-            var (isSuccess, releaseInfo) = await ReleaseInfoProvider
-                .TryGetNextUpcomingReleaseAsync(DataAccessConfig.ProjectId)
+            var (isSuccess, sprintInfo) = await SprintInfoProvider
+                .TryGetCurrentSprintAsync(DataAccessConfig.ProjectId)
                 .ConfigureAwait(false);
 
             if (isSuccess)
             {
-                _selectedReleaseInfo = releaseInfo;
+                _selectedSprintInfo = sprintInfo;
             }
-            else if (_releaseInfos != null)
+            else if (_sprintInfos != null)
             {
-                _selectedReleaseInfo = _releaseInfos.Last();
+                _selectedSprintInfo = _sprintInfos.Last();
             }
             
-            await LoadReleaseAsync(_selectedReleaseInfo).ConfigureAwait(false);
+            await LoadSprintAsync(_selectedSprintInfo).ConfigureAwait(false);
         }
 
-        private async Task LoadReleaseAsync(ReleaseInfo releaseInfo)
+        private async Task LoadSprintAsync(SprintInfo sprintInfo)
         {
-            _selectedRelease = 
-                await ReleaseProvider
-                    .GetReleaseAsync(DataAccessConfig.ProjectId, releaseInfo)
+            _selectedSprint = 
+                await SprintProvider
+                    .GetSprintAsync(DataAccessConfig.ProjectId, sprintInfo)
                     .ConfigureAwait(false);
 
-            _dueDate = _selectedRelease.Info.DueDate;
+            _endTime = _selectedSprint.Info.EndTime;
         }
         
         private async void OnChange(object value)
@@ -88,11 +89,11 @@ namespace Scrummy.UI.Pages
             switch (value)
             {
                 case null:
-                    _selectedReleaseInfo = null;
-                    _selectedRelease = null;
+                    _selectedSprintInfo = null;
+                    _selectedSprint = null;
                     break;
-                case ReleaseInfo releaseInfo:
-                    await LoadReleaseAsync(releaseInfo).ConfigureAwait(false);
+                case SprintInfo sprintInfo:
+                    await LoadSprintAsync(sprintInfo).ConfigureAwait(false);
                     break;
             }
             

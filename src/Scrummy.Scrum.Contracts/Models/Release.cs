@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Scrummy.Scrum.Contracts.Models
 {
@@ -10,8 +11,8 @@ namespace Scrummy.Scrum.Contracts.Models
 
         public Release(ReleaseInfo info, IReadOnlyList<Item> items)
         {
-            Info = info;
-            Items = items;
+            Info = info ?? throw new ArgumentNullException(nameof(info));
+            Items = items ?? throw new ArgumentNullException(nameof(items));
         }
     }
 }

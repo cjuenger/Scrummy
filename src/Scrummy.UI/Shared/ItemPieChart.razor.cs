@@ -8,9 +8,12 @@ using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.UI.Shared
 {
-    public partial class BacklogItemPieChart
+    public partial class ItemPieChart
     {
         private ItemCategories[] _itemCategories;
+        
+        [Parameter]
+        public string Title { get; set; }
         
         [Parameter] 
         public IEnumerable<Item> Items { get; set; }

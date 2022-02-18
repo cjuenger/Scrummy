@@ -5,7 +5,7 @@
 
 @* <div style="display: flex; justify-content: flex-start; width: 90vw; flex-wrap: wrap"> *@
 <div style="margin-top: 10px; display: flex; justify-content: flex-start; width: 90vw; flex-wrap: wrap; gap: 10px">
-    <ReleaseBurnDownChart Stories="@_stories" StartDate="@ScrumConfig.ProjectStart"/>
+    <BurnDownChart Stories="@_stories" Title="Release"/>
     <ReleaseBurnUpChart Stories="@_stories" StartDate="@ScrumConfig.ProjectStart"/>
     <Velocity Stories="@_stories" SprintLength="@ScrumConfig.SprintLength" StartDate="@ScrumConfig.ProjectStart"/>
     <ItemsChart Items="@_items" ItemType="@ItemType.Story"/>

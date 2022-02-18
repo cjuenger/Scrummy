@@ -232,7 +232,7 @@ namespace Scrummy.Scrum.Services
             var sprintArray = sprints?.ToArray() ?? Array.Empty<Sprint>();
 
             var sprintsAsStoryPoints = sprintArray
-                .OrderBy(s => s.EndTime)
+                .OrderBy(s => s.Info.EndTime)
                 .Aggregate(new List<Xy<string, int>>(), (aggregate, sprint) =>
                 {
                     var averageXy = new Xy<string, int>

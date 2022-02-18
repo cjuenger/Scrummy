@@ -1,26 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Io.Juenger.Common.Util;
 using Scrummy.DataAccess.Contracts.Enums;
 
 namespace Scrummy.Scrum.Contracts.Models
 {
     public class Sprint
     {
-        public string Name { get; set; }
+        public SprintInfo Info { get; }
 
-        public DateTime StartTime { get; set; }
-
-        public DateTime EndTime { get; set; }
-
-        public int Length => GetSprintLength();
-        
-        public List<Item> Items { get; set; }
+        public IReadOnlyList<Item> Items { get; }
 
         public int CompletedStoryPoints => GetCompletedStoryPoints();
-
+        
         public int OpenStoryPoints => GetOpenStoryPoints();
+
+        public Sprint(SprintInfo info, IReadOnlyList<Item> items)
+        {
+            Info = info ?? throw new ArgumentNullException(nameof(info));
+            Items = items ?? throw new ArgumentNullException(nameof(items));
+        }
         
         private int GetCompletedStoryPoints()
         {
@@ -44,12 +43,6 @@ namespace Scrummy.Scrum.Contracts.Models
                 .Sum(s => s.StoryPoints ?? 0);
             
             return velocity;
-        }
-
-        private int GetSprintLength()
-        {
-            var businessDays = StartTime.GetBusinessDaysUntil(EndTime);
-            return businessDays;
         }
     }
 }

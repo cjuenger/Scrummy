@@ -28,7 +28,7 @@ namespace Scrummy.Scrum.Providers
                 .ConfigureAwait(false);
 
             var sprintsWithStoryPoints = sprints
-                .Where(sp => sp.EndTime <= endTime)
+                .Where(sp => sp.Info.EndTime <= endTime)
                 .Where(sp => sp.CompletedStoryPoints > 0)
                 .ToList();
 

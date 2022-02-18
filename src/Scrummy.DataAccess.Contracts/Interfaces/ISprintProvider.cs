@@ -17,5 +17,10 @@ namespace Scrummy.DataAccess.Contracts.Interfaces
             DateTime startTime, 
             DateTime endTime, 
             CancellationToken ct = default);
+
+        Task<Sprint> GetSprintAsync(
+            string projectId, 
+            SprintInfo sprintInfo,
+            CancellationToken ct = default);
     }
 }

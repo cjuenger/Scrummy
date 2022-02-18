@@ -34,6 +34,10 @@ namespace Scrummy.DataAccess.GitLab
                 .As<ISprintProvider>()
                 .SingleInstance();
 
+            builder.RegisterType<SprintInfoProvider>()
+                .As<ISprintInfoProvider>()
+                .SingleInstance();
+            
             builder.RegisterType<SprintProviderConfig>()
                 .As<ISprintProviderConfig>()
                 .SingleInstance();

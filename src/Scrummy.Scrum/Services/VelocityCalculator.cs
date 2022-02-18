@@ -28,11 +28,11 @@ namespace Scrummy.Scrum.Services
         private static void CalculateTotalTimeRange(IEnumerable<Sprint> sprints, ref Velocity velocity)
         {
             var timeOrderedSprints = sprints
-                .OrderBy(sp => sp.StartTime)
+                .OrderBy(sp => sp.Info.StartTime)
                 .ToList();
 
-            velocity.Start = timeOrderedSprints.FirstOrDefault()?.StartTime ?? default;
-            velocity.End = timeOrderedSprints.LastOrDefault()?.EndTime ?? default;
+            velocity.Start = timeOrderedSprints.FirstOrDefault()?.Info.StartTime ?? default;
+            velocity.End = timeOrderedSprints.LastOrDefault()?.Info.EndTime ?? default;
         }
         
         private static void CalculateVelocity(IEnumerable<Sprint> sprints, ref Velocity velocity)
@@ -69,7 +69,7 @@ namespace Scrummy.Scrum.Services
 
         private static void CalculateAverageSprintLength(IReadOnlyCollection<Sprint> sprints, ref Velocity velocity)
         {
-            var totalLengthOfSprints = sprints.Sum(sp => sp.Length);
+            var totalLengthOfSprints = sprints.Sum(sp => sp.Info.Length);
             var averageSprintLength = (float) totalLengthOfSprints / sprints.Count;
 
             velocity.AverageSprintLength = averageSprintLength;
