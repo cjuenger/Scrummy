@@ -20,7 +20,7 @@ namespace Scrummy.Scrum.Providers
             _itemsProvider = itemsProvider ?? throw new ArgumentNullException(nameof(itemsProvider));
         }
         
-        public async Task<PassThrough> GetPassThroughTimeAsync(string projectId, CancellationToken ct = default)
+        public async Task<Throughput> GetPassThroughTimeAsync(string projectId, CancellationToken ct = default)
         {
             var items = (await _itemsProvider.GetAllItemsAsync(projectId, ct)).ToList();
 
@@ -32,7 +32,7 @@ namespace Scrummy.Scrum.Providers
             var bugPassThroughTimeAsTicks = GetPassThroughTimesAsTicks(bugs.Where(i => i.ClosedAt.HasValue));
             var otherPassThroughTimeAsTicks = GetPassThroughTimesAsTicks(others.Where(i => i.ClosedAt.HasValue));
             
-            var passThroughTime = new PassThrough
+            var passThroughTime = new Throughput
             {
                 AverageStoryPassThroughTime = GetAveragePassThroughTime(storyPassThroughTimeAsTicks),
                 WorstStoryPassThroughTime = GetMaxPassThroughTime(storyPassThroughTimeAsTicks),

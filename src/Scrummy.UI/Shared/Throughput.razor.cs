@@ -13,7 +13,7 @@ namespace Scrummy.UI.Shared
         private IDataAccessConfig DataAccessConfig { get; set; }
         
         [Inject]
-        private IPassThroughProvider PassThroughProvider { get; set; }
+        private IPassThroughProvider ThroughputProvider { get; set; }
         
         private TimeSpan AverageStoryPassThroughTime { get; set; }
         private TimeSpan BestStoryPassThroughTime { get; set; }
@@ -31,7 +31,7 @@ namespace Scrummy.UI.Shared
         {
             await base.OnInitializedAsync().ConfigureAwait(false);
 
-            var passThroughTime = await PassThroughProvider
+            var passThroughTime = await ThroughputProvider
                 .GetPassThroughTimeAsync(DataAccessConfig.ProjectId)
                 .ConfigureAwait(false);
 
