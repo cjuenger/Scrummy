@@ -13,6 +13,10 @@ namespace Scrummy.Scrum
                 .As<IVelocityProvider>()
                 .SingleInstance();
 
+            builder.RegisterType<PassThroughProvider>()
+                .As<IPassThroughProvider>()
+                .SingleInstance();
+
             builder.RegisterType<VelocityCalculator>()
                 .As<IVelocityCalculator>()
                 .SingleInstance();

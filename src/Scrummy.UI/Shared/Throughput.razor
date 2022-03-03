@@ -1,11 +1,19 @@
 ﻿@using Radzen.Blazor
 
-<RadzenCard Style="width:1010px;">
+<RadzenCard Style="width:500px;">
 
-    <h3 class="card-title">Pass-Through Time</h3>
+    <h3 class="card-title">Pass-Through</h3>
 
-    <b>Velocity: @_velocity SP</b>
-    <b>Velocity of best 3 Sprints: @_bestVelocity SP</b>
-    <b>Velocity of worst 3 Sprints: @_worstVelocity SP</b>
-
+    <b>Story (Average): @AverageStoryPassThroughTime</b>
+    <b>Story (Best): @BestStoryPassThroughTime</b>
+    <b>Story (Worst): @WorstStoryPassThroughTime</b>
+    <br/>
+    <b>Bug (Average): @AverageBugPassThroughTime</b>
+    <b>Bug (Best): @BestBugPassThroughTime</b>
+    <b>Bug (Worst): @WorstBugPassThroughTime</b>
+    <br/>
+    <b>Other (Average): @AverageOtherPassThroughTime</b>
+    <b>Other (Best): @BestOtherPassThroughTime</b>
+    <b>Other (Worst): @WorstOtherPassThroughTime</b>
+    
 </RadzenCard>

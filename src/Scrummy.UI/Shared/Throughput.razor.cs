@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Scrummy.DataAccess.Contracts.Interfaces;
 using Scrummy.Scrum.Contracts.Interfaces;
@@ -12,17 +13,39 @@ namespace Scrummy.UI.Shared
         private IDataAccessConfig DataAccessConfig { get; set; }
         
         [Inject]
-        private IPassThroughTimeProvider PassThroughTimeProvider { get; set; }
+        private IPassThroughProvider PassThroughProvider { get; set; }
         
-        public PassThroughTime PassThroughTime { get; set; }
+        private TimeSpan AverageStoryPassThroughTime { get; set; }
+        private TimeSpan BestStoryPassThroughTime { get; set; }
+        private TimeSpan WorstStoryPassThroughTime { get; set; }
+        
+        private TimeSpan AverageBugPassThroughTime { get; set; }
+        private TimeSpan BestBugPassThroughTime { get; set; }
+        private TimeSpan WorstBugPassThroughTime { get; set; }
+        
+        private TimeSpan AverageOtherPassThroughTime { get; set; }
+        private TimeSpan BestOtherPassThroughTime { get; set; }
+        private TimeSpan WorstOtherPassThroughTime { get; set; }
         
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync().ConfigureAwait(false);
 
-            PassThroughTime = await PassThroughTimeProvider
+            var passThroughTime = await PassThroughProvider
                 .GetPassThroughTimeAsync(DataAccessConfig.ProjectId)
                 .ConfigureAwait(false);
+
+            AverageStoryPassThroughTime = passThroughTime.AverageStoryPassThroughTime;
+            BestStoryPassThroughTime = passThroughTime.BestStoryPassThroughTime;
+            WorstStoryPassThroughTime = passThroughTime.WorstStoryPassThroughTime;
+
+            AverageBugPassThroughTime = passThroughTime.AverageBugPassThroughTime;
+            BestBugPassThroughTime = passThroughTime.BestBugPassThroughTime;
+            WorstBugPassThroughTime = passThroughTime.WorstBugPassThroughTime;
+
+            AverageOtherPassThroughTime = passThroughTime.AverageOtherPassThroughTime;
+            BestOtherPassThroughTime = passThroughTime.BestOtherPassThroughTime;
+            WorstOtherPassThroughTime = passThroughTime.WorstOtherPassThroughTime;
         }
     }
 }

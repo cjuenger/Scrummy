@@ -2,7 +2,7 @@
 
 namespace Scrummy.Scrum.Contracts.Models
 {
-    public class PassThroughTime
+    public class PassThrough
     {
         public TimeSpan AverageStoryPassThroughTime { get; set; }
         public TimeSpan BestStoryPassThroughTime { get; set; }

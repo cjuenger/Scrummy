@@ -4,8 +4,8 @@ using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.Scrum.Contracts.Interfaces
 {
-    public interface IPassThroughTimeProvider
+    public interface IPassThroughProvider
     {
-        Task<PassThroughTime> GetPassThroughTimeAsync(string projectId, CancellationToken ct = default);
+        Task<PassThrough> GetPassThroughTimeAsync(string projectId, CancellationToken ct = default);
     }
 }
