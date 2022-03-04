@@ -18,6 +18,8 @@ namespace Scrummy.Scrum.Contracts.Models
         public DateTime CreatedAt { get; set; }
         
         public DateTime StartedAt { get; set; }
+        
+        public DateTime UpdatedAt { get; set; }
 
         public DateTime? ClosedAt { get; set; }
         

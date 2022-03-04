@@ -40,6 +40,7 @@ namespace Scrummy.DataAccess.GitLab.Parsers
                     Description = issue.Description,
                     CreatedAt = issue.CreatedAt,
                     ClosedAt = issue.ClosedAt,
+                    UpdatedAt = issue.UpdatedAt,
                     State = state
                 };
             }
@@ -52,6 +53,7 @@ namespace Scrummy.DataAccess.GitLab.Parsers
                     Description = issue.Description,
                     CreatedAt = issue.CreatedAt,
                     ClosedAt = issue.ClosedAt,
+                    UpdatedAt = issue.UpdatedAt,
                     State = state
                 };
             }
