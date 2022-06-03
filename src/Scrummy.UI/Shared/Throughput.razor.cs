@@ -13,39 +13,39 @@ namespace Scrummy.UI.Shared
         private IDataAccessConfig DataAccessConfig { get; set; }
         
         [Inject]
-        private IPassThroughProvider ThroughputProvider { get; set; }
+        private IThroughputProvider ThroughputProvider { get; set; }
         
-        private TimeSpan AverageStoryPassThroughTime { get; set; }
-        private TimeSpan BestStoryPassThroughTime { get; set; }
-        private TimeSpan WorstStoryPassThroughTime { get; set; }
+        private TimeSpan AverageStoryThroughputTime { get; set; }
+        private TimeSpan BestStoryThroughputTime { get; set; }
+        private TimeSpan WorstStoryThroughputTime { get; set; }
         
-        private TimeSpan AverageBugPassThroughTime { get; set; }
-        private TimeSpan BestBugPassThroughTime { get; set; }
-        private TimeSpan WorstBugPassThroughTime { get; set; }
+        private TimeSpan AverageBugThroughputTime { get; set; }
+        private TimeSpan BestBugThroughputTime { get; set; }
+        private TimeSpan WorstBugThroughputTime { get; set; }
         
-        private TimeSpan AverageOtherPassThroughTime { get; set; }
-        private TimeSpan BestOtherPassThroughTime { get; set; }
-        private TimeSpan WorstOtherPassThroughTime { get; set; }
+        private TimeSpan AverageOtherThroughputTime { get; set; }
+        private TimeSpan BestOtherThroughputTime { get; set; }
+        private TimeSpan WorstOtherThroughputTime { get; set; }
         
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync().ConfigureAwait(false);
 
-            var passThroughTime = await ThroughputProvider
-                .GetPassThroughTimeAsync(DataAccessConfig.ProjectId)
+            var ThroughputTime = await ThroughputProvider
+                .GetThroughputTimeAsync(DataAccessConfig.ProjectId)
                 .ConfigureAwait(false);
 
-            AverageStoryPassThroughTime = passThroughTime.AverageStoryPassThroughTime;
-            BestStoryPassThroughTime = passThroughTime.BestStoryPassThroughTime;
-            WorstStoryPassThroughTime = passThroughTime.WorstStoryPassThroughTime;
+            AverageStoryThroughputTime = ThroughputTime.AverageStoryThroughputTime;
+            BestStoryThroughputTime = ThroughputTime.BestStoryThroughputTime;
+            WorstStoryThroughputTime = ThroughputTime.WorstStoryThroughputTime;
 
-            AverageBugPassThroughTime = passThroughTime.AverageBugPassThroughTime;
-            BestBugPassThroughTime = passThroughTime.BestBugPassThroughTime;
-            WorstBugPassThroughTime = passThroughTime.WorstBugPassThroughTime;
+            AverageBugThroughputTime = ThroughputTime.AverageBugThroughputTime;
+            BestBugThroughputTime = ThroughputTime.BestBugThroughputTime;
+            WorstBugThroughputTime = ThroughputTime.WorstBugThroughputTime;
 
-            AverageOtherPassThroughTime = passThroughTime.AverageOtherPassThroughTime;
-            BestOtherPassThroughTime = passThroughTime.BestOtherPassThroughTime;
-            WorstOtherPassThroughTime = passThroughTime.WorstOtherPassThroughTime;
+            AverageOtherThroughputTime = ThroughputTime.AverageOtherThroughputTime;
+            BestOtherThroughputTime = ThroughputTime.BestOtherThroughputTime;
+            WorstOtherThroughputTime = ThroughputTime.WorstOtherThroughputTime;
         }
     }
 }

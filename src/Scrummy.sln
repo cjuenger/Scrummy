@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{820E6163
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scrummy.Scrum.Tests", "Tests\Scrummy.Scrum.Tests\Scrummy.Scrum.Tests.csproj", "{5535BBCD-E0EC-4BB0-B5BD-EBA599A2EBF1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Io.Juenger.Scrummy.Service", "Io.Juenger.Scrummy.Service\Io.Juenger.Scrummy.Service.csproj", "{A718A0E9-7F80-4E53-ABEB-BEC242118DC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{5535BBCD-E0EC-4BB0-B5BD-EBA599A2EBF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5535BBCD-E0EC-4BB0-B5BD-EBA599A2EBF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5535BBCD-E0EC-4BB0-B5BD-EBA599A2EBF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A718A0E9-7F80-4E53-ABEB-BEC242118DC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A718A0E9-7F80-4E53-ABEB-BEC242118DC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A718A0E9-7F80-4E53-ABEB-BEC242118DC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A718A0E9-7F80-4E53-ABEB-BEC242118DC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5FF00931-7DA1-47D9-866F-2B9D427AF1AF} = {820E6163-CF9C-4660-A039-E2CEA466E43B}

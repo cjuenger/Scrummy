@@ -14,7 +14,7 @@ using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.DataAccess.GitLab
 {
-    internal class GitLabModule : Module
+    public class GitLabModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {

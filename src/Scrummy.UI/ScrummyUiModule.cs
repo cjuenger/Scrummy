@@ -21,11 +21,8 @@ namespace Scrummy.UI
         
         private static void RegisterComponents(ContainerBuilder builder)
         {
-            var gitLabComponentActivator = new Scrummy.DataAccess.GitLab.ComponentActivator();
-            gitLabComponentActivator.RegisterDependencies(builder);
-
-            var scrumComponentActivator = new Scrummy.Scrum.ComponentActivator();
-            scrumComponentActivator.RegisterDependencies(builder);
+            builder.RegisterModule<DataAccess.GitLab.GitLabModule>();
+            builder.RegisterModule<ScrumModule>();
         }
     }
 }

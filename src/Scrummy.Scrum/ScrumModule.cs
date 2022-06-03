@@ -5,7 +5,7 @@ using Scrummy.Scrum.Services;
 
 namespace Scrummy.Scrum
 {
-    internal class ScrumModule : Module
+    public class ScrumModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
@@ -13,8 +13,8 @@ namespace Scrummy.Scrum
                 .As<IVelocityProvider>()
                 .SingleInstance();
 
-            builder.RegisterType<PassThroughProvider>()
-                .As<IPassThroughProvider>()
+            builder.RegisterType<ThroughputProvider>()
+                .As<IThroughputProvider>()
                 .SingleInstance();
 
             builder.RegisterType<VelocityCalculator>()
