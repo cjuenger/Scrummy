@@ -31,3 +31,5 @@ src/Tests/Io.Juenger.Common.Tests/bin/
 src/Tests/Io.Juenger.Common.Tests/obj/
 src/Tests/Scrummy.Scrum.Tests/bin/
 src/Tests/Scrummy.Scrum.Tests/obj/
+src/Io.Juenger.Scrummy.Service/bin
+src/Io.Juenger.Scrummy.Service/obj
