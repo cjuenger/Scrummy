@@ -55,11 +55,11 @@ namespace Scrummy.UI.Pages
 
             _sprintInfos = 
                 await SprintInfoProvider
-                    .GetAllSprintsAsync(DataAccessConfig.ProjectId)
+                    .GetSprintInfosAsync(DataAccessConfig.ProjectId)
                     .ConfigureAwait(false);
 
             var (isSuccess, sprintInfo) = await SprintInfoProvider
-                .TryGetCurrentSprintAsync(DataAccessConfig.ProjectId)
+                .TryGetCurrentSprintInfoAsync(DataAccessConfig.ProjectId)
                 .ConfigureAwait(false);
 
             if (isSuccess)

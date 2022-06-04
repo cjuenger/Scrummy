@@ -31,7 +31,7 @@ namespace Scrummy.DataAccess.GitLab.Providers
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
         
-        public async Task<IReadOnlyList<SprintInfo>> GetAllSprintsAsync(string projectId, CancellationToken ct = default)
+        public async Task<IReadOnlyList<SprintInfo>> GetSprintInfosAsync(string projectId, CancellationToken ct = default)
         {
             if (string.IsNullOrWhiteSpace(projectId))
             {
@@ -63,14 +63,31 @@ namespace Scrummy.DataAccess.GitLab.Providers
                 .ToList();
         }
 
-        public async Task<(bool IsSuccess, SprintInfo SprintInfo)> TryGetCurrentSprintAsync(string projectId, CancellationToken ct = default)
+        public async Task<(bool IsSuccess, SprintInfo SprintInfo)> TryGetCurrentSprintInfoAsync(
+            string projectId, 
+            CancellationToken ct = default)
         {
-            var sprintInfos = await GetAllSprintsAsync(projectId, ct)
+            var sprintInfos = await GetSprintInfosAsync(projectId, ct)
                 .ConfigureAwait(false);
 
             var now = DateTime.UtcNow;
             var currentSprintInfo =
                 sprintInfos.FirstOrDefault(sprintInfo => now >= sprintInfo.StartTime && now <= sprintInfo.EndTime);
+
+            return currentSprintInfo == null ? (false, null) : (true, currentSprintInfo);
+        }
+
+        public async Task<(bool IsSuccess, SprintInfo SprintInfo)> TryGetSprintInfoAsync(
+            string projectId, 
+            int sprintId, 
+            CancellationToken ct = default)
+        {
+            var sprintInfos = await GetSprintInfosAsync(projectId, ct)
+                .ConfigureAwait(false);
+
+            var now = DateTime.UtcNow;
+            var currentSprintInfo =
+                sprintInfos.FirstOrDefault(sprintInfo => sprintInfo.Id == sprintId);
 
             return currentSprintInfo == null ? (false, null) : (true, currentSprintInfo);
         }

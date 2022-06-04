@@ -57,7 +57,8 @@ namespace Scrummy.DataAccess.GitLab.Providers
             return sprint;
         }
 
-        public async Task<IEnumerable<Sprint>> GetSprintsAsync(string projectId,
+        public async Task<IEnumerable<Sprint>> GetSprintsAsync(
+            string projectId,
             IEnumerable<SprintInfo> sprintInfos,
             CancellationToken ct = default)
         {
@@ -82,7 +83,7 @@ namespace Scrummy.DataAccess.GitLab.Providers
             }
             
             var sprintInfos = await _sprintInfoProvider.
-                GetAllSprintsAsync(projectId, ct).
+                GetSprintInfosAsync(projectId, ct).
                 ConfigureAwait(false);
 
             var currentSprintInfo = sprintInfos
@@ -97,7 +98,26 @@ namespace Scrummy.DataAccess.GitLab.Providers
             
             return (true, currentSprint);
         }
-        
+
+        public async Task<(bool IsSuccess, Sprint Sprint)> TryGetSprintAsync(
+            string projectId, 
+            int sprintId, 
+            CancellationToken ct = default)
+        {
+            if (string.IsNullOrWhiteSpace(projectId))
+            {
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(projectId));
+            }
+
+            var sprintInfo = await _sprintInfoProvider.TryGetSprintInfoAsync(projectId, sprintId, ct);
+            if (!sprintInfo.IsSuccess) return (false, null);
+
+            var sprint = await GetSprintAsync(projectId, sprintInfo.SprintInfo, ct)
+                .ConfigureAwait(false);
+            
+            return (true, sprint);
+        }
+
         public async Task<IEnumerable<Sprint>> GetAllSprintsAsync(string projectId, CancellationToken ct = default)
         {
             if (string.IsNullOrWhiteSpace(projectId))
@@ -106,7 +126,7 @@ namespace Scrummy.DataAccess.GitLab.Providers
             }
 
             var sprintInfos = await _sprintInfoProvider.
-                GetAllSprintsAsync(projectId, ct).
+                GetSprintInfosAsync(projectId, ct).
                 ConfigureAwait(false);
 
             var sprints = new List<Sprint>();
@@ -132,7 +152,7 @@ namespace Scrummy.DataAccess.GitLab.Providers
             }
 
             var sprintInfos = await _sprintInfoProvider.
-                GetAllSprintsAsync(projectId, ct).
+                GetSprintInfosAsync(projectId, ct).
                 ConfigureAwait(false);
             
             var sprintInfosInRange = sprintInfos

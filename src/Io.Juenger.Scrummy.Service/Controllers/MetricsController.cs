@@ -6,17 +6,17 @@ using Scrummy.Scrum.Contracts.Models;
 namespace Io.Juenger.Scrummy.Service.Controllers;
 
 [ApiController]
-[Route("projects/{projectId}/metrics/[controller]")]
-public class ScrumController : ControllerBase
+[Route("projects/{projectId}/scrum/[controller]")]
+public class MetricsController : ControllerBase
 {
-    private readonly ILogger<ScrumController> _logger;
+    private readonly ILogger<MetricsController> _logger;
     private readonly IVelocityProvider _velocityProvider;
     private readonly IThroughputProvider _throughputProvider;
     private readonly IChartService _chartService;
     private readonly IItemsProvider _itemsProvider;
 
-    public ScrumController(
-        ILogger<ScrumController> logger,
+    public MetricsController(
+        ILogger<MetricsController> logger,
         IVelocityProvider velocityProvider,
         IThroughputProvider throughputProvider,
         IChartService chartService,

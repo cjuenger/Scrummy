@@ -8,8 +8,15 @@ namespace Scrummy.DataAccess.Contracts.Interfaces
 {
     public interface ISprintProvider
     {
-        Task<(bool IsSuccess, Sprint Sprint)> TryGetCurrentSprintAsync(string projectId, CancellationToken ct = default);
+        Task<(bool IsSuccess, Sprint Sprint)> TryGetCurrentSprintAsync(
+            string projectId, 
+            CancellationToken ct = default);
 
+        Task<(bool IsSuccess, Sprint Sprint)> TryGetSprintAsync(
+            string projectId, 
+            int sprintId, 
+            CancellationToken ct = default);
+        
         Task<IEnumerable<Sprint>> GetAllSprintsAsync(string projectId, CancellationToken ct = default);
 
         Task<IEnumerable<Sprint>> GetSprintsInRange(

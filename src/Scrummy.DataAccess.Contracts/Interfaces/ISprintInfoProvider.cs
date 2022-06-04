@@ -7,7 +7,13 @@ namespace Scrummy.DataAccess.Contracts.Interfaces
 {
     public interface ISprintInfoProvider
     {
-        Task<IReadOnlyList<SprintInfo>> GetAllSprintsAsync(string projectId, CancellationToken ct = default);
-        Task<(bool IsSuccess, SprintInfo SprintInfo)> TryGetCurrentSprintAsync(string projectId, CancellationToken ct = default);
+        Task<IReadOnlyList<SprintInfo>> GetSprintInfosAsync(string projectId, CancellationToken ct = default);
+        Task<(bool IsSuccess, SprintInfo SprintInfo)> TryGetCurrentSprintInfoAsync(
+            string projectId, 
+            CancellationToken ct = default);
+        Task<(bool IsSuccess, SprintInfo SprintInfo)> TryGetSprintInfoAsync(
+            string projectId, 
+            int sprintId, 
+            CancellationToken ct = default);
     }
 }
