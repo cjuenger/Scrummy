@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 using Scrummy.DataAccess.Contracts.Interfaces;
+using Scrummy.DataAccess.GitLab.Caching;
 using Scrummy.DataAccess.GitLab.Parsers;
 using Scrummy.DataAccess.GitLab.Services;
 using Scrummy.Scrum.Contracts.Models;
@@ -15,15 +17,21 @@ namespace Scrummy.DataAccess.GitLab.Providers
         private readonly IProjectApiProvider _projectApiProvider;
         private readonly IPaginationService _paginationService;
         private readonly IItemParser _itemParser;
+        private readonly IMemoryCache _memoryCache;
+        private readonly ICacheKeyBuilder _cacheKeyBuilder;
 
         public ItemsProvider(
             IProjectApiProvider projectApiProvider,
             IPaginationService paginationService,
-            IItemParser itemParser)
+            IItemParser itemParser,
+            IMemoryCache memoryCache,
+            ICacheKeyBuilder cacheKeyBuilder)
         {
             _projectApiProvider = projectApiProvider ?? throw new ArgumentNullException(nameof(projectApiProvider));
             _paginationService = paginationService ?? throw new ArgumentNullException(nameof(paginationService));
             _itemParser = itemParser ?? throw new ArgumentNullException(nameof(itemParser));
+            _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
+            _cacheKeyBuilder = cacheKeyBuilder ?? throw new ArgumentNullException(nameof(cacheKeyBuilder));
         }
         
         public async Task<IEnumerable<Item>> GetItemsOfProjectAsync(
@@ -35,14 +43,25 @@ namespace Scrummy.DataAccess.GitLab.Providers
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(projectId));
             }
 
+            _cacheKeyBuilder.ProjectId = projectId;
+            _cacheKeyBuilder.Key = nameof(IList<Item>);
+            var key = _cacheKeyBuilder.Build();
+
+            if (_memoryCache.TryGetValue(key, out IList<Item> cachedItems)) return cachedItems;
+            
             var issues = await _paginationService
                 .BrowseAllAsync(page => 
                     _projectApiProvider
                         .ProjectApi
                         .GetProjectIssuesAsync(projectId, page, cancellationToken: ct))
                 .ConfigureAwait(false);
+            
+            var items = issues
+                .Select(i => _itemParser.Parse(i))
+                .ToList();
 
-            var items = issues.Select(i => _itemParser.Parse(i));
+            _memoryCache.Set(key, items, TimeSpan.FromMinutes(5));
+                
             return items;
         }
         

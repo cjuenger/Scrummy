@@ -22,6 +22,7 @@
       <PackageReference Include="GraphQL.Client" Version="4.0.1" />
       <PackageReference Include="GraphQL.Client.Serializer.Newtonsoft" Version="4.0.1" />
       <PackageReference Include="IO.Juenger.GitLab" Version="0.1.0-unstable0002" />
+      <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0-rc.2.21480.5" />
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
     </ItemGroup>
