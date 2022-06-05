@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <RootNamespace>Scrummy.DataAccess.Contracts</RootNamespace>
+        <PackageId>Io.Juenger.GitShake.DataAccess.Contracts</PackageId>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Io.Juenger.GitShake.Scrum.Contracts\Io.Juenger.GitShake.Scrum.Contracts.csproj" />
+    </ItemGroup>
+
+</Project>

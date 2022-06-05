@@ -1,24 +1,24 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scrummy.UI", "Scrummy.UI\Scrummy.UI.csproj", "{35BF7791-9FEE-4D6D-B4D4-7FE2BAE19823}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Io.Juenger.GitShake.UI", "Io.Juenger.GitShake.UI\Io.Juenger.GitShake.UI.csproj", "{35BF7791-9FEE-4D6D-B4D4-7FE2BAE19823}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scrummy.DataAccess.GitLab", "Scrummy.DataAccess.GitLab\Scrummy.DataAccess.GitLab.csproj", "{72F32255-EA5D-4838-9E15-2FF2870F428D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Io.Juenger.GitShake.DataAccess.GitLab", "Io.Juenger.GitShake.DataAccess.GitLab\Io.Juenger.GitShake.DataAccess.GitLab.csproj", "{72F32255-EA5D-4838-9E15-2FF2870F428D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scrummy.Scrum", "Scrummy.Scrum\Scrummy.Scrum.csproj", "{94BC5CBF-BEED-4752-AC40-32844D6EE8AD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Io.Juenger.GitShake.Scrum", "Io.Juenger.GitShake.Scrum\Io.Juenger.GitShake.Scrum.csproj", "{94BC5CBF-BEED-4752-AC40-32844D6EE8AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scrummy.DataAccess.Contracts", "Scrummy.DataAccess.Contracts\Scrummy.DataAccess.Contracts.csproj", "{8B58A6B8-410B-4E4D-8102-E21BF8ED8C02}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Io.Juenger.GitShake.DataAccess.Contracts", "Io.Juenger.GitShake.DataAccess.Contracts\Io.Juenger.GitShake.DataAccess.Contracts.csproj", "{8B58A6B8-410B-4E4D-8102-E21BF8ED8C02}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Io.Juenger.Common", "Io.Juenger.Common\Io.Juenger.Common.csproj", "{F1C14659-A8BC-4930-A043-2A62BCDE60F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scrummy.Scrum.Contracts", "Scrummy.Scrum.Contracts\Scrummy.Scrum.Contracts.csproj", "{CA7CDE46-539B-49A4-B1DD-E3BF0D26CF58}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Io.Juenger.GitShake.Scrum.Contracts", "Io.Juenger.GitShake.Scrum.Contracts\Io.Juenger.GitShake.Scrum.Contracts.csproj", "{CA7CDE46-539B-49A4-B1DD-E3BF0D26CF58}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Io.Juenger.Common.Tests", "Tests\Io.Juenger.Common.Tests\Io.Juenger.Common.Tests.csproj", "{5FF00931-7DA1-47D9-866F-2B9D427AF1AF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{820E6163-CF9C-4660-A039-E2CEA466E43B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scrummy.Scrum.Tests", "Tests\Scrummy.Scrum.Tests\Scrummy.Scrum.Tests.csproj", "{5535BBCD-E0EC-4BB0-B5BD-EBA599A2EBF1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Io.Juenger.GitShake.Scrum.Tests", "Tests\Io.Juenger.GitShake.Scrum.Tests\Io.Juenger.GitShake.Scrum.Tests.csproj", "{5535BBCD-E0EC-4BB0-B5BD-EBA599A2EBF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Io.Juenger.Scrummy.Service", "Io.Juenger.Scrummy.Service\Io.Juenger.Scrummy.Service.csproj", "{A718A0E9-7F80-4E53-ABEB-BEC242118DC5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Io.Juenger.GitShake.Service", "Io.Juenger.GitShake.Service\Io.Juenger.GitShake.Service.csproj", "{A718A0E9-7F80-4E53-ABEB-BEC242118DC5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
