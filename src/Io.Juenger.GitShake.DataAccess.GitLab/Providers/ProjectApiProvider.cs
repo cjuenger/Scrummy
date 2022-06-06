@@ -1,6 +1,6 @@
 ﻿using System;
-using IO.Juenger.GitLab.Api;
-using IO.Juenger.GitLab.Client;
+using Io.Juenger.GitLabClient.Api;
+using Io.Juenger.GitLabClient.Client;
 using Microsoft.Extensions.Configuration;
 using Scrummy.DataAccess.Contracts.Interfaces;
 

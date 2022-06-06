@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using IO.Juenger.GitLab.Model;
+using Io.Juenger.GitLabClient.Model;
 using Scrummy.DataAccess.Contracts.Enums;
 using Scrummy.DataAccess.GitLab.Configs;
 using Scrummy.Scrum.Contracts.Enums;

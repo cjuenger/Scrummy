@@ -1,4 +1,4 @@
-﻿using IO.Juenger.GitLab.Api;
+﻿using Io.Juenger.GitLabClient.Api;
 
 namespace Scrummy.DataAccess.GitLab.Providers
 {

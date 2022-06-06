@@ -1,8 +1,7 @@
 ﻿using Autofac;
 using AutoMapper;
-using IO.Juenger.GitLab.Api;
-using IO.Juenger.GitLab.Client;
-using IO.Juenger.GitLab.Model;
+using Io.Juenger.GitLabClient.Client;
+using Io.Juenger.GitLabClient.Model;
 using Microsoft.Extensions.Configuration;
 using Scrummy.DataAccess.Contracts.Interfaces;
 using Scrummy.DataAccess.GitLab.Configs;
@@ -10,7 +9,6 @@ using Scrummy.DataAccess.GitLab.GraphQl.Queries;
 using Scrummy.DataAccess.GitLab.Parsers;
 using Scrummy.DataAccess.GitLab.Providers;
 using Scrummy.DataAccess.GitLab.Services;
-using Scrummy.Scrum.Contracts.Interfaces;
 using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.DataAccess.GitLab

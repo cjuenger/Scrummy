@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using IO.Juenger.GitLab.Model;
+using Io.Juenger.GitLabClient.Model;
 using Microsoft.Extensions.Logging;
 using Scrummy.DataAccess.Contracts.Interfaces;
 using Scrummy.DataAccess.GitLab.Configs;

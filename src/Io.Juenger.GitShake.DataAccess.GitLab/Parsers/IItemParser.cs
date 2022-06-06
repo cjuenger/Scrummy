@@ -1,4 +1,4 @@
-﻿using IO.Juenger.GitLab.Model;
+﻿using Io.Juenger.GitLabClient.Model;
 using Scrummy.Scrum.Contracts.Models;
 
 namespace Scrummy.DataAccess.GitLab.Parsers

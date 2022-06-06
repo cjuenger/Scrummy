@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using IO.Juenger.GitLab.Model;
+using Io.Juenger.GitLabClient.Model;
 using Scrummy.DataAccess.Contracts.Interfaces;
 using Scrummy.DataAccess.GitLab.Services;
 using Scrummy.Scrum.Contracts.Models;

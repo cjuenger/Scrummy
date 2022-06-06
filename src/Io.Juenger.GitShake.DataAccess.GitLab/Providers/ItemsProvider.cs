@@ -92,7 +92,7 @@ namespace Scrummy.DataAccess.GitLab.Providers
                     .BrowseAllAsync(page => 
                         _projectApiProvider
                             .ProjectApi
-                            .GetAllIssuesOfProjectMilestoneAsync(projectId, releaseId, page, ct))
+                            .GetAllIssuesOfProjectMilestoneAsync(projectId, releaseId, page, cancellationToken: ct))
                     .ConfigureAwait(false);
             
             var items = totalIssues.Select(i => _itemParser.Parse(i));
