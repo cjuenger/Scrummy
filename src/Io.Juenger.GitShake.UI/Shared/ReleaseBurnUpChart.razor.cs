@@ -4,7 +4,6 @@ using System.Linq;
 using Microsoft.AspNetCore.Components;
 using Scrummy.Scrum.Contracts.Interfaces;
 using Scrummy.Scrum.Contracts.Models;
-using Scrummy.Scrum.Providers;
 
 namespace Scrummy.UI.Shared
 {

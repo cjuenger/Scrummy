@@ -8,9 +8,9 @@ using Scrummy.Scrum.Contracts.Enums;
 using Scrummy.Scrum.Contracts.Interfaces;
 using Scrummy.Scrum.Contracts.Models;
 
-namespace Scrummy.Scrum.Providers
+namespace Scrummy.Scrum.Metrics
 {
-    public class ThroughputProvider : IThroughputProvider
+    internal class ThroughputProvider : IThroughputProvider
     {
         private readonly IItemsProvider _itemsProvider;
 

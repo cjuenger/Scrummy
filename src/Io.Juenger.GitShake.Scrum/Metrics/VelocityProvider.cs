@@ -6,7 +6,7 @@ using Scrummy.DataAccess.Contracts.Interfaces;
 using Scrummy.Scrum.Contracts.Interfaces;
 using Scrummy.Scrum.Contracts.Models;
 
-namespace Scrummy.Scrum.Providers
+namespace Scrummy.Scrum.Metrics
 {
     internal class VelocityProvider : IVelocityProvider
     {

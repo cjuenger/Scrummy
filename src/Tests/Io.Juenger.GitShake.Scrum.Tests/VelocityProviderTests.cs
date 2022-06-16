@@ -10,7 +10,7 @@ using Scrummy.DataAccess.Contracts.Enums;
 using Scrummy.DataAccess.Contracts.Interfaces;
 using Scrummy.Scrum.Contracts.Interfaces;
 using Scrummy.Scrum.Contracts.Models;
-using Scrummy.Scrum.Providers;
+using Scrummy.Scrum.Metrics;
 using Scrummy.Scrum.Services;
 
 namespace Scrummy.Scrum.Tests

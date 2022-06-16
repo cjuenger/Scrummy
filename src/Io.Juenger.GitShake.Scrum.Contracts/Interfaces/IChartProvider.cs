@@ -18,13 +18,9 @@ namespace Scrummy.Scrum.Contracts.Interfaces
         
         Task<BurnDownChartData> GetProjectBurnDownChartDataAsync(string projectId, CancellationToken ct = default);
         
-        Task<BurnDownChartData> GetSprintBurnDownChartDataAsync(string projectId, int sprintId, CancellationToken ct = default);
-
         Task<BurnDownChartData> GetReleaseBurnDownChartDataAsync(string projectId, int releaseId, CancellationToken ct = default);
         
         Task<BurnUpChartData> GetProjectBurnUpChartDataAsync(string projectId, CancellationToken ct = default);
-        
-        Task<BurnUpChartData> GetSprintBurnUpChartDataAsync(string projectId, int sprintId, CancellationToken ct = default);
         
         Task<BurnUpChartData> GetReleaseBurnUpChartDataAsync(string projectId, int releaseId, CancellationToken ct = default);
         

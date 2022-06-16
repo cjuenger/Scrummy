@@ -12,17 +12,20 @@ public class MetricsController : ControllerBase
     private readonly IVelocityProvider _velocityProvider;
     private readonly IThroughputProvider _throughputProvider;
     private readonly IChartProvider _chartProvider;
+    private readonly ISprintMetrics _sprintMetrics;
 
     public MetricsController(
         ILogger<MetricsController> logger,
         IVelocityProvider velocityProvider,
         IThroughputProvider throughputProvider,
-        IChartProvider chartProvider)
+        IChartProvider chartProvider,
+        ISprintMetrics sprintMetrics)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _velocityProvider = velocityProvider ?? throw new ArgumentNullException(nameof(velocityProvider));
         _throughputProvider = throughputProvider ?? throw new ArgumentNullException(nameof(throughputProvider));
         _chartProvider = chartProvider ?? throw new ArgumentNullException(nameof(chartProvider));
+        _sprintMetrics = sprintMetrics ?? throw new ArgumentNullException(nameof(sprintMetrics));
     }
 
     [HttpGet("velocity")]
@@ -56,7 +59,13 @@ public class MetricsController : ControllerBase
     {
         return _chartProvider.GetProjectBurnUpChartDataAsync(projectId);
     }
-    
+
+    [HttpGet("sprintComposition")]
+    public Task<SprintComposition> GetSprintComposition(string projectId, int sprintId)
+    {
+        return _sprintMetrics.GetSprintCompositionAsync(projectId, sprintId);
+    }
+
     [HttpGet("sprintBurnUpChartData")]
     public Task<BurnUpChartData> GetSprintBurnUpChartData(string projectId, int sprintId)
     {

@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using Scrummy.Scrum.Contracts.Interfaces;
-using Scrummy.Scrum.Providers;
+using Scrummy.Scrum.Metrics;
 using Scrummy.Scrum.Services;
 
 namespace Scrummy.Scrum
@@ -23,6 +23,16 @@ namespace Scrummy.Scrum
             
             builder.RegisterType<ChartProvider>()
                 .As<IChartProvider>()
+                .SingleInstance();
+
+            builder
+                .RegisterType<SprintMetrics>()
+                .As<ISprintMetrics>()
+                .SingleInstance();
+
+            builder
+                .RegisterType<BurnDownChartDataProvider>()
+                .As<IBurnDownChartDataProvider>()
                 .SingleInstance();
         }
     }
