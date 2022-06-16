@@ -14,11 +14,8 @@ namespace Scrummy.UI.Shared
     public partial class BurnDownChart
     {
         private int _maxYValue;
-        
-        private IEnumerable<Xy<DateTime, int>> _burnDown;
-        private IEnumerable<Xy<DateTime, int>> _estimate;
-        private IEnumerable<Xy<DateTime, int>> _bestEstimate;
-        private IEnumerable<Xy<DateTime, int>> _worstEstimate;
+
+        private BurnDownChartData _burnDownChartData;
         private IEnumerable<Xy<DateTime, int>> _dueLine;
         
         private readonly bool _smooth = false;
@@ -27,10 +24,7 @@ namespace Scrummy.UI.Shared
         private IDataAccessConfig DataAccessConfig { get; set; }
         
         [Inject]
-        private IVelocityProvider VelocityProvider { get; set; }
-        
-        [Inject]
-        private IChartService ChartService { get; set; }
+        private IChartProvider ChartProvider { get; set; }
         
         [Parameter] 
         public IEnumerable<Story> Stories { get; set; }
@@ -47,30 +41,14 @@ namespace Scrummy.UI.Shared
             
             if(Stories == null || !Stories.Any())
             {
-                _burnDown = Enumerable.Empty<Xy<DateTime, int>>();
-                _estimate = Enumerable.Empty<Xy<DateTime, int>>();
-                
+                _burnDownChartData = new BurnDownChartData();
                 await InvokeAsync(StateHasChanged).ConfigureAwait(false);
-                
                 return;
             }
-            
-            _burnDown = ChartService.GetBurnDownChart(Stories);
 
-            _maxYValue = _burnDown.Select(bd => bd.Y).Max() + 5;
-            
-            var velocity = await VelocityProvider
-                .GetVelocityAsync(DataAccessConfig.ProjectId)
-                .ConfigureAwait(false);
-            
-            _estimate = ChartService
-                .GetBurnDownEstimationChart(Stories, velocity.DayAverageVelocity);
-            
-            _bestEstimate = ChartService
-                .GetBurnDownEstimationChart(Stories, velocity.Best3SprintsDayAverageVelocity);
-            
-            _worstEstimate = ChartService
-                .GetBurnDownEstimationChart(Stories, velocity.Worst3SprintsDayAverageVelocity);
+            _maxYValue = _burnDownChartData.BurnDownSeries.Select(bd => bd.Y).Max() + 5;
+
+            _burnDownChartData = await ChartProvider.GetSprintBurnDownChartDataAsync(DataAccessConfig.ProjectId);
 
             CalculateDueLine();
         }

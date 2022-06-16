@@ -109,7 +109,7 @@ namespace Scrummy.DataAccess.GitLab.Providers
             
             var items = 
                 await _itemsProvider
-                    .GetItemsOfSprintAsync(projectId, sprintInfo.Name, ct)
+                    .GetItemsOfSprintAsync(projectId, sprintInfo, ct)
                     .ConfigureAwait(false);
             
             var sprint = new Sprint(sprintInfo, items);

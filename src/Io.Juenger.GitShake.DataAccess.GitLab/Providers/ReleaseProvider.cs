@@ -29,7 +29,18 @@ namespace Scrummy.DataAccess.GitLab.Providers
             _paginationService = paginationService ?? throw new ArgumentNullException(nameof(paginationService));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
-        
+
+        public async Task<(bool IsSuccess, ReleaseInfo ReleaseInfo)> TryGetReleaseInfoAsync(string projectId, int releaseId, CancellationToken ct = default)
+        {
+            var releaseInfos = 
+                await GetReleaseInfosAsync(projectId, ct)
+                    .ConfigureAwait(false);
+
+            var releaseInfo = releaseInfos.FirstOrDefault(releaseInfo => releaseInfo.Id == releaseId);
+
+            return releaseInfo == null ? (false, null) : (true, releaseInfo);
+        }
+
         public async Task<Release> GetReleaseAsync(
             string projectId, 
             ReleaseInfo releaseInfo, 
@@ -41,7 +52,7 @@ namespace Scrummy.DataAccess.GitLab.Providers
             }
 
             var items = 
-                await _itemsProvider.GetItemsOfReleaseAsync(projectId, releaseInfo.Id, ct)
+                await _itemsProvider.GetItemsOfReleaseAsync(projectId, releaseInfo, ct)
                     .ConfigureAwait(false);
 
             var release = new Release(releaseInfo, items.ToList());
@@ -70,7 +81,7 @@ namespace Scrummy.DataAccess.GitLab.Providers
             return (true, nextUpcomingRelease);
         }
         
-        public async Task<IReadOnlyList<ReleaseInfo>> GetAllReleasesAsync(string projectId, CancellationToken ct = default)
+        public async Task<IReadOnlyList<ReleaseInfo>> GetReleaseInfosAsync(string projectId, CancellationToken ct = default)
         {
             if (string.IsNullOrWhiteSpace(projectId))
             {

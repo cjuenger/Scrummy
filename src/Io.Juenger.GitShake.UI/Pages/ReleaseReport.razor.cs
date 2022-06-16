@@ -51,7 +51,7 @@ namespace Scrummy.UI.Pages
 
             _releaseInfos = 
                 await ReleaseProvider
-                    .GetAllReleasesAsync(DataAccessConfig.ProjectId)
+                    .GetReleaseInfosAsync(DataAccessConfig.ProjectId)
                     .ConfigureAwait(false);
 
             var (isSuccess, releaseInfo) = await ReleaseProvider

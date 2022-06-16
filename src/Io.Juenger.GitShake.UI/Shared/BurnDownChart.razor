@@ -9,7 +9,7 @@
 
         @* Burn down *@
         <RadzenLineSeries Smooth="@_smooth"
-                          Data="@_burnDown"
+                          Data="@_burnDownChartData.BurnDownSeries"
                           Title="Burn Down"
                           CategoryProperty="X"
                           ValueProperty="Y">
@@ -18,7 +18,7 @@
         
         @* Average estimate *@
         <RadzenLineSeries Smooth="@_smooth"
-                          Data="@_estimate"
+                          Data="@_burnDownChartData.EstimateSeries"
                           CategoryProperty="X"
                           Title="Estimate"
                           LineType="LineType.Dashed"
@@ -29,7 +29,7 @@
         
         @* Best estimate *@
         <RadzenLineSeries Smooth="@_smooth"
-                          Data="@_bestEstimate"
+                          Data="@_burnDownChartData.BestEstimateSeries"
                           CategoryProperty="X"
                           Title="Best Estimate"
                           LineType="LineType.Dashed"
@@ -40,7 +40,7 @@
 
         @* Worst estimate *@
         <RadzenLineSeries Smooth="@_smooth"
-                          Data="@_worstEstimate"
+                          Data="@_burnDownChartData.WorstEstimateSeries"
                           CategoryProperty="X"
                           Title="Worst Estimate"
                           LineType="LineType.Dashed"

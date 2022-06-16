@@ -11,12 +11,12 @@ namespace Scrummy.DataAccess.Contracts.Interfaces
 
         Task<IReadOnlyList<Item>> GetItemsOfSprintAsync(
             string projectId, 
-            string sprintName, 
+            SprintInfo sprintInfo, 
             CancellationToken ct = default);
 
         Task<IEnumerable<Item>> GetItemsOfReleaseAsync(
             string projectId, 
-            int releaseId, 
+            ReleaseInfo releaseInfo, 
             CancellationToken ct = default);
     }
 }

@@ -27,7 +27,7 @@ namespace Scrummy.UI.Shared
         private IDataAccessConfig DataAccessConfig { get; set; }
         
         [Inject]
-        private IChartService ChartService { get; set; }
+        private IChartProvider ChartProvider { get; set; }
         
         [Inject]
         private ISprintProvider SprintProvider { get; set; }
@@ -60,7 +60,7 @@ namespace Scrummy.UI.Shared
             
             var sprints = await SprintProvider.GetAllSprintsAsync(DataAccessConfig.ProjectId);
             
-            var series = ChartService.GetVelocityChart(sprints);
+            var series = ChartProvider.GetVelocityChartData(sprints);
             
             _completedStoriesSeries = series[0].Series;
             _smaVelocitySeries = series[^1].Series;

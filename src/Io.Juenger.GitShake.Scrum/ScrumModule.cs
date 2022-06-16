@@ -21,8 +21,8 @@ namespace Scrummy.Scrum
                 .As<IVelocityCalculator>()
                 .SingleInstance();
             
-            builder.RegisterType<ChartService>()
-                .As<IChartService>()
+            builder.RegisterType<ChartProvider>()
+                .As<IChartProvider>()
                 .SingleInstance();
         }
     }

@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Scrummy.DataAccess.Contracts.Interfaces;
 using Scrummy.Scrum.Contracts.Interfaces;
 using Scrummy.Scrum.Contracts.Models;
 
@@ -12,21 +11,18 @@ public class MetricsController : ControllerBase
     private readonly ILogger<MetricsController> _logger;
     private readonly IVelocityProvider _velocityProvider;
     private readonly IThroughputProvider _throughputProvider;
-    private readonly IChartService _chartService;
-    private readonly IItemsProvider _itemsProvider;
+    private readonly IChartProvider _chartProvider;
 
     public MetricsController(
         ILogger<MetricsController> logger,
         IVelocityProvider velocityProvider,
         IThroughputProvider throughputProvider,
-        IChartService chartService,
-        IItemsProvider itemsProvider)
+        IChartProvider chartProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _velocityProvider = velocityProvider ?? throw new ArgumentNullException(nameof(velocityProvider));
         _throughputProvider = throughputProvider ?? throw new ArgumentNullException(nameof(throughputProvider));
-        _chartService = chartService ?? throw new ArgumentNullException(nameof(chartService));
-        _itemsProvider = itemsProvider ?? throw new ArgumentNullException(nameof(itemsProvider));
+        _chartProvider = chartProvider ?? throw new ArgumentNullException(nameof(chartProvider));
     }
 
     [HttpGet("velocity")]
@@ -43,27 +39,51 @@ public class MetricsController : ControllerBase
             _velocityProvider.GetVelocityAsync(projectId);
     }
 
+    [HttpGet("velocityChartData")]
+    public Task<VelocityChartData> GetVelocityChartDataAsync(string projectId)
+    {
+        return _chartProvider.GetVelocityChartData(projectId);
+    }
+
     [HttpGet("throughput")]
     public Task<Throughput> GetThroughputAsync(string projectId)
     {
         return _throughputProvider.GetThroughputTimeAsync(projectId);
     }
 
-    [HttpGet("burnUp")]
-    public async Task<IEnumerable<Xy<DateTime, int>>> GetBurnUp(string projectId)
+    [HttpGet("projectBurnUpChartData")]
+    public Task<BurnUpChartData> GetProjectBurnUpChartData(string projectId)
     {
-        // TODO: 20220603 CJ: Request only issues with 'Story' label!
-        var items = await _itemsProvider.GetItemsOfProjectAsync(projectId);
-        var stories = items.OfType<Story>();
-        return _chartService.GetBurnUpChart(stories);
+        return _chartProvider.GetProjectBurnUpChartDataAsync(projectId);
+    }
+    
+    [HttpGet("sprintBurnUpChartData")]
+    public Task<BurnUpChartData> GetSprintBurnUpChartData(string projectId, int sprintId)
+    {
+        return _chartProvider.GetSprintBurnUpChartDataAsync(projectId, sprintId);
+    }
+    
+    [HttpGet("releaseBurnUpChartData")]
+    public Task<BurnUpChartData> GetReleaseBurnUpChartData(string projectId, int releaseId)
+    {
+        return _chartProvider.GetReleaseBurnUpChartDataAsync(projectId, releaseId);
     }
 
-    [HttpGet("burnDown")]
-    public async Task<IEnumerable<Xy<DateTime, int>>> GetBurnDown(string projectId)
+    [HttpGet("projectBurnDownChartData")]
+    public Task<BurnDownChartData> GetProjectBurnDownChartData(string projectId)
     {
-        // TODO: 20220603 CJ: Request only issues with 'Story' label!
-        var items = await _itemsProvider.GetItemsOfProjectAsync(projectId);
-        var stories = items.OfType<Story>();
-        return _chartService.GetBurnDownChart(stories);
+        return _chartProvider.GetProjectBurnDownChartDataAsync(projectId);
+    }
+    
+    [HttpGet("sprintBurnDownChartData")]
+    public Task<BurnDownChartData> GetSprintBurnDownChartData(string projectId, int sprintId)
+    {
+        return _chartProvider.GetSprintBurnDownChartDataAsync(projectId, sprintId);
+    }
+    
+    [HttpGet("releaseBurnDownChartData")]
+    public Task<BurnDownChartData> GetReleaseBurnDownChartData(string projectId, int releaseId)
+    {
+        return _chartProvider.GetReleaseBurnDownChartDataAsync(projectId, releaseId);
     }
 }

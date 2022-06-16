@@ -67,14 +67,14 @@ namespace Scrummy.DataAccess.GitLab.Providers
         
         public async Task<IReadOnlyList<Item>> GetItemsOfSprintAsync(
             string projectId, 
-            string sprintName, 
+            SprintInfo sprintInfo, 
             CancellationToken ct = default)
         {
             var totalIssues = await _paginationService
                 .BrowseAllAsync(page => 
                     _projectApiProvider
                         .ProjectApi
-                        .GetProjectIssuesAsync(projectId, page, labels: new List<string> {sprintName}, cancellationToken: ct))
+                        .GetProjectIssuesAsync(projectId, page, labels: new List<string> {sprintInfo.Name}, cancellationToken: ct))
                 .ConfigureAwait(false);
             
             var items = totalIssues.Select(i => _itemParser.Parse(i));
@@ -84,7 +84,7 @@ namespace Scrummy.DataAccess.GitLab.Providers
         
         public async Task<IEnumerable<Item>> GetItemsOfReleaseAsync(
             string projectId, 
-            int releaseId, 
+            ReleaseInfo releaseInfo, 
             CancellationToken ct = default)
         {
             var totalIssues=  
@@ -92,7 +92,7 @@ namespace Scrummy.DataAccess.GitLab.Providers
                     .BrowseAllAsync(page => 
                         _projectApiProvider
                             .ProjectApi
-                            .GetAllIssuesOfProjectMilestoneAsync(projectId, releaseId, page, cancellationToken: ct))
+                            .GetAllIssuesOfProjectMilestoneAsync(projectId, releaseInfo.Id, page, cancellationToken: ct))
                     .ConfigureAwait(false);
             
             var items = totalIssues.Select(i => _itemParser.Parse(i));

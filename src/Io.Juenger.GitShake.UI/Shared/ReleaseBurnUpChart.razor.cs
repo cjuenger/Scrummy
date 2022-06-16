@@ -15,7 +15,7 @@ namespace Scrummy.UI.Shared
         private readonly bool _smooth = false;
         
         [Inject]
-        private IChartService ChartService { get; set; }
+        private IChartProvider ChartProvider { get; set; }
         
         [Parameter] 
         public IEnumerable<Story> Stories { get; set; }
@@ -27,7 +27,7 @@ namespace Scrummy.UI.Shared
         {
             base.OnParametersSet();
 
-            _burnUp = ChartService.GetBurnUpChart(Stories);
+            _burnUp = ChartProvider.GetBurnUpChart(Stories);
         }
     }
 }

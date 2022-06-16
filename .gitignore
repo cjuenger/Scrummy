@@ -15,12 +15,15 @@ src/Io.Juenger.GitShake.GitLab.GraphQl.Contracts/obj/
 src/Io.Juenger.GitShake.GitLab.GraphQl/bin/
 src/Io.Juenger.GitShake.GitLab.GraphQl/obj/
 src/Io.Juenger.GitShake.Scrum/bin/
+src/Io.Juenger.GitShake.Scrum/bin
 src/Io.Juenger.GitShake.GitLab.GraphQl.Contracts/bin/
 src/Io.Juenger.GitShake.Scrum.Contracts/bin/
+src/Io.Juenger.GitShake.Scrum.Contracts/bin
 src/Io.Juenger.GitShake.sln.DotSettings.user
 src/Io.Juenger.GitShake.DataAccess.Contracts/bin/
 src/Io.Juenger.GitShake.DataAccess.Contracts/obj/
 src/Io.Juenger.GitShake.DataAccess.GitLab/bin/
+src/Io.Juenger.GitShake.DataAccess.GitLab/bin
 src/Io.Juenger.GitShake.DataAccess.GitLab/obj/
 src/Io.Juenger.GitShake.UI/appsettings.Development.json
 src/Io.Juenger.Common/bin/
