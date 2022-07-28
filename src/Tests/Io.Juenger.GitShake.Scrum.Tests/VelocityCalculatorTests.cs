@@ -3,9 +3,9 @@ using System.Linq;
 using NUnit.Framework;
 using Scrummy.DataAccess.Contracts.Enums;
 using Scrummy.Scrum.Contracts.Models;
-using Scrummy.Scrum.Services;
 using ArrangeContext.NSubstitute;
 using FluentAssertions;
+using Scrummy.Scrum.Metrics.Calculators;
 
 namespace Scrummy.Scrum.Tests
 {

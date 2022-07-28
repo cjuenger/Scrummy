@@ -5,8 +5,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Io.Juenger.Common.Util;
 using Microsoft.Extensions.Logging;
+using Scrummy.DataAccess.Contracts.Interfaces;
 using Scrummy.Scrum.Contracts.Interfaces;
 using Scrummy.Scrum.Contracts.Models;
+using Scrummy.Scrum.Metrics.Calculators;
 
 namespace Scrummy.Scrum.Metrics
 {
@@ -14,16 +16,42 @@ namespace Scrummy.Scrum.Metrics
     {
         private readonly ILogger<BurnDownChartDataProvider> _logger;
         private readonly IVelocityProvider _velocityProvider;
+        private readonly IItemsProvider _itemsProvider;
+        private readonly IReleaseProvider _releaseProvider;
+        private readonly IStorySeriesCalculator _storySeriesCalculator;
 
         public BurnDownChartDataProvider(
             ILogger<BurnDownChartDataProvider> logger,
-            IVelocityProvider velocityProvider)
+            IVelocityProvider velocityProvider,
+            IItemsProvider itemsProvider,
+            IReleaseProvider releaseProvider,
+            IStorySeriesCalculator storySeriesCalculator)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _velocityProvider = velocityProvider ?? throw new ArgumentNullException(nameof(velocityProvider));
+            _itemsProvider = itemsProvider ?? throw new ArgumentNullException(nameof(itemsProvider));
+            _releaseProvider = releaseProvider ?? throw new ArgumentNullException(nameof(releaseProvider));
+            _storySeriesCalculator = storySeriesCalculator ?? throw new ArgumentNullException(nameof(storySeriesCalculator));
         }
         
-        public IEnumerable<Xy<DateTime, int>> GetBurnDownChartSeries(IEnumerable<Story> stories, bool tillToday = true)
+        public async Task<BurnDownChartData> GetProjectBurnDownChartDataAsync(string projectId, CancellationToken ct = default)
+        {
+            var items = await _itemsProvider.GetItemsOfProjectAsync(projectId, ct);
+            return await GetBurnDownChartDataAsync(projectId, items, ct);
+        }
+        
+        public async Task<BurnDownChartData> GetReleaseBurnDownChartDataAsync(string projectId, int releaseId, CancellationToken ct = default)
+        {
+            var (isSuccess, releaseInfo) = await _releaseProvider.TryGetReleaseInfoAsync(projectId, releaseId, ct);
+
+            if (!isSuccess) return new BurnDownChartData();
+            
+            var items = await _itemsProvider.GetItemsOfReleaseAsync(projectId, releaseInfo, ct);
+
+            return await GetBurnDownChartDataAsync(projectId, items, ct);
+        }
+        
+        private IEnumerable<Xy<DateTime, int>> GetBurnDownChartSeries(IEnumerable<Story> stories, bool tillToday = true)
         {
             var storyArray = stories?.ToArray() ?? Array.Empty<Story>();
             
@@ -34,7 +62,7 @@ namespace Scrummy.Scrum.Metrics
                     Y = s.StoryPoints ?? 0
                 });
             
-            var closed = GetClosedStoryChart(storyArray);
+            var closed = _storySeriesCalculator.CalculateClosedStoryChart(storyArray);
 
             var burnDown = opened
                 .Concat(closed)
@@ -71,7 +99,7 @@ namespace Scrummy.Scrum.Metrics
             return burnDown;
         }
 
-        public IEnumerable<Xy<DateTime, int>> GetBurnDownEstimationChartSeries(IEnumerable<Story> stories, float velocityPerDay)
+        private IEnumerable<Xy<DateTime, int>> GetBurnDownEstimationChartSeries(IEnumerable<Story> stories, float velocityPerDay)
         {
             var storyArray = stories?.ToArray() ?? Array.Empty<Story>();
             
@@ -111,7 +139,7 @@ namespace Scrummy.Scrum.Metrics
             };
         }
 
-        public async Task<BurnDownChartData> GetBurnDownChartDataAsync(
+        private async Task<BurnDownChartData> GetBurnDownChartDataAsync(
             string projectId, 
             IEnumerable<Item> items, 
             CancellationToken ct)

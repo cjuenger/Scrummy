@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using Scrummy.Scrum.Contracts.Interfaces;
 using Scrummy.Scrum.Metrics;
-using Scrummy.Scrum.Services;
+using Scrummy.Scrum.Metrics.Calculators;
 
 namespace Scrummy.Scrum
 {
@@ -21,8 +21,8 @@ namespace Scrummy.Scrum
                 .As<IVelocityCalculator>()
                 .SingleInstance();
             
-            builder.RegisterType<ChartProvider>()
-                .As<IChartProvider>()
+            builder.RegisterType<StorySeriesCalculator>()
+                .As<IStorySeriesCalculator>()
                 .SingleInstance();
 
             builder

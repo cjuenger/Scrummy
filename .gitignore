@@ -36,3 +36,17 @@ src/Tests/Io.Juenger.GitShake.Scrum.Tests/bin/
 src/Tests/Io.Juenger.GitShake.Scrum.Tests/obj/
 src/Io.Juenger.GitShake.Service/bin
 src/Io.Juenger.GitShake.Service/obj
+src/Scrummy.DataAccess.Contracts/bin/
+src/Scrummy.DataAccess.Contracts/obj/
+src/Scrummy.DataAccess.GitLab/bin/
+src/Scrummy.DataAccess.GitLab/obj/
+src/Scrummy.GitLab.Contracts/obj/
+src/Scrummy.GitLab/obj/
+src/Scrummy.Scrum.Contracts/bin/
+src/Scrummy.Scrum.Contracts/obj/
+src/Scrummy.Scrum/bin/
+src/Scrummy.Scrum/obj/
+src/Scrummy.UI/bin/
+src/Scrummy.UI/obj/
+src/Tests/Scrummy.Scrum.Tests/bin/
+src/Tests/Scrummy.Scrum.Tests/obj/

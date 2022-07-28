@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Scrummy.DataAccess.Contracts.Enums;
-using Scrummy.Scrum.Contracts.Interfaces;
 using Scrummy.Scrum.Contracts.Models;
 
-namespace Scrummy.Scrum.Services
+namespace Scrummy.Scrum.Metrics.Calculators
 {
     internal class VelocityCalculator : IVelocityCalculator
     {
@@ -23,6 +22,66 @@ namespace Scrummy.Scrum.Services
             CalculateVelocity(sprintsWithStoryPoints, ref velocity);
             
             return velocity;
+        }
+        
+        public VelocityChartData CalculateVelocityChartData(IEnumerable<Sprint> sprints)
+        {
+            var sprintList = sprints.ToList();
+            var velocity = CalculateVelocity(sprintList);
+            var velocityChartData = new VelocityChartData {Velocity = velocity};
+
+            var sprintsAsStoryPoints = sprintList
+                .OrderBy(s => s.Info.EndTime)
+                .Aggregate(new List<Xy<string, int>>(), (aggregate, sprint) =>
+                {
+                    var averageXy = new Xy<string, int>
+                    {
+                        X = $"Sprint {aggregate.Count+1}",
+                        Y = sprint.CompletedStoryPoints
+                    };
+                    
+                    aggregate.Add(averageXy);
+                    
+                    return aggregate;
+                });
+
+            if (sprintsAsStoryPoints.Count <= 0) return velocityChartData;
+
+            var accumulatedStoryPoints = sprintsAsStoryPoints
+                .Aggregate(new List<int>(), (aggregate, sprint) =>
+                {
+                    var accumulatedValue = aggregate.LastOrDefault() + sprint.Y;
+                    aggregate.Add(accumulatedValue);
+
+                    return aggregate;
+                });
+
+            // Simple Moving Average
+            var smaVelocity = accumulatedStoryPoints
+                .Aggregate(new List<Xy<string, int>>(), (aggregate, accSp) =>
+                {
+                    var average = accSp/(aggregate.Count+1);
+
+                    var averageXy = new Xy<string, int>
+                    {
+                        X = $"Sprint {aggregate.Count+1}",
+                        Y = average
+                    };
+                    
+                    aggregate.Add(averageXy);
+                    
+                    return aggregate;
+                });
+
+            var dataSeries = new List<DataSeries<string, int>>
+            {
+                new() { Series = sprintsAsStoryPoints, Title = "Completed Stories" },
+                new() { Series = smaVelocity, Title = "SMA Velocity" }
+            };
+
+            velocityChartData.VelocitySeries = dataSeries;
+        
+            return velocityChartData;
         }
         
         private static void CalculateTotalTimeRange(IEnumerable<Sprint> sprints, ref Velocity velocity)

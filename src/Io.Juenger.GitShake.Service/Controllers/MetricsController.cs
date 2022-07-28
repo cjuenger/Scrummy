@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Scrummy.Scrum.Contracts.Interfaces;
 using Scrummy.Scrum.Contracts.Models;
+using Scrummy.Scrum.Metrics;
 
 namespace Io.Juenger.Scrummy.Service.Controllers;
 

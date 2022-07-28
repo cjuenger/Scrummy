@@ -7,6 +7,7 @@ using Scrummy.DataAccess.Contracts.Interfaces;
 using Scrummy.DataAccess.GitLab.Configs;
 using Scrummy.Scrum.Contracts.Interfaces;
 using Scrummy.Scrum.Contracts.Models;
+using Scrummy.Scrum.Metrics;
 
 namespace Scrummy.UI.Shared
 {
